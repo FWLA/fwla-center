@@ -1,0 +1,122 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="00-init" author="ihrigb">
+
+		<createTable tableName="regex_patterns">
+			<column name="field_name" type="VARCHAR(255)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="pattern" type="VARCHAR(2048)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="source" type="VARCHAR(255)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="index" type="INT">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="ID" />
+			<column name="pattern" value="Einsatznummer\:[^\S\n]+(\d+)\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="TIME" />
+			<column name="pattern" value="Zeiten:[^\S\n]+\d{2}\.\d{2}\.\d{4}\s\d{2}\:\d{2}\:\d{2}\s+(\d{2}\.\d{2}\.\d{4}\s\d{2}\:\d{2}\:\d{2})\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="PLACE" />
+			<column name="pattern" value="Einsatzort\:[^\S\n]+(.+)\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="OBJECT" />
+			<column name="pattern" value="Objekt\:[^\S\n]+(.+)\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="TOWN" />
+			<column name="pattern" value="Ort\:[^\S\n]+(.+)\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="DISTRICT" />
+			<column name="pattern" value="Ortsteil\:[^\S\n]+(.+)\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="STREET" />
+			<column name="pattern" value="Straße\:[^\S\n]+(.+)\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="LATITUDE" />
+			<column name="pattern" value="Koordinaten\:[^\S\n]+POINT\s\(\d+\.\d+\s(\d+\.\d+)\)\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="LONGITUDE" />
+			<column name="pattern" value="Koordinaten\:[^\S\n]+POINT\s\((\d+\.\d+)\s\d+\.\d+\)\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="NOTICE" />
+			<column name="pattern" value="Bemerkung\:[^\S\n]+(.+)\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="MESSAGE" />
+			<column name="pattern" value="Meldebild\:[^\S\n]+(.+)\r\n" />
+			<column name="source" value="BODY" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="field_name" value="CODE" />
+			<column name="pattern" value="^\d+\s\/\s(.\-.+)\s\-\s.*$" />
+			<column name="source" value="SUBJECT" />
+			<column name="index" value="0" />
+		</insert>
+
+		<createTable tableName="stations">
+			<column name="id" type="VARCHAR(255)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="address_street" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_number" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_town" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_district" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<addUniqueConstraint
+			columnNames="name"
+			constraintName="station_name"
+			tableName="stations" />
+	</changeSet>
+</databaseChangeLog>
