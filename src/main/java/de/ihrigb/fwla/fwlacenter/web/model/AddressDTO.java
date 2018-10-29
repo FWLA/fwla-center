@@ -17,7 +17,6 @@ public class AddressDTO {
 
 	public AddressDTO(Address address) {
 		this.street = address.getStreet();
-		this.number = address.getNumber();
 		this.town = address.getTown();
 		this.district = address.getDistrict();
 	}
@@ -30,7 +29,6 @@ public class AddressDTO {
 
 	public void update(Address address) {
 		address.setStreet(street);
-		address.setNumber(number);
 		address.setTown(town);
 		address.setDistrict(district);
 	}

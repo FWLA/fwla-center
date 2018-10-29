@@ -17,8 +17,8 @@ import lombok.Setter;
 public class RegexPattern {
 
 	@Id
-	@Column(name = "field_name", nullable = false, unique = true)
-	private String fieldName;
+	@Column(name = "id", nullable = false, unique = true)
+	private String id;
 
 	@Column(name = "pattern", nullable = false)
 	private String pattern;
