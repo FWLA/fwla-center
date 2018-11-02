@@ -8,9 +8,9 @@ import org.springframework.util.Assert;
 
 import de.ihrigb.fwla.fwlacenter.mail.Email;
 import de.ihrigb.fwla.fwlacenter.mail.api.MailExtractionService;
-import de.ihrigb.fwla.fwlacenter.operation.Operation;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RegexPattern;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RegexPatternRepository;
+import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import lombok.RequiredArgsConstructor;
 
 @Component

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import de.ihrigb.fwla.fwlacenter.operation.Operation;
+import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 
 @Component
 public class ActiveOperationService {
@@ -13,6 +13,10 @@ public class ActiveOperationService {
 
 	public void set(Operation operation) {
 		this.activeOperation = operation;
+	}
+
+	public boolean isSet() {
+		return get().isPresent();
 	}
 
 	public Optional<Operation> get() {

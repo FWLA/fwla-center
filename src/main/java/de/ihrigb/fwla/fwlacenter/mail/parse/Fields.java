@@ -6,8 +6,9 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.function.BiConsumer;
 
-import de.ihrigb.fwla.fwlacenter.operation.Location;
-import de.ihrigb.fwla.fwlacenter.operation.Operation;
+import de.ihrigb.fwla.fwlacenter.services.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.services.api.Location;
+import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -96,8 +97,11 @@ public enum Fields implements Field {
 				if (operation.getLocation() == null) {
 					operation.setLocation(new Location());
 				}
+				if (operation.getLocation().getCoordinate() == null) {
+					operation.getLocation().setCoordinate(new Coordinate());
+				}
 				try {
-					operation.getLocation().setLatitude(Double.parseDouble(value));
+					operation.getLocation().getCoordinate().setLatitude(Double.parseDouble(value));
 				} catch (NumberFormatException e) {
 					log.warn("Error parsing coordinate.", e);
 				}
@@ -111,8 +115,11 @@ public enum Fields implements Field {
 				if (operation.getLocation() == null) {
 					operation.setLocation(new Location());
 				}
+				if (operation.getLocation().getCoordinate() == null) {
+					operation.getLocation().setCoordinate(new Coordinate());
+				}
 				try {
-					operation.getLocation().setLongitude(Double.parseDouble(value));
+					operation.getLocation().getCoordinate().setLongitude(Double.parseDouble(value));
 				} catch (NumberFormatException e) {
 					log.warn("Error parsing coordinate.", e);
 				}

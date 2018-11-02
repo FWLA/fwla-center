@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.ihrigb.fwla.fwlacenter.operation.api.CurrentOperationsService;
+import de.ihrigb.fwla.fwlacenter.services.api.CurrentOperationsService;
 import lombok.RequiredArgsConstructor;
 
 @RestController

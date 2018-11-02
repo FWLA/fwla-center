@@ -3,7 +3,7 @@ package de.ihrigb.fwla.fwlacenter.print;
 import org.springframework.stereotype.Component;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.Handler;
-import de.ihrigb.fwla.fwlacenter.operation.Operation;
+import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 
 @Component
 public class PrintHandler implements Handler {

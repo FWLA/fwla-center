@@ -1,4 +1,4 @@
-package de.ihrigb.fwla.fwlacenter.operation.core;
+package de.ihrigb.fwla.fwlacenter.services.operation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import de.ihrigb.fwla.fwlacenter.operation.Operation;
-import de.ihrigb.fwla.fwlacenter.operation.api.CurrentOperationsService;
+import de.ihrigb.fwla.fwlacenter.services.api.CurrentOperationsService;
+import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 
 @Component
 public class CurrentOperationServiceImpl implements CurrentOperationsService {
@@ -21,6 +21,10 @@ public class CurrentOperationServiceImpl implements CurrentOperationsService {
 
 	@Override
 	public void add(Operation operation) {
+		// make sure, that when a real operation comes in, all trainings are cancelled.
+		if (!operation.isTraining()) {
+			currentOperations.removeIf(o -> o.isTraining());
+		}
 		currentOperations.add(operation);
 	}
 

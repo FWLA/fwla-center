@@ -118,5 +118,19 @@
 			columnNames="name"
 			constraintName="station_name"
 			tableName="stations" />
+
+		<createTable tableName="operation_keys">
+			<column name="key" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="type" type="VARCHAR(16)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addUniqueConstraint
+			columnNames="key"
+			constraintName="operation_keys_key"
+			tableName="operation_keys" />
 	</changeSet>
 </databaseChangeLog>

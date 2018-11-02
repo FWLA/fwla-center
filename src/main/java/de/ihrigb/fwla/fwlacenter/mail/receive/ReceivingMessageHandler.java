@@ -16,7 +16,7 @@ import org.springframework.messaging.MessagingException;
 import de.ihrigb.fwla.fwlacenter.handling.api.HandlerChain;
 import de.ihrigb.fwla.fwlacenter.mail.Email;
 import de.ihrigb.fwla.fwlacenter.mail.api.MailExtractionService;
-import de.ihrigb.fwla.fwlacenter.operation.Operation;
+import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import de.ihrigb.fwla.fwlacenter.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

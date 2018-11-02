@@ -1,8 +1,6 @@
-package de.ihrigb.fwla.fwlacenter.operation.api;
+package de.ihrigb.fwla.fwlacenter.services.api;
 
 import java.util.List;
-
-import de.ihrigb.fwla.fwlacenter.operation.Operation;
 
 public interface CurrentOperationsService {
 	List<Operation> get();

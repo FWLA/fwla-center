@@ -1,4 +1,4 @@
-package de.ihrigb.fwla.fwlacenter.operation;
+package de.ihrigb.fwla.fwlacenter.services.api;
 
 import java.time.Instant;
 
@@ -17,5 +17,6 @@ public class Operation {
 	private String message;
 	private String notice;
 	private String operationType;
-	private Boolean closed;
+	private boolean isTraining = false;
+	private boolean closed;
 }
