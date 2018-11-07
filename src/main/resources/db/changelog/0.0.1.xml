@@ -120,6 +120,9 @@
 			tableName="stations" />
 
 		<createTable tableName="operation_keys">
+			<column name="id" type="VARCHAR(255)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
 			<column name="key" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>

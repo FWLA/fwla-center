@@ -4,8 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
 
@@ -15,6 +18,11 @@ import lombok.Data;
 public class OperationKey {
 
 	@Id
+	@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name = "uuid2", strategy = "uuid2")
+	@Column(name = "id", nullable = false, unique = true)
+	private String id;
+
 	@Column(name = "key", nullable = false, unique = true)
 	private String key;
 
