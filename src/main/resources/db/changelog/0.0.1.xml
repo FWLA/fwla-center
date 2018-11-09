@@ -88,8 +88,14 @@
 		</insert>
 		<insert tableName="regex_patterns">
 			<column name="id" value="CODE" />
-			<column name="pattern" value="^\d+\s\/\s(.\-.+)\s\-\s.*$" />
+			<column name="pattern" value="^\d+\s\/\s(.+\-.+)\s\-\s.*$" />
 			<column name="source" value="SUBJECT" />
+			<column name="index" value="0" />
+		</insert>
+		<insert tableName="regex_patterns">
+			<column name="id" value="RESOURCE_KEYS" />
+			<column name="pattern" value="EM\:(.+)\s\salarmiert.+\r\n" />
+			<column name="source" value="BODY" />
 			<column name="index" value="0" />
 		</insert>
 

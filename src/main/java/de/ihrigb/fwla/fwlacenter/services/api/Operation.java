@@ -1,6 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.services.api;
 
 import java.time.Instant;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,4 +20,5 @@ public class Operation {
 	private String operationType;
 	private boolean isTraining = false;
 	private boolean closed;
+	private List<String> resourceKeys;
 }

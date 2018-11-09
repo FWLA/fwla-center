@@ -51,7 +51,7 @@ public class ReceivingMessageHandler implements MessageHandler {
 	}
 
 	private boolean filterSender(String sender) {
-		if (properties.getWhitelist() != null & !properties.getWhitelist().isEmpty()) {
+		if (properties.getWhitelist() != null && !properties.getWhitelist().isEmpty()) {
 			if (!StringUtils.containsIgnoreCase(properties.getWhitelist(), sender)) {
 				return false;
 			}

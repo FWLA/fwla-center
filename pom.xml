@@ -5,7 +5,7 @@
 
 	<groupId>de.ihrigb.fwla</groupId>
 	<artifactId>fwla-center</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>fwla-center</name>

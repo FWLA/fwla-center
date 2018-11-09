@@ -27,14 +27,14 @@ public class EmailExtractionServiceImpl implements MailExtractionService {
 
 		for (Field field : Fields.values()) {
 			patternRepository.findById(field.getName()).ifPresent(pattern -> {
-				field.getPopulator().accept(operation, trim(evaluateRegexPattern(pattern, email)));
+				field.getPopulator().accept(operation, getMatcher(pattern, email));
 			});
 		}
 
 		return operation;
 	}
 
-	private String evaluateRegexPattern(RegexPattern regexPattern, Email email) {
+	private Matcher getMatcher(RegexPattern regexPattern, Email email) {
 		String text;
 		switch (regexPattern.getSource()) {
 		case SUBJECT:
@@ -47,29 +47,6 @@ public class EmailExtractionServiceImpl implements MailExtractionService {
 		}
 
 		Pattern pattern = Pattern.compile(regexPattern.getPattern());
-		return evaluateRegexPattern(pattern, text);
-	}
-
-	private String evaluateRegexPattern(Pattern pattern, String text) {
-		Matcher matcher = pattern.matcher(text);
-		if (matcher.find()) {
-			if (matcher.groupCount() == 0) {
-				return matcher.group();
-			}
-			return matcher.group(1);
-		}
-		return null;
-	}
-
-	private String trim(String string) {
-		if (string == null) {
-			return null;
-		}
-
-		String trimmed = string.trim();
-		if ("".equals(trimmed)) {
-			return null;
-		}
-		return trimmed;
+		return pattern.matcher(text);
 	}
 }
