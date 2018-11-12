@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="00-add-operationKey-columns" author="ihrigb">
+		<addColumn tableName="operation_keys">
+			<column name="code" type="varchar(64)">
+				<constraints nullable="true" />
+			</column>
+			<column name="danger_to_life" type="boolean" defaultValueBoolean="false">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+
+		<addUniqueConstraint
+			columnNames="code"
+			constraintName="operation_keys_code"
+			tableName="operation_keys" />
+	</changeSet>
+</databaseChangeLog>

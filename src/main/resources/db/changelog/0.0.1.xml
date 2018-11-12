@@ -6,13 +6,13 @@
 	<changeSet id="00-init" author="ihrigb">
 
 		<createTable tableName="regex_patterns">
-			<column name="id" type="VARCHAR(255)">
+			<column name="id" type="VARCHAR(64)">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="pattern" type="VARCHAR(2048)">
+			<column name="pattern" type="VARCHAR(512)">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="source" type="VARCHAR(255)">
+			<column name="source" type="VARCHAR(16)">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="index" type="INT">
@@ -100,22 +100,22 @@
 		</insert>
 
 		<createTable tableName="stations">
-			<column name="id" type="VARCHAR(255)">
+			<column name="id" type="VARCHAR(64)">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="VARCHAR(255)">
+			<column name="name" type="VARCHAR(64)">
 				<constraints nullable="false" />
 			</column>
-			<column name="address_street" type="VARCHAR(255)">
+			<column name="address_street" type="VARCHAR(128)">
 				<constraints nullable="true" />
 			</column>
-			<column name="address_zip" type="VARCHAR(255)">
+			<column name="address_zip" type="VARCHAR(16)">
 				<constraints nullable="true" />
 			</column>
-			<column name="address_town" type="VARCHAR(255)">
+			<column name="address_town" type="VARCHAR(128)">
 				<constraints nullable="true" />
 			</column>
-			<column name="address_district" type="VARCHAR(255)">
+			<column name="address_district" type="VARCHAR(128)">
 				<constraints nullable="true" />
 			</column>
 		</createTable>
@@ -126,10 +126,10 @@
 			tableName="stations" />
 
 		<createTable tableName="operation_keys">
-			<column name="id" type="VARCHAR(255)">
+			<column name="id" type="VARCHAR(64)">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="key" type="VARCHAR(255)">
+			<column name="key" type="VARCHAR(32)">
 				<constraints nullable="false" />
 			</column>
 			<column name="type" type="VARCHAR(16)">

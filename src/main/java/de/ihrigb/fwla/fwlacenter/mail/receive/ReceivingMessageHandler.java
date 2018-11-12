@@ -13,7 +13,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 
-import de.ihrigb.fwla.fwlacenter.handling.api.HandlerChain;
+import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
 import de.ihrigb.fwla.fwlacenter.mail.Email;
 import de.ihrigb.fwla.fwlacenter.mail.api.MailExtractionService;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
@@ -27,7 +27,7 @@ public class ReceivingMessageHandler implements MessageHandler {
 
 	private final ReceivingProperties properties;
 	private final MailExtractionService mailExtractionService;
-	private final HandlerChain handlerChain;
+	private final OperationChain operationChain;
 
 	@Override
 	public void handleMessage(Message<?> message) throws MessagingException {
@@ -43,7 +43,7 @@ public class ReceivingMessageHandler implements MessageHandler {
 
 				Email email = new Email(sender, subject, text, timestamp);
 				Operation operation = mailExtractionService.extract(email);
-				handlerChain.handle(operation);
+				operationChain.put(operation);
 			}
 		} catch (Exception e) {
 			log.error("Exception while handling incomming message.", e);

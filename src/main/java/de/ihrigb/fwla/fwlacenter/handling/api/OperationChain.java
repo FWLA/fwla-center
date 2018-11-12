@@ -2,6 +2,6 @@ package de.ihrigb.fwla.fwlacenter.handling.api;
 
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 
-public interface Handler {
-	void handle(Operation operation);
+public interface OperationChain {
+	void put(Operation operation);
 }

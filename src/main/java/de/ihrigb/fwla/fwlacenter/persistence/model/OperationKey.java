@@ -26,7 +26,13 @@ public class OperationKey {
 	@Column(name = "key", nullable = false, unique = true)
 	private String key;
 
+	@Column(name = "code", nullable = true, unique = true)
+	private String code;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
 	private OperationType type;
+
+	@Column(name = "danger_to_life", nullable = false)
+	private boolean dangerToLife;
 }

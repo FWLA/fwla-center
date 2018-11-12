@@ -30,8 +30,8 @@ public class OpenWeatherMapWeatherService implements WeatherService {
 	private final OpenWeatherMapProperties properties;
 
 	public OpenWeatherMapWeatherService(RestTemplateBuilder restTemplateBuilder, OpenWeatherMapProperties properties) {
-		this.restTemplate = restTemplateBuilder.setConnectTimeout((int) properties.getConnectTimeout().toMillis())
-				.setReadTimeout((int) properties.getReadTimeout().toMillis()).build();
+		this.restTemplate = restTemplateBuilder.setConnectTimeout(properties.getConnectTimeout())
+				.setReadTimeout(properties.getReadTimeout()).build();
 		this.properties = properties;
 	}
 

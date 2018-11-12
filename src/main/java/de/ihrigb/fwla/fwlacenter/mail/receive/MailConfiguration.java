@@ -13,7 +13,7 @@ import org.springframework.integration.mail.ImapMailReceiver;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.web.util.UriUtils;
 
-import de.ihrigb.fwla.fwlacenter.handling.api.HandlerChain;
+import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
 import de.ihrigb.fwla.fwlacenter.mail.api.MailExtractionService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,7 +55,7 @@ public class MailConfiguration {
 
 	@Bean
 	public MessageHandler messageHandler(ReceivingProperties properties, MailExtractionService mailExtractionService,
-			HandlerChain handlerChain) {
-		return new ReceivingMessageHandler(properties, mailExtractionService, handlerChain);
+			OperationChain operationChain) {
+		return new ReceivingMessageHandler(properties, mailExtractionService, operationChain);
 	}
 }
