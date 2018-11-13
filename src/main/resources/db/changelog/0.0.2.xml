@@ -18,4 +18,85 @@
 			constraintName="operation_keys_code"
 			tableName="operation_keys" />
 	</changeSet>
+
+	<changeSet id="01-add-active-resources-table" author="ihrigb">
+		<createTable tableName="active_resources">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="VARCHAR(128)">
+				<constraints nullable="false" />
+			</column>
+			<column name="radio" type="VARCHAR(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="station_id" type="VARCHAR(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addUniqueConstraint
+			columnNames="radio"
+			constraintName="active_resources_radio"
+			tableName="active_resources" />
+
+		<addForeignKeyConstraint
+			baseColumnNames="station_id"
+			baseTableName="active_resources"
+			constraintName="active_resources_station"
+			referencedColumnNames="id"
+			referencedTableName="stations" />
+	</changeSet>
+
+	<changeSet id="02-add-passive-resources-tables" author="ihrigb">
+		<createTable tableName="passive_resources">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="VARCHAR(128)">
+				<constraints nullable="false" />
+			</column>
+			<column name="radio" type="VARCHAR(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="station_id" type="VARCHAR(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addUniqueConstraint
+			columnNames="radio"
+			constraintName="passive_resources_radio"
+			tableName="passive_resources" />
+
+		<addForeignKeyConstraint
+			baseColumnNames="station_id"
+			baseTableName="passive_resources"
+			constraintName="passive_resources_station"
+			referencedColumnNames="id"
+			referencedTableName="stations" />
+
+		<createTable tableName="passive_active_resources">
+			<column name="passive_resource_id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="active_resource_id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			baseColumnNames="passive_resource_id"
+			baseTableName="passive_active_resources"
+			constraintName="passive_active_resources_passive"
+			referencedColumnNames="id"
+			referencedTableName="passive_resources" />
+
+		<addForeignKeyConstraint
+			baseColumnNames="active_resource_id"
+			baseTableName="passive_active_resources"
+			constraintName="passive_active_resources_active"
+			referencedColumnNames="id"
+			referencedTableName="active_resources" />
+	</changeSet>
 </databaseChangeLog>
