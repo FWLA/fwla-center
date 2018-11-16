@@ -138,4 +138,21 @@
 			constraintName="real_estates_key"
 			tableName="real_estates" />
 	</changeSet>
+
+	<changeSet id="04-add-eventlog-table" author="ihrigb">
+		<createTable tableName="eventlogs">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="time" type="DATETIME">
+				<constraints nullable="false" />
+			</column>
+			<column name="type" type="VARCHAR(16)">
+				<constraints nullable="false" />
+			</column>
+			<column name="message" type="VARCHAR(2048)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
 </databaseChangeLog>

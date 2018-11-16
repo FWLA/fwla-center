@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.OperationKey;
+import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,8 +19,9 @@ public class Operation {
 	private String code;
 	private String message;
 	private String notice;
-	private OperationKey operationKey;
 	private boolean isTraining = false;
 	private boolean closed;
 	private List<String> resourceKeys;
+	private OperationKey operationKey;
+	private RealEstate realEstate;
 }

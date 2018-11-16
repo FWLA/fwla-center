@@ -33,7 +33,7 @@ public class ActiveResourceController extends BaseController<ActiveResource, Str
 	public ResponseEntity<?> getAll(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 			@RequestParam(name = "size", required = false, defaultValue = "10") int size,
 			@RequestParam(name = "filter", required = false) String filter) {
-		return super.doGetAll();
+		return super.doGetAll(page, size, filter);
 	}
 
 	@GetMapping("/{id}")

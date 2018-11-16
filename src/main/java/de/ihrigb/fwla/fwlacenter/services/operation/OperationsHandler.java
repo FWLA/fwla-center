@@ -1,21 +1,20 @@
-package de.ihrigb.fwla.fwlacenter.display;
+package de.ihrigb.fwla.fwlacenter.services.operation;
 
 import org.springframework.stereotype.Component;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.Handler;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class DisplayHandler implements Handler {
+public class OperationsHandler implements Handler {
 
-	private final ActiveOperationService activeOperationService;
+	private final OperationService operationsService;
 
 	@Override
 	public void handle(Operation operation) {
-		if (!activeOperationService.isSet()) {
-			activeOperationService.set(operation);
-		}
+		operationsService.addOperation(operation);
 	}
 }

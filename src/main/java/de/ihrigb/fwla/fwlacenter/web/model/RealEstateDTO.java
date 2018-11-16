@@ -1,5 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.web.model;
 
+import org.springframework.util.Assert;
+
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +19,8 @@ public class RealEstateDTO {
 	private AddressDTO address;
 
 	public RealEstateDTO(RealEstate realEstate) {
+		Assert.notNull(realEstate, "RealEstate must not be null.");
+
 		this.id = realEstate.getId();
 		this.name = realEstate.getName();
 		this.key = realEstate.getKey();
