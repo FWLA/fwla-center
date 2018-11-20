@@ -1,5 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.web;
 
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,8 @@ public class OperationController {
 	@PostMapping("/training")
 	public ResponseEntity<?> createTraining(@RequestBody OperationDTO dto) {
 		Operation operation = fromDTOMapper().apply(dto);
+		operation.setId("training-" + UUID.randomUUID().toString());
+		operation.setTraining(true);
 		OperationChain.put(operation);
 		return ResponseEntity.accepted().build();
 	}
