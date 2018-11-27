@@ -26,3 +26,6 @@
 
 # project dev properties
 src/main/resources/application-dev.yml
+
+### VS Code ###
+.vscode/

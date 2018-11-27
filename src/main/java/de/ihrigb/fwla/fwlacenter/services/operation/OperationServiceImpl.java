@@ -1,5 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.services.operation;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -9,6 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -25,6 +28,15 @@ public class OperationServiceImpl implements OperationService {
 	private Map<String, Operation> operations = new LinkedHashMap<>();
 	private List<String> currentOperationIds = new LinkedList<>();
 	private String activeOperation;
+
+	@Scheduled(fixedRateString = "PT1M")
+	public void timeoutOperations() {
+		operations.values().stream().filter(o -> {
+			return o.getTime().isBefore(Instant.now().minus(15, ChronoUnit.MINUTES));
+		}).forEach(o -> {
+			closeOperation(o.getId());
+		});
+	}
 
 	@Override
 	public void addOperation(Operation operation) {
@@ -94,6 +106,7 @@ public class OperationServiceImpl implements OperationService {
 
 		currentOperationIds.remove(id);
 		if (activeOperation != null && activeOperation.equals(id)) {
+			activeOperation = null;
 			resetActiveOperation();
 		}
 	}

@@ -1,5 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.ihrigb.fwla.fwlacenter.services.api.Coordinate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,7 @@ public class CoordinateDTO {
 		this.longitude = coordinate.getLongitude();
 	}
 
+	@JsonIgnore
 	public Coordinate getApiModel() {
 		Coordinate coordinate = new Coordinate();
 		coordinate.setLatitude(latitude);

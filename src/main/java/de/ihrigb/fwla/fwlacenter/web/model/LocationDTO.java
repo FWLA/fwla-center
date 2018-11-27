@@ -2,6 +2,8 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 
 import org.springframework.util.Assert;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.ihrigb.fwla.fwlacenter.services.api.Location;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +30,7 @@ public class LocationDTO {
 		}
 	}
 
+	@JsonIgnore
 	public Location getApiModel() {
 		Location location = new Location();
 		location.setStreet(street);

@@ -3,6 +3,8 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.ihrigb.fwla.fwlacenter.persistence.model.PassiveResource;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.ActiveResourceRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
@@ -26,6 +28,7 @@ public class PassiveResourceDTO extends ResourceDTO {
 		}
 	}
 
+	@JsonIgnore
 	public PassiveResource getPersistenceModel(StationRepository stationRepository,
 			ActiveResourceRepository activeResourceRepository) {
 		PassiveResource passiveResource = new PassiveResource();

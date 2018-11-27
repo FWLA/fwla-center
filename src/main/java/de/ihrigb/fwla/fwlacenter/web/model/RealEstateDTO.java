@@ -2,6 +2,8 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 
 import org.springframework.util.Assert;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +32,7 @@ public class RealEstateDTO {
 		}
 	}
 
+	@JsonIgnore
 	public RealEstate getPersistenceModel() {
 		RealEstate realEstate = new RealEstate();
 		realEstate.setId(id);

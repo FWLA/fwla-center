@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.util.Assert;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,6 +54,7 @@ public class OperationDTO {
 		}
 	}
 
+	@JsonIgnore
 	public Operation getApiModel() {
 		Operation operation = new Operation();
 		operation.setId(id);
