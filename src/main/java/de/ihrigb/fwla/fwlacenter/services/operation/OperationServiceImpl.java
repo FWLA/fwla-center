@@ -1,5 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.services.operation;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -32,7 +33,7 @@ public class OperationServiceImpl implements OperationService {
 	@Scheduled(fixedRateString = "PT1M")
 	public void timeoutOperations() {
 		operations.values().stream().filter(o -> {
-			return o.getTime().isBefore(Instant.now().minus(15, ChronoUnit.MINUTES));
+			return Duration.between(o.getTime(), Instant.now()).compareTo(Duration.ofMinutes(15)) > 0;
 		}).forEach(o -> {
 			closeOperation(o.getId());
 		});
