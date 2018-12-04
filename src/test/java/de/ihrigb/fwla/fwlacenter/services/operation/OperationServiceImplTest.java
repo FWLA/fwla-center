@@ -159,7 +159,7 @@ public class OperationServiceImplTest {
 
 		when(operation.isTraining()).thenReturn(false);
 		when(operation.getId()).thenReturn("id");
-		when(operation.getTime()).thenReturn(Instant.ofEpochMilli(System.currentTimeMillis() - (16 * 60 * 1000)));
+		when(operation.getCreated()).thenReturn(Instant.ofEpochMilli(System.currentTimeMillis() - (16 * 60 * 1000)));
 
 		testee.addOperation(operation);
 

@@ -11,6 +11,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Operation {
+
+	/*
+	 * Data from email.
+	 */
 	private String id;
 	private Instant time;
 	private String place;
@@ -19,9 +23,18 @@ public class Operation {
 	private String code;
 	private String message;
 	private String notice;
-	private boolean isTraining = false;
-	private boolean closed;
 	private List<String> resourceKeys;
+
+	/*
+	 * Added information based on persistent data.
+	 */
 	private OperationKey operationKey;
 	private RealEstate realEstate;
+
+	/*
+	 * Metadata
+	 */
+	private Instant created = Instant.now();
+	private boolean isTraining = false;
+	private boolean closed;
 }

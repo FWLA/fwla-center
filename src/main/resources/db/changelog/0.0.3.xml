@@ -3,8 +3,16 @@
 	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<include file="0.0.1.xml" relativeToChangelogFile="true" />
-	<include file="0.0.2.xml" relativeToChangelogFile="true" />
-	<include file="0.0.3.xml" relativeToChangelogFile="true" />
-
+	<changeSet id="00-add-resource-active-columns" author="ihrigb">
+		<addColumn tableName="active_resources">
+			<column name="out_of_service" type="boolean" defaultValueBoolean="false">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+		<addColumn tableName="passive_resources">
+			<column name="out_of_service" type="boolean" defaultValueBoolean="false">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>

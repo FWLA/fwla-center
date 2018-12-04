@@ -2,7 +2,6 @@ package de.ihrigb.fwla.fwlacenter.services.operation;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -18,23 +17,23 @@ import org.springframework.util.Assert;
 
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class OperationServiceImpl implements OperationService {
 
 	private Map<String, Operation> operations = new LinkedHashMap<>();
 	private List<String> currentOperationIds = new LinkedList<>();
 	private String activeOperation;
 
-	@Scheduled(fixedRateString = "PT1M")
+	@Scheduled(fixedRate = 60000)
 	public void timeoutOperations() {
+		log.debug("Scheduled timeout of operations.");
 		operations.values().stream().filter(o -> {
-			return Duration.between(o.getTime(), Instant.now()).compareTo(Duration.ofMinutes(15)) > 0;
+			return Duration.between(o.getCreated(), Instant.now()).compareTo(Duration.ofMinutes(15)) > 0;
 		}).forEach(o -> {
+			log.debug("Operation {} timed out. Closing it.", o.getId());
 			closeOperation(o.getId());
 		});
 	}

@@ -30,4 +30,7 @@ public abstract class Resource {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "station_id", referencedColumnName = "id")
 	private Station station;
+
+	@Column(name = "out_of_service", nullable = false)
+	private boolean outOfService = Boolean.FALSE;
 }
