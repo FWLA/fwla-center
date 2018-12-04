@@ -9,11 +9,11 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableConfigurationProperties(SchedulerProperties.class)
 @RequiredArgsConstructor
+@EnableConfigurationProperties(SchedulerProperties.class)
 public class SchedulerConfiguration implements SchedulingConfigurer {
 
-	private SchedulerProperties properties;
+	private final SchedulerProperties properties;
 
 	@Override
 	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
