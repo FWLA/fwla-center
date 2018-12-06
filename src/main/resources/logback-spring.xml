@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="false">
+	<springProfile name="container">
+		<appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+			<destination>logstash:9999</destination>
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+		</appender>
+
+		<root level="DEBUG">
+			<appender-ref ref="logstash" />
+		</root>
+	</springProfile>
+	<springProfile name="!container">
+		<!-- use Spring default values -->
+		<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+		<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+				<charset>utf8</charset>
+			</encoder>
+		</appender>
+
+		<root level="${LOG_ROOT_LEVEL:-INFO}">
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+</configuration>

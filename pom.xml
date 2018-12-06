@@ -25,6 +25,7 @@
 
 		<!-- Versions -->
 		<easymock.version>4.0.2</easymock.version>
+		<logstash-logback-encoder.version>5.2</logstash-logback-encoder.version>
 	</properties>
 
 	<dependencies>
@@ -81,10 +82,17 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<!-- Tool dependencies -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>${logstash-logback-encoder.version}</version>
 		</dependency>
 
 		<!-- Test dependencies -->

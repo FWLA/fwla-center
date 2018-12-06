@@ -1,3 +1,5 @@
 spring:
+  application:
+    name: fwla-center
   liquibase:
     change-log: 'classpath:/db/changelog/db.changelog-master.xml'
