@@ -2,11 +2,14 @@
 <configuration debug="false" scan="false">
 	<springProfile name="container">
 		<appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-			<destination>logstash:9999</destination>
+			<destination>logstash:4560</destination>
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+		</appender>
+		<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 			<encoder class="net.logstash.logback.encoder.LogstashEncoder" />
 		</appender>
 
-		<root level="DEBUG">
+		<root level="INFO">
 			<appender-ref ref="logstash" />
 		</root>
 	</springProfile>

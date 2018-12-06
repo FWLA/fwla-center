@@ -17,4 +17,4 @@ ARG JAR_FILE=target/fwla-center-0.0.3-SNAPSHOT.jar
 ADD ${JAR_FILE} fwla-center.jar
 
 # Run the jar file 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/fwla-center.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dspring.profiles.active=container","-jar","/fwla-center.jar"]
