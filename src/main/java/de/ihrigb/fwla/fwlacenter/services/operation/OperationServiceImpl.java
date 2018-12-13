@@ -2,6 +2,7 @@ package de.ihrigb.fwla.fwlacenter.services.operation;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -36,6 +37,11 @@ public class OperationServiceImpl implements OperationService {
 			log.debug("Operation {} timed out. Closing it.", o.getId());
 			closeOperation(o.getId());
 		});
+	}
+
+	@Override
+	public List<Operation> getOperations() {
+		return new ArrayList<>(operations.values());
 	}
 
 	@Override

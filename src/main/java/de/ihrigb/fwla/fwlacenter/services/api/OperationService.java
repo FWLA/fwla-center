@@ -5,6 +5,8 @@ import java.util.Optional;
 
 public interface OperationService {
 
+	List<Operation> getOperations();
+
 	void addOperation(Operation operation);
 
 	void setActiveOperation(String id);

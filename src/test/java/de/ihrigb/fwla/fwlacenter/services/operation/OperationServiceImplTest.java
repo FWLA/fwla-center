@@ -32,6 +32,7 @@ public class OperationServiceImplTest {
 
 	@Test
 	public void testInitial() throws Exception {
+		assertTrue(testee.getOperations().isEmpty());
 		assertFalse(testee.get("id").isPresent());
 		assertFalse(testee.getActiveOperation().isPresent());
 		assertTrue(testee.getCurrentOperations().isEmpty());
@@ -48,6 +49,7 @@ public class OperationServiceImplTest {
 
 		testee.addOperation(operation);
 
+		assertEquals(1, testee.getOperations().size());
 		assertSame(operation, testee.get("id").get());
 		assertSame(operation, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
@@ -56,6 +58,7 @@ public class OperationServiceImplTest {
 
 		testee.closeOperation("id");
 
+		assertEquals(1, testee.getOperations().size());
 		assertTrue(testee.get("id").isPresent());
 		assertFalse(testee.getActiveOperation().isPresent());
 		assertTrue(testee.getCurrentOperations().isEmpty());
@@ -72,6 +75,7 @@ public class OperationServiceImplTest {
 
 		testee.addOperation(operation1);
 
+		assertEquals(1, testee.getOperations().size());
 		assertSame(operation1, testee.get("id1").get());
 		assertSame(operation1, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
@@ -85,6 +89,7 @@ public class OperationServiceImplTest {
 
 		testee.addOperation(operation2);
 
+		assertEquals(2, testee.getOperations().size());
 		assertSame(operation2, testee.get("id2").get());
 		assertSame(operation1, testee.getActiveOperation().get());
 		assertEquals(2, testee.getCurrentOperations().size());
@@ -93,6 +98,7 @@ public class OperationServiceImplTest {
 
 		testee.closeOperation("id1");
 
+		assertEquals(2, testee.getOperations().size());
 		assertTrue(testee.get("id1").isPresent());
 		assertSame(operation2, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
@@ -101,6 +107,7 @@ public class OperationServiceImplTest {
 
 		testee.closeOperation("id2");
 
+		assertEquals(2, testee.getOperations().size());
 		assertTrue(testee.get("id2").isPresent());
 		assertFalse(testee.getActiveOperation().isPresent());
 		assertTrue(testee.getCurrentOperations().isEmpty());
@@ -117,6 +124,7 @@ public class OperationServiceImplTest {
 
 		testee.addOperation(operation1);
 
+		assertEquals(1, testee.getOperations().size());
 		assertSame(operation1, testee.get("id1").get());
 		assertSame(operation1, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
@@ -130,6 +138,7 @@ public class OperationServiceImplTest {
 
 		testee.addOperation(operation2);
 
+		assertEquals(2, testee.getOperations().size());
 		assertSame(operation2, testee.get("id2").get());
 		assertSame(operation1, testee.getActiveOperation().get());
 		assertEquals(2, testee.getCurrentOperations().size());
@@ -138,6 +147,7 @@ public class OperationServiceImplTest {
 
 		testee.closeOperation("id2");
 
+		assertEquals(2, testee.getOperations().size());
 		assertTrue(testee.get("id2").isPresent());
 		assertSame(operation1, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
@@ -146,6 +156,7 @@ public class OperationServiceImplTest {
 
 		testee.closeOperation("id1");
 
+		assertEquals(2, testee.getOperations().size());
 		assertTrue(testee.get("id1").isPresent());
 		assertFalse(testee.getActiveOperation().isPresent());
 		assertTrue(testee.getCurrentOperations().isEmpty());
@@ -163,6 +174,7 @@ public class OperationServiceImplTest {
 
 		testee.addOperation(operation);
 
+		assertEquals(1, testee.getOperations().size());
 		assertSame(operation, testee.get("id").get());
 		assertSame(operation, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
@@ -171,6 +183,7 @@ public class OperationServiceImplTest {
 
 		testee.timeoutOperations();
 
+		assertEquals(1, testee.getOperations().size());
 		assertTrue(testee.get("id").isPresent());
 		assertFalse(testee.getActiveOperation().isPresent());
 		assertTrue(testee.getCurrentOperations().isEmpty());

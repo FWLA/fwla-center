@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
+import de.ihrigb.fwla.fwlacenter.web.model.IdDTO;
 import de.ihrigb.fwla.fwlacenter.web.model.OperationDTO;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +27,12 @@ public class OperationController {
 
 	private final OperationService operationService;
 	private final OperationChain OperationChain;
+
+	@GetMapping
+	public ResponseEntity<?> getOperations() {
+		return ResponseEntity
+				.ok(operationService.getOperations().stream().map(toDTOMapper()).collect(Collectors.toList()));
+	}
 
 	@GetMapping("/active")
 	public ResponseEntity<?> getActiveOperation() {
@@ -46,6 +53,12 @@ public class OperationController {
 		operation.setTraining(true);
 		OperationChain.put(operation);
 		return ResponseEntity.accepted().build();
+	}
+
+	@PostMapping("/active")
+	public ResponseEntity<?> activate(@RequestBody IdDTO idDTO) {
+		operationService.setActiveOperation(idDTO.getId());
+		return ResponseEntity.noContent().build();
 	}
 
 	@PatchMapping("/{id}/close")
