@@ -31,6 +31,6 @@ public abstract class Resource {
 	@JoinColumn(name = "station_id", referencedColumnName = "id")
 	private Station station;
 
-	@Column(name = "out_of_service", nullable = false)
-	private boolean outOfService = Boolean.FALSE;
+	@Column(name = "in_service", nullable = false)
+	private boolean inService = Boolean.TRUE;
 }

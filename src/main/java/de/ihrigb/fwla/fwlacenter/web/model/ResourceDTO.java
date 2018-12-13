@@ -18,13 +18,13 @@ public abstract class ResourceDTO {
 	private String name;
 	private String radio;
 	private String stationId;
-	private boolean outOfService;
+	private boolean inService;
 
 	public ResourceDTO(Resource resource) {
 		this.id = resource.getId();
 		this.name = resource.getName();
 		this.radio = resource.getRadio();
-		this.outOfService = resource.isOutOfService();
+		this.inService = resource.isInService();
 		if (resource.getStation() != null) {
 			this.stationId = resource.getStation().getId();
 		}
@@ -35,7 +35,7 @@ public abstract class ResourceDTO {
 		resource.setId(id);
 		resource.setName(name);
 		resource.setRadio(radio);
-		resource.setOutOfService(outOfService);
+		resource.setInService(inService);
 		if (stationId != null) {
 			resource.setStation(stationRepository.findById(stationId)
 					.orElseThrow(() -> new ReferenceNotFoundException("resource -> station")));

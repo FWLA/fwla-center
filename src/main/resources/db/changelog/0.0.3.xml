@@ -5,12 +5,12 @@
 
 	<changeSet id="00-add-resource-active-columns" author="ihrigb">
 		<addColumn tableName="active_resources">
-			<column name="out_of_service" type="boolean" defaultValueBoolean="false">
+			<column name="in_service" type="boolean" defaultValueBoolean="true">
 				<constraints nullable="false" />
 			</column>
 		</addColumn>
 		<addColumn tableName="passive_resources">
-			<column name="out_of_service" type="boolean" defaultValueBoolean="false">
+			<column name="in_service" type="boolean" defaultValueBoolean="true">
 				<constraints nullable="false" />
 			</column>
 		</addColumn>
