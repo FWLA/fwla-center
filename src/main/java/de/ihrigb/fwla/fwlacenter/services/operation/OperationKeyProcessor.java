@@ -28,7 +28,7 @@ public class OperationKeyProcessor implements Processor {
 		if (optOperationKey.isPresent()) {
 			operation.setOperationKey(optOperationKey.get());
 		} else {
-			eventLogService.error("Unable to find OperationKey with CODE %s.", operation.getCode());
+			eventLogService.error("Unable to find OperationKey with CODE '%s'.", operation.getCode());
 		}
 	}
 }

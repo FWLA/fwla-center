@@ -28,7 +28,7 @@ public class RealEstateProcessor implements Processor {
 		if (optRealEstate.isPresent()) {
 			operation.setRealEstate(optRealEstate.get());
 		} else {
-			eventLogService.error("Unable to find OperationKey with OBJECT %s.", operation.getObject());
+			eventLogService.error("Unable to find OperationKey with OBJECT '%s'.", operation.getObject());
 		}
 	}
 }
