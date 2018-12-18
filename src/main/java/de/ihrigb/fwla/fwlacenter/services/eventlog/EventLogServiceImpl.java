@@ -9,7 +9,9 @@ import de.ihrigb.fwla.fwlacenter.persistence.model.EventLogType;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.EventLogRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class EventLogServiceImpl implements EventLogService {
@@ -27,6 +29,8 @@ public class EventLogServiceImpl implements EventLogService {
 	}
 
 	private void createEventLog(EventLogType type, String message) {
+		log.debug("Event log {}: {}.", type, message);
+
 		EventLog eventLog = new EventLog();
 		eventLog.setTime(Instant.now());
 		eventLog.setMessage(message);

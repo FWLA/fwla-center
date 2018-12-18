@@ -10,7 +10,9 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationKeyRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OperationKeyProcessor implements Processor {
@@ -20,14 +22,24 @@ public class OperationKeyProcessor implements Processor {
 
 	@Override
 	public void process(Operation operation) {
-		if (operation.getCode() == null || operation.getOperationKey() != null) {
+		log.trace("process(Operation: {})", operation.getId());
+
+		if (operation.getCode() == null) {
+			log.debug("Operation has no code to be mapped.");
 			return;
+		}
+
+		if (operation.getOperationKey() != null) {
+			log.debug("Operation already has an operation key set.");
 		}
 
 		Optional<OperationKey> optOperationKey = repository.findOneByCode(operation.getCode());
 		if (optOperationKey.isPresent()) {
-			operation.setOperationKey(optOperationKey.get());
+			OperationKey operationKey = optOperationKey.get();
+			log.debug("Found operation key {}.", operationKey.getKey());
+			operation.setOperationKey(operationKey);
 		} else {
+			log.debug("Did not find an operation key for code {}.", operation.getCode());
 			eventLogService.error("Unable to find OperationKey with CODE '%s'.", operation.getCode());
 		}
 	}

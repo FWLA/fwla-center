@@ -34,13 +34,14 @@ public class OperationServiceImpl implements OperationService {
 		operations.values().stream().filter(o -> {
 			return Duration.between(o.getCreated(), Instant.now()).compareTo(Duration.ofMinutes(15)) > 0;
 		}).forEach(o -> {
-			log.debug("Operation {} timed out. Closing it.", o.getId());
+			log.info("Operation {} timed out. Closing it.", o.getId());
 			closeOperation(o.getId());
 		});
 	}
 
 	@Override
 	public List<Operation> getOperations() {
+		log.trace("getOperations()");
 		return new ArrayList<>(operations.values());
 	}
 
@@ -48,7 +49,10 @@ public class OperationServiceImpl implements OperationService {
 	public void addOperation(Operation operation) {
 		Assert.notNull(operation, "Operation must not be null.");
 
+		log.info("Adding operation {}.", operation.getId());
+
 		if (!operation.isTraining() && containsTraining()) {
+			log.debug("Clear existing training due to new real operation.");
 			clearTraining();
 		}
 
@@ -62,6 +66,8 @@ public class OperationServiceImpl implements OperationService {
 	public void setActiveOperation(String id) {
 		Assert.notNull(id, "Operation ID must not be null.");
 
+		log.info("Set active operation to {}.", id);
+
 		if (!currentOperationIds.contains(id)) {
 			log.debug("Tried to set an active operation of unknown id.");
 			return;
@@ -72,6 +78,8 @@ public class OperationServiceImpl implements OperationService {
 
 	@Override
 	public Optional<Operation> getActiveOperation() {
+		log.trace("getActiveOperation()");
+
 		if (activeOperation == null) {
 			return Optional.empty();
 		}
@@ -80,6 +88,7 @@ public class OperationServiceImpl implements OperationService {
 
 	@Override
 	public boolean hasActiveOperation() {
+		log.trace("hasActiveOperation()");
 		return activeOperation != null;
 	}
 
@@ -87,11 +96,14 @@ public class OperationServiceImpl implements OperationService {
 	public Optional<Operation> get(String id) {
 		Assert.notNull(id, "Operation ID must not be null.");
 
+		log.trace("get({})", id);
+
 		return Optional.ofNullable(operations.get(id));
 	}
 
 	@Override
 	public List<Operation> getCurrentOperations() {
+		log.trace("getCurrentOperations()");
 		return Collections.unmodifiableList(currentOperationIds.stream().map(id -> {
 			return operations.get(id);
 		}).collect(Collectors.toList()));
@@ -99,6 +111,7 @@ public class OperationServiceImpl implements OperationService {
 
 	@Override
 	public boolean hasCurrentOperations() {
+		log.trace("hasCurrentOperations()");
 		return !currentOperationIds.isEmpty();
 	}
 
@@ -106,31 +119,40 @@ public class OperationServiceImpl implements OperationService {
 	public void closeOperation(String id) {
 		Assert.notNull(id, "Operation ID must not be null.");
 
+		log.debug("Attempt to close operation {}.", id);
+
 		get(id).ifPresent(operation -> {
+			log.info("Close operation {}.", id);
 			operation.setClosed(true);
 		});
 
 		currentOperationIds.remove(id);
 		if (activeOperation != null && activeOperation.equals(id)) {
+			log.debug("Active operation was closed, resetting.");
 			activeOperation = null;
 			resetActiveOperation();
 		}
 	}
 
 	private void resetActiveOperation() {
+		log.trace("resetActiveOperation()");
 		if (activeOperation == null && !currentOperationIds.isEmpty()) {
 			activeOperation = currentOperationIds.get(0);
+			log.info("New active operation: {}.", activeOperation);
 		}
 	}
 
 	private boolean containsTraining() {
+		log.trace("containsTraining()");
 		return operations.values().stream().filter(o -> o.isTraining()).count() > 0;
 	}
 
 	private void clearTraining() {
+		log.trace("clearTraining()");
 		Set<String> trainingIds = operations.values().stream().filter(o -> o.isTraining()).map(o -> o.getId())
 				.collect(Collectors.toSet());
 		for (String id : trainingIds) {
+			log.debug("Removing training operation {}.", id);
 			operations.remove(id);
 		}
 		currentOperationIds.removeAll(trainingIds);

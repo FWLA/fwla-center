@@ -2,38 +2,25 @@ package de.ihrigb.fwla.fwlacenter.services.api;
 
 import java.util.Optional;
 
-/**
- * Represents the state of a display.
- */
-public interface DisplayState {
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-	/**
-	 * Get the basic state of the display.
-	 *
-	 * @return state of display
-	 */
-	State getState();
+import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.services.api.Weather;
+import lombok.Builder;
+import lombok.Getter;
 
-	/**
-	 * Optionally includes weather information.
-	 *
-	 * @return optional of weather
-	 */
-	Optional<Weather> getWeather();
-
-	/**
-	 * Optionally includes operation information.
-	 *
-	 * @return optional of operation
-	 */
-	Optional<Operation> getOperation();
-
-	/**
-	 * Optionally provides text to be displayed.
-	 *
-	 * @return optional of text (html)
-	 */
-	Optional<String> getText();
+@Builder
+@Getter
+@JsonInclude(Include.NON_NULL)
+public class DisplayState {
+	private final State state;
+	@Builder.Default
+	private Optional<Weather> weather = Optional.empty();
+	@Builder.Default
+	private Optional<Operation> operation = Optional.empty();
+	@Builder.Default
+	private Optional<String> text = Optional.empty();
 
 	public static enum State {
 		IDLE, OPERATION, TEXT;

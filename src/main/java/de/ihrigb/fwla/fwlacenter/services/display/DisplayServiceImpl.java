@@ -11,7 +11,9 @@ import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.services.api.WeatherService;
 import de.ihrigb.fwla.fwlacenter.services.api.DisplayState.State;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DisplayServiceImpl implements DisplayService {
@@ -21,18 +23,23 @@ public class DisplayServiceImpl implements DisplayService {
 
 	@Override
 	public DisplayState getDisplayState() {
-		BaseDisplayState.BaseDisplayStateBuilder builder = BaseDisplayState.builder();
+		log.trace("getDisplayState()");
+
+		DisplayState.DisplayStateBuilder builder = DisplayState.builder();
 
 		if (operationService.hasActiveOperation()) {
+			log.debug("Display is in operation state.");
 			builder.state(State.OPERATION);
 			Optional<Operation> activeOperation = operationService.getActiveOperation();
 			builder.operation(activeOperation);
 			activeOperation.ifPresent(o -> {
 				weatherService.ifPresent(ws -> {
+					log.debug("Adding weather information to state.");
 					builder.weather(Optional.ofNullable(ws.getWeather(o.getLocation().getCoordinate())));
 				});
 			});
 		} else {
+			log.debug("Display is in idle state.");
 			builder.state(State.IDLE);
 		}
 

@@ -16,8 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import de.ihrigb.fwla.fwlacenter.services.api.DisplayService;
+import de.ihrigb.fwla.fwlacenter.services.api.DisplayState;
 import de.ihrigb.fwla.fwlacenter.services.api.DisplayState.State;
-import de.ihrigb.fwla.fwlacenter.services.display.BaseDisplayState;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(DisplayController.class)
@@ -31,7 +31,7 @@ public class DisplayControllerTest {
 
 	@Test
 	public void testGetState() throws Exception {
-		when(displayService.getDisplayState()).thenReturn(BaseDisplayState.builder().state(State.IDLE).build());
+		when(displayService.getDisplayState()).thenReturn(DisplayState.builder().state(State.IDLE).build());
 
 		mvc.perform(get("/v1/display")).andExpect(status().isOk()).andExpect(content().json("{\"state\":\"IDLE\"}"));
 

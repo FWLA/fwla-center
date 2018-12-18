@@ -12,7 +12,9 @@ import de.ihrigb.fwla.fwlacenter.persistence.model.RegexPattern;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RegexPatternRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class EmailExtractionServiceImpl implements MailExtractionService {
@@ -23,6 +25,8 @@ public class EmailExtractionServiceImpl implements MailExtractionService {
 	public Operation extract(Email email) {
 		Assert.notNull(email, "Email must not be null.");
 
+		log.debug("Extracting operation from email.");
+
 		Operation operation = new Operation();
 
 		for (Field field : Fields.values()) {
@@ -30,6 +34,8 @@ public class EmailExtractionServiceImpl implements MailExtractionService {
 				field.getPopulator().accept(operation, getMatcher(pattern, email));
 			});
 		}
+
+		log.debug("Extracted operation {}.", operation.getId());
 
 		return operation;
 	}

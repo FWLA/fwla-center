@@ -21,13 +21,17 @@ public class OperationsChain implements OperationChain {
 
 	@Override
 	public void put(Operation operation) {
+		log.debug("New operation {} put into chain.", operation.getId());
 		try {
 			for (Processor processor : processors) {
+				log.debug("Processing operation by processor {}.", processor.getClass().getName());
 				processor.process(operation);
 			}
 			for (Handler handler : handlers) {
+				log.debug("Handling operation by handler {}.", handler.getClass().getName());
 				handler.handle(operation);
 			}
+			log.debug("Successfully finished operation chain.");
 		} catch (RuntimeException e) {
 			log.error("Exception in operation chain.", e);
 		}
