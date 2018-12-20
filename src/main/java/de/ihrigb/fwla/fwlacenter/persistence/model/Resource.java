@@ -24,6 +24,9 @@ public abstract class Resource {
 	@Column(name = "name", nullable = false)
 	private String name;
 
+	@Column(name = "key", nullable = true)
+	private String key;
+
 	@Column(name = "radio", nullable = true, unique = true)
 	private String radio;
 

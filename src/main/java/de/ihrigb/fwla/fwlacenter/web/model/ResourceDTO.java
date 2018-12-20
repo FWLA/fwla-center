@@ -16,6 +16,7 @@ public abstract class ResourceDTO {
 
 	private String id;
 	private String name;
+	private String key;
 	private String radio;
 	private String stationId;
 	private boolean inService;
@@ -23,6 +24,7 @@ public abstract class ResourceDTO {
 	public ResourceDTO(Resource resource) {
 		this.id = resource.getId();
 		this.name = resource.getName();
+		this.key = resource.getKey();
 		this.radio = resource.getRadio();
 		this.inService = resource.isInService();
 		if (resource.getStation() != null) {
@@ -34,6 +36,7 @@ public abstract class ResourceDTO {
 	protected <T extends Resource> T populate(T resource, StationRepository stationRepository) {
 		resource.setId(id);
 		resource.setName(name);
+		resource.setKey(key);
 		resource.setRadio(radio);
 		resource.setInService(inService);
 		if (stationId != null) {
