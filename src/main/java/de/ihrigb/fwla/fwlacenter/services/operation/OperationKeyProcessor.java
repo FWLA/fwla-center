@@ -31,6 +31,7 @@ public class OperationKeyProcessor implements Processor {
 
 		if (operation.getOperationKey() != null) {
 			log.debug("Operation already has an operation key set.");
+			return;
 		}
 
 		Optional<OperationKey> optOperationKey = repository.findOneByCode(operation.getCode());

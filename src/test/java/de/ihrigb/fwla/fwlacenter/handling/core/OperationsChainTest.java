@@ -1,6 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.handling.core;
 
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -32,6 +33,7 @@ public class OperationsChainTest {
 	@Test
 	public void testPut() throws Exception {
 		Operation operation = mock(Operation.class);
+		expect(operation.getId()).andReturn("id");
 
 		processor.process(operation);
 		expectLastCall();
@@ -47,6 +49,7 @@ public class OperationsChainTest {
 	@Test
 	public void testPutException() throws Exception {
 		Operation operation = mock(Operation.class);
+		expect(operation.getId()).andReturn("id");
 
 		processor.process(operation);
 		expectLastCall();
