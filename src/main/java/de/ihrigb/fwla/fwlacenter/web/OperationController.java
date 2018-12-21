@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.web.model.IdDTO;
@@ -27,6 +28,8 @@ public class OperationController {
 
 	private final OperationService operationService;
 	private final OperationChain OperationChain;
+
+	private final StationRepository stationRepository;
 
 	@GetMapping
 	public ResponseEntity<?> getOperations() {
@@ -68,7 +71,7 @@ public class OperationController {
 	}
 
 	private Function<OperationDTO, Operation> fromDTOMapper() {
-		return dto -> dto == null ? null : dto.getApiModel();
+		return dto -> dto == null ? null : dto.getApiModel(stationRepository);
 	}
 
 	private Function<Operation, OperationDTO> toDTOMapper() {

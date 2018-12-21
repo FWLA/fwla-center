@@ -2,11 +2,14 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +32,7 @@ public class OperationDTO {
 	private List<String> resourceKeys;
 	private OperationKeyDTO operationKey;
 	private RealEstateDTO realEstate;
+	private Set<ResourceDTO> resources;
 
 	public OperationDTO(Operation operation) {
 		Assert.notNull(operation, "Operation must not be null.");
@@ -52,10 +56,13 @@ public class OperationDTO {
 		if (operation.getRealEstate() != null) {
 			this.realEstate = new RealEstateDTO(operation.getRealEstate());
 		}
+		if (operation.getResources() != null) {
+			this.resources = operation.getResources().stream().map(r -> new ResourceDTO(r)).collect(Collectors.toSet());
+		}
 	}
 
 	@JsonIgnore
-	public Operation getApiModel() {
+	public Operation getApiModel(StationRepository stationRepository) {
 		Operation operation = new Operation();
 		operation.setId(id);
 		operation.setTime(time);
@@ -75,6 +82,10 @@ public class OperationDTO {
 		}
 		if (realEstate != null) {
 			operation.setRealEstate(realEstate.getPersistenceModel());
+		}
+		if (resources != null) {
+			operation.setResources(resources.stream().map(dto -> dto.getPersistenceModel(stationRepository))
+					.collect(Collectors.toSet()));
 		}
 		return operation;
 	}

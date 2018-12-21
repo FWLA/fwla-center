@@ -2,9 +2,11 @@ package de.ihrigb.fwla.fwlacenter.services.api;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.OperationKey;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Resource;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +32,7 @@ public class Operation {
 	 */
 	private OperationKey operationKey;
 	private RealEstate realEstate;
+	private Set<Resource> resources;
 
 	/*
 	 * Metadata
