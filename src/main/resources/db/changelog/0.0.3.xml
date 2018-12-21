@@ -3,13 +3,8 @@
 	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet id="00-add-resource-active-columns" author="ihrigb">
-		<addColumn tableName="active_resources">
-			<column name="in_service" type="boolean" defaultValueBoolean="true">
-				<constraints nullable="false" />
-			</column>
-		</addColumn>
-		<addColumn tableName="passive_resources">
+	<changeSet id="00-add-resource-columns" author="ihrigb">
+		<addColumn tableName="resources">
 			<column name="in_service" type="boolean" defaultValueBoolean="true">
 				<constraints nullable="false" />
 			</column>

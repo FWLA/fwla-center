@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class ResourceDTO {
+public class ResourceDTO {
 
 	private String id;
 	private String name;
@@ -33,7 +33,8 @@ public abstract class ResourceDTO {
 	}
 
 	@JsonIgnore
-	protected <T extends Resource> T populate(T resource, StationRepository stationRepository) {
+	public Resource getPersistenceModel(StationRepository stationRepository) {
+		Resource resource = new Resource();
 		resource.setId(id);
 		resource.setName(name);
 		resource.setKey(key);

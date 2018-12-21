@@ -95,7 +95,7 @@ public abstract class BaseController<T, ID extends Serializable, DTO> {
 	protected ResponseEntity<DataResponse<DTO>> doUpdate(ID id, DTO dto) {
 		T t = getFromDTOFunction().apply(dto);
 
-		if (id.equals(getId(t)) || !repository.existsById(id)) {
+		if (!id.equals(getId(t)) || !repository.existsById(id)) {
 			return ResponseEntity.notFound().build();
 		}
 

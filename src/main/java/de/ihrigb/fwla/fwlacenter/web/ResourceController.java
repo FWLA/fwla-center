@@ -5,39 +5,35 @@ import java.util.function.Function;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.ihrigb.fwla.fwlacenter.persistence.model.PassiveResource;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.ActiveResourceRepository;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.PassiveResourceRepository;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Resource;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
-import de.ihrigb.fwla.fwlacenter.web.model.PassiveResourceDTO;
+import de.ihrigb.fwla.fwlacenter.web.model.ResourceDTO;
 
 @RestController
-@RequestMapping("/v1/passiveResources")
-public class PassiveResourceController extends BaseController<PassiveResource, String, PassiveResourceDTO> {
+@RequestMapping("/v1/resources")
+public class ResourceController extends BaseController<Resource, String, ResourceDTO> {
 
 	private final StationRepository stationRepository;
-	private final ActiveResourceRepository activeResourceRepository;
 
-	public PassiveResourceController(PassiveResourceRepository repository,
-			ActiveResourceRepository activeResourceRepository, StationRepository stationRepository) {
+	public ResourceController(ResourceRepository repository, StationRepository stationRepository) {
 		super(repository);
 		this.stationRepository = stationRepository;
-		this.activeResourceRepository = activeResourceRepository;
 	}
 
 	@GetMapping
 	public ResponseEntity<?> getAll(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 			@RequestParam(name = "size", required = false, defaultValue = "10") int size,
 			@RequestParam(name = "filter", required = false) String filter) {
-		return super.doGetAll();
+		return super.doGetAll(page, size, filter);
 	}
 
 	@GetMapping("/{id}")
@@ -46,12 +42,12 @@ public class PassiveResourceController extends BaseController<PassiveResource, S
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody PassiveResourceDTO dto) {
+	public ResponseEntity<?> create(@RequestBody ResourceDTO dto) {
 		return super.doCreate(dto);
 	}
 
-	@PatchMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable("id") String id, @RequestBody PassiveResourceDTO dto) {
+	@PutMapping("/{id}")
+	public ResponseEntity<?> update(@PathVariable("id") String id, @RequestBody ResourceDTO dto) {
 		return super.doUpdate(id, dto);
 	}
 
@@ -61,21 +57,21 @@ public class PassiveResourceController extends BaseController<PassiveResource, S
 	}
 
 	@Override
-	protected Function<? super PassiveResource, ? extends PassiveResourceDTO> getToDTOFunction() {
-		return passiveResource -> {
-			return new PassiveResourceDTO(passiveResource);
+	protected Function<? super Resource, ? extends ResourceDTO> getToDTOFunction() {
+		return Resource -> {
+			return new ResourceDTO(Resource);
 		};
 	}
 
 	@Override
-	protected Function<? super PassiveResourceDTO, ? extends PassiveResource> getFromDTOFunction() {
+	protected Function<? super ResourceDTO, ? extends Resource> getFromDTOFunction() {
 		return dto -> {
-			return dto.getPersistenceModel(stationRepository, activeResourceRepository);
+			return dto.getPersistenceModel(stationRepository);
 		};
 	}
 
 	@Override
-	protected String getId(PassiveResource t) {
+	protected String getId(Resource t) {
 		return t.getId();
 	}
 }
