@@ -11,10 +11,10 @@ VOLUME /tmp
 EXPOSE 8080
 
 # The application's jar file
-ARG JAR_FILE=target/fwla-center-0.0.4-SNAPSHOT.jar
+ARG JAR_FILE=target/fwla-center-0.0.4.jar
 
 # Add the application's jar to the container
-ADD ${JAR_FILE} fwla-center.jar
+COPY ${JAR_FILE} fwla-center.jar
 
 # Run the jar file 
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dspring.profiles.active=container","-jar","/fwla-center.jar"]
