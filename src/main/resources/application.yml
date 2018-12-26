@@ -3,3 +3,14 @@ spring:
     name: fwla-center
   liquibase:
     change-log: 'classpath:/db/changelog/db.changelog-master.xml'
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: info,scheduledtasks
+  endpoint:
+    info:
+      enabled: true
+    scheduledtasks:
+      enabled: true
