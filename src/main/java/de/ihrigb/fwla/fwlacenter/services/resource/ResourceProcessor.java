@@ -1,12 +1,16 @@
 package de.ihrigb.fwla.fwlacenter.services.resource;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
+import de.ihrigb.fwla.fwlacenter.persistence.model.PatternMode;
+import de.ihrigb.fwla.fwlacenter.persistence.model.ResourceKeyPattern;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceKeyPatternRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
@@ -19,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ResourceProcessor implements Processor {
 
 	private final ResourceRepository resourceRepository;
+	private final ResourceKeyPatternRepository resourceKeyPatternRepository;
 	private final EventLogService eventLogService;
 
 	@Override
@@ -37,12 +42,48 @@ public class ResourceProcessor implements Processor {
 			return;
 		}
 
-		operation.setResources(operation.getResourceKeys().stream().map(resourceKey -> {
+		operation.setResources(operation.getResourceKeys().stream().filter(resourceKey -> {
+			return isIncluded(resourceKey) && !isExcluded(resourceKey);
+		}).map(resourceKey -> {
 			return resourceRepository.findByKey(resourceKey).orElseGet(() -> {
 				log.debug("Did not find resource for key {}.", resourceKey);
 				eventLogService.error(String.format("Unable to find Resource with key '%s'", resourceKey));
 				return null;
 			});
 		}).filter(Objects::nonNull).collect(Collectors.toSet()));
+	}
+
+	private boolean isIncluded(String resource) {
+		Set<ResourceKeyPattern> includes = resourceKeyPatternRepository.findByMode(PatternMode.INCLUDE);
+		if (includes.isEmpty()) {
+			return true;
+		}
+
+		for (ResourceKeyPattern resourceKeyPattern : includes) {
+			if (matches(resourceKeyPattern, resource)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean isExcluded(String resource) {
+		Set<ResourceKeyPattern> excludes = resourceKeyPatternRepository.findByMode(PatternMode.EXCLUDE);
+		if (excludes.isEmpty()) {
+			return false;
+		}
+
+		for (ResourceKeyPattern resourceKeyPattern : excludes) {
+			if (matches(resourceKeyPattern, resource)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean matches(ResourceKeyPattern resourceKeyPattern, String resource) {
+		return resource.matches(resourceKeyPattern.getPattern());
 	}
 }

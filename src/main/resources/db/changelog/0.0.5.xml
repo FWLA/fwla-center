@@ -9,4 +9,18 @@
 			<where>id = 'CODE'</where>
 		</update>
 	</changeSet>
+
+	<changeSet id="01-create-resourcekey-patterns-table" author="ihrigb">
+		<createTable tableName="resourcekey_patterns">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="pattern" type="VARCHAR(512)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="mode" type="VARCHAR(16)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
 </databaseChangeLog>
