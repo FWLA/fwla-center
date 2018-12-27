@@ -33,6 +33,7 @@ public class OperationDTO {
 	private OperationKeyDTO operationKey;
 	private RealEstateDTO realEstate;
 	private Set<ResourceDTO> resources;
+	private boolean ambulanceCalled;
 
 	public OperationDTO(Operation operation) {
 		Assert.notNull(operation, "Operation must not be null.");
@@ -59,6 +60,7 @@ public class OperationDTO {
 		if (operation.getResources() != null) {
 			this.resources = operation.getResources().stream().map(r -> new ResourceDTO(r)).collect(Collectors.toSet());
 		}
+		this.ambulanceCalled = operation.isAmbulanceCalled();
 	}
 
 	@JsonIgnore
@@ -87,6 +89,7 @@ public class OperationDTO {
 			operation.setResources(resources.stream().map(dto -> dto.getPersistenceModel(stationRepository))
 					.collect(Collectors.toSet()));
 		}
+		operation.setAmbulanceCalled(ambulanceCalled);
 		return operation;
 	}
 }
