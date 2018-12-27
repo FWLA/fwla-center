@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.ihrigb.fwla.fwlacenter.persistence.model.ResourceKeyPattern;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceKeyPatternRepository;
-import de.ihrigb.fwla.fwlacenter.web.model.ResourceKeyPatternDTO;
+import de.ihrigb.fwla.fwlacenter.persistence.model.AmbulancePattern;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.AmbulancePatternRepository;
+import de.ihrigb.fwla.fwlacenter.web.model.AmbulancePatternDTO;
 
 @RestController
-@RequestMapping("/v1/resourceKeyPatterns")
-public class ResourceKeyPatternController extends BasePatternController<ResourceKeyPattern, ResourceKeyPatternDTO> {
+@RequestMapping("/v1/ambulancePatterns")
+public class AmbulancePatternController extends BasePatternController<AmbulancePattern, AmbulancePatternDTO> {
 
-	public ResourceKeyPatternController(ResourceKeyPatternRepository resourceKeyPatternRepository) {
-		super(resourceKeyPatternRepository);
+	public AmbulancePatternController(AmbulancePatternRepository AmbulancePatternRepository) {
+		super(AmbulancePatternRepository);
 	}
 
 	@GetMapping
@@ -38,12 +38,12 @@ public class ResourceKeyPatternController extends BasePatternController<Resource
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody ResourceKeyPatternDTO dto) {
+	public ResponseEntity<?> create(@RequestBody AmbulancePatternDTO dto) {
 		return super.doCreate(dto);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable("id") String id, @RequestBody ResourceKeyPatternDTO dto) {
+	public ResponseEntity<?> update(@PathVariable("id") String id, @RequestBody AmbulancePatternDTO dto) {
 		return super.doUpdate(id, dto);
 	}
 
@@ -53,12 +53,12 @@ public class ResourceKeyPatternController extends BasePatternController<Resource
 	}
 
 	@Override
-	protected Function<? super ResourceKeyPatternDTO, ? extends ResourceKeyPattern> getFromDTOFunction() {
+	protected Function<? super AmbulancePatternDTO, ? extends AmbulancePattern> getFromDTOFunction() {
 		return dto -> dto.getPersistenceModel();
 	}
 
 	@Override
-	protected Function<? super ResourceKeyPattern, ? extends ResourceKeyPatternDTO> getToDTOFunction() {
-		return t -> new ResourceKeyPatternDTO(t);
+	protected Function<? super AmbulancePattern, ? extends AmbulancePatternDTO> getToDTOFunction() {
+		return t -> new AmbulancePatternDTO(t);
 	}
 }

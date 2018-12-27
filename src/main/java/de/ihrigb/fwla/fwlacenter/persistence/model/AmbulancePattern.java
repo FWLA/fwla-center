@@ -9,6 +9,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "resourcekey_patterns")
-public class ResourceKeyPattern extends BasePattern {
+@Table(name = "ambulance_patterns")
+public class AmbulancePattern extends BasePattern {
 }

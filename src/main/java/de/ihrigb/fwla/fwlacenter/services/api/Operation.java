@@ -33,6 +33,7 @@ public class Operation {
 	private OperationKey operationKey;
 	private RealEstate realEstate;
 	private Set<Resource> resources;
+	private boolean ambulanceCalled;
 
 	/*
 	 * Metadata

@@ -28,7 +28,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.DataResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class BaseController<T, ID extends Serializable, DTO> {
+abstract class BaseController<T, ID extends Serializable, DTO> {
 
 	private final JpaRepository<T, ID> repository;
 	private final ObjectMapper objectMapper = new ObjectMapper();
