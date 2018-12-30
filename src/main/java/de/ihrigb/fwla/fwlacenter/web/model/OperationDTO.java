@@ -2,13 +2,12 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.geojson.FeatureCollection;
 import org.springframework.util.Assert;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
@@ -33,7 +32,7 @@ public class OperationDTO {
 	private List<String> resourceKeys;
 	private OperationKeyDTO operationKey;
 	private RealEstateDTO realEstate;
-	private Set<ResourceDTO> resources;
+	private List<ResourceDTO> resources;
 	private boolean ambulanceCalled;
 	private FeatureCollection directions;
 
@@ -60,7 +59,7 @@ public class OperationDTO {
 			this.realEstate = new RealEstateDTO(operation.getRealEstate());
 		}
 		if (operation.getResources() != null) {
-			this.resources = operation.getResources().stream().map(r -> new ResourceDTO(r)).collect(Collectors.toSet());
+			this.resources = operation.getResources().stream().map(r -> new ResourceDTO(r)).collect(Collectors.toList());
 		}
 		this.ambulanceCalled = operation.isAmbulanceCalled();
 		this.directions = operation.getDirections();
@@ -90,7 +89,7 @@ public class OperationDTO {
 		}
 		if (resources != null) {
 			operation.setResources(resources.stream().map(dto -> dto.getPersistenceModel(stationRepository))
-					.collect(Collectors.toSet()));
+					.collect(Collectors.toList()));
 		}
 		operation.setAmbulanceCalled(ambulanceCalled);
 		operation.setDirections(directions);

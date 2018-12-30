@@ -2,7 +2,6 @@ package de.ihrigb.fwla.fwlacenter.services.api;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 import org.geojson.FeatureCollection;
 
@@ -34,7 +33,7 @@ public class Operation {
 	 */
 	private OperationKey operationKey;
 	private RealEstate realEstate;
-	private Set<Resource> resources;
+	private List<Resource> resources;
 	private boolean ambulanceCalled;
 	private FeatureCollection directions;
 

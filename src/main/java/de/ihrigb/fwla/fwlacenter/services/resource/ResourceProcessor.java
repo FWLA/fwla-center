@@ -50,7 +50,9 @@ public class ResourceProcessor implements Processor {
 				eventLogService.error(String.format("Unable to find Resource with key '%s'", resourceKey));
 				return null;
 			});
-		}).filter(Objects::nonNull).collect(Collectors.toSet()));
+		}).filter(Objects::nonNull).sorted((r1, r2) -> {
+			return r1.getRadio().compareTo(r2.getRadio());
+		}).collect(Collectors.toList()));
 	}
 
 	private boolean isIncluded(String resource) {
