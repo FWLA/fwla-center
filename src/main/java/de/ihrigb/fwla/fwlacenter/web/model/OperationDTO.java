@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.geojson.FeatureCollection;
 import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,6 +35,7 @@ public class OperationDTO {
 	private RealEstateDTO realEstate;
 	private Set<ResourceDTO> resources;
 	private boolean ambulanceCalled;
+	private FeatureCollection directions;
 
 	public OperationDTO(Operation operation) {
 		Assert.notNull(operation, "Operation must not be null.");
@@ -61,6 +63,7 @@ public class OperationDTO {
 			this.resources = operation.getResources().stream().map(r -> new ResourceDTO(r)).collect(Collectors.toSet());
 		}
 		this.ambulanceCalled = operation.isAmbulanceCalled();
+		this.directions = operation.getDirections();
 	}
 
 	@JsonIgnore
@@ -90,6 +93,7 @@ public class OperationDTO {
 					.collect(Collectors.toSet()));
 		}
 		operation.setAmbulanceCalled(ambulanceCalled);
+		operation.setDirections(directions);
 		return operation;
 	}
 }

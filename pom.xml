@@ -25,6 +25,7 @@
 
 		<!-- Versions -->
 		<easymock.version>4.0.2</easymock.version>
+		<geojson-jackson.version>1.8.1</geojson-jackson.version>
 	</properties>
 
 	<dependencies>
@@ -81,6 +82,11 @@
 		<dependency>
 			<groupId>com.github.ben-manes.caffeine</groupId>
 			<artifactId>caffeine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.grundid.opendatalab</groupId>
+			<artifactId>geojson-jackson</artifactId>
+			<version>${geojson-jackson.version}</version>
 		</dependency>
 
 		<!-- Databases -->
