@@ -39,6 +39,22 @@ public class OperationServiceImpl implements OperationService {
 		});
 	}
 
+	/*
+	 * Note: "0 0 0 * * ?" is valid but "0 0 0 * * *" is invalid. Spring and
+	 * Quartz document not mention this. Can use http://www.cronmaker.com/ to
+	 * validate the Quartz Cron expression.
+	 */
+	@Scheduled(cron = "0 0 0 * * ?") // Run at 12:00:00 AM (midnight) every day
+	public void purgeOperations() {
+		log.debug("Purge operations closed && older than 7 days.");
+		operations.values().stream().filter(Operation::isClosed).filter(o -> {
+			return Duration.between(o.getCreated(), Instant.now()).compareTo(Duration.ofDays(7)) > 0;
+		}).forEach(o -> {
+			log.info("Purging operation {}.", o.getId());
+			purgeOperation(o.getId());
+		});
+	}
+
 	@Override
 	public List<Operation> getOperations() {
 		log.trace("getOperations()");
@@ -132,6 +148,10 @@ public class OperationServiceImpl implements OperationService {
 			activeOperation = null;
 			resetActiveOperation();
 		}
+	}
+
+	private void purgeOperation(String id) {
+		operations.remove(id);
 	}
 
 	private void resetActiveOperation() {
