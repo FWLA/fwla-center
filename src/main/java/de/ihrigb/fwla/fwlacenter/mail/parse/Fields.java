@@ -1,11 +1,12 @@
 package de.ihrigb.fwla.fwlacenter.mail.parse;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,15 +33,18 @@ public enum Fields implements Field {
 		@Override
 		public BiConsumer<Operation, Matcher> getPopulator() {
 			return (operation, matcher) -> {
-				SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
 				Instant time;
 				String value = getSingleValue(matcher);
 				if (value != null) {
 					try {
-						Date date = format.parse(value);
-						time = date.toInstant();
-					} catch (ParseException e) {
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+						LocalDateTime localDateTime = LocalDateTime.parse(value, formatter);
+			
+						ZoneId zoneId = ZoneId.of("Europe/Berlin");
+						ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, zoneId);
+						time = zonedDateTime.toInstant();
+					} catch (RuntimeException e) {
 						log.error("Error parsing time. Fallback to now.", e);
 						time = Instant.now();
 					}

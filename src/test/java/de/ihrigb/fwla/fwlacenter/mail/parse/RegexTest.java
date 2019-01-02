@@ -23,6 +23,14 @@ public class RegexTest {
 	private RegexPatternRepository repository;
 
 	@Test
+	public void testTimePattern() throws Exception {
+		// Winter Time
+		assertEquals("2019-01-01T02:40:49Z", parse("Zeiten:        01.01.2019 03:37:46     01.01.2019 03:40:49\r\n", Fields.TIME).getTime().toString());
+		// Summer Time
+		assertEquals("2019-08-01T01:40:49Z", parse("Zeiten:        01.08.2019 03:37:46     01.08.2019 03:40:49\r\n", Fields.TIME).getTime().toString());
+	}
+
+	@Test
 	public void testCodePattern() throws Exception {
 		assertEquals("F-2", parse("1234567890 / F-2 - , Musterstadt-Musterort, Musterstraße", Fields.CODE).getCode());
 		assertEquals("H-PWASS", parse("1234567890 / H-PWASS - , Musterstadt-Musterort, Fluss - Ort > bis Musterstadt", Fields.CODE).getCode());
