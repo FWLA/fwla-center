@@ -51,10 +51,10 @@ public class ResourceProcessorTest {
 
 		Operation operation = new Operation();
 		operation.setResourceKeys(Collections.singletonList("key"));
-		operation.setResources(Collections.singleton(resource));
+		operation.setResources(Collections.singletonList(resource));
 
 		testee.process(operation);
-		assertEquals(Collections.singleton(resource), operation.getResources());
+		assertEquals(Collections.singletonList(resource), operation.getResources());
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class ResourceProcessorTest {
 
 		replay(resourceRepository, resourceKeyPatternRepository, eventLogService);
 		testee.process(operation);
-		assertEquals(Collections.singleton(resource), operation.getResources());
+		assertEquals(Collections.singletonList(resource), operation.getResources());
 		verify(resourceRepository, resourceKeyPatternRepository, eventLogService);
 	}
 
@@ -89,7 +89,7 @@ public class ResourceProcessorTest {
 
 		replay(resourceRepository, resourceKeyPatternRepository, eventLogService);
 		testee.process(operation);
-		assertEquals(Collections.emptySet(), operation.getResources());
+		assertEquals(Collections.emptyList(), operation.getResources());
 		verify(resourceRepository, resourceKeyPatternRepository, eventLogService);
 	}
 
@@ -109,7 +109,7 @@ public class ResourceProcessorTest {
 
 		replay(resourceRepository, resourceKeyPatternRepository, eventLogService);
 		testee.process(operation);
-		assertEquals(Collections.emptySet(), operation.getResources());
+		assertEquals(Collections.emptyList(), operation.getResources());
 		verify(resourceRepository, resourceKeyPatternRepository, eventLogService);
 	}
 
@@ -134,7 +134,7 @@ public class ResourceProcessorTest {
 
 		replay(resourceRepository, resourceKeyPatternRepository, eventLogService);
 		testee.process(operation);
-		assertEquals(Collections.emptySet(), operation.getResources());
+		assertEquals(Collections.emptyList(), operation.getResources());
 		verify(resourceRepository, resourceKeyPatternRepository, eventLogService);
 	}
 }
