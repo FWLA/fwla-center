@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
+import de.ihrigb.fwla.fwlacenter.configuration.HomeProvider;
 import de.ihrigb.fwla.fwlacenter.services.api.DisplayService;
 import de.ihrigb.fwla.fwlacenter.services.api.DisplayState;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
@@ -20,6 +21,7 @@ public class DisplayServiceImpl implements DisplayService {
 
 	private final OperationService operationService;
 	private final Optional<WeatherService> weatherService;
+	private final Optional<HomeProvider> homeProvider;
 
 	@Override
 	public DisplayState getDisplayState() {
@@ -42,6 +44,10 @@ public class DisplayServiceImpl implements DisplayService {
 			log.debug("Display is in idle state.");
 			builder.state(State.IDLE);
 		}
+
+		homeProvider.ifPresent(hp -> {
+			builder.home(Optional.ofNullable(hp.getHome()));
+		});
 
 		return builder.build();
 	}

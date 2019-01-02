@@ -17,6 +17,7 @@ public class DisplayStateDTO {
 	private String state;
 	private OperationDTO operation;
 	private WeatherDTO weather;
+	private CoordinateDTO home;
 	private String text;
 
 	public DisplayStateDTO(DisplayState displayState) {
@@ -24,6 +25,7 @@ public class DisplayStateDTO {
 		this.state = displayState.getState().name();
 		this.operation = displayState.getOperation().map(o -> new OperationDTO(o)).orElse(null);
 		this.weather = displayState.getWeather().map(w -> new WeatherDTO(w)).orElse(null);
+		this.home = displayState.getHome().map(c -> new CoordinateDTO(c)).orElse(null);
 		this.text = displayState.getText().orElse(null);
 	}
 }

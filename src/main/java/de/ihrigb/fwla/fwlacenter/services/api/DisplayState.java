@@ -21,6 +21,8 @@ public class DisplayState {
 	private Optional<Operation> operation = Optional.empty();
 	@Builder.Default
 	private Optional<String> text = Optional.empty();
+	@Builder.Default
+	private Optional<Coordinate> home = Optional.empty();
 
 	public static enum State {
 		IDLE, OPERATION, TEXT;
