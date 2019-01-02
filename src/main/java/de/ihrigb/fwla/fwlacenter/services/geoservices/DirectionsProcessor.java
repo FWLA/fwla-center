@@ -1,4 +1,4 @@
-package de.ihrigb.fwla.fwlacenter.services.directions;
+package de.ihrigb.fwla.fwlacenter.services.geoservices;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;

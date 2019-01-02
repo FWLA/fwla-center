@@ -1,4 +1,4 @@
-package de.ihrigb.fwla.fwlacenter.services.directions;
+package de.ihrigb.fwla.fwlacenter.services.geoservices;
 
 import java.net.URI;
 import java.util.Locale;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "app.directions.ors", name = "apiKey", matchIfMissing = false)
+@ConditionalOnProperty(prefix = "app.geo.ors", name = "apiKey", matchIfMissing = false)
 @EnableConfigurationProperties(OpenRouteServiceProperties.class)
 public class OpenRouteServiceDirectionsService implements DirectionsService {
 

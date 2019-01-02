@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "app.home")
+@ConfigurationProperties(prefix = "app.geo.home")
 public class HomeProperties {
 	private Coordinate coordinate;
 }
