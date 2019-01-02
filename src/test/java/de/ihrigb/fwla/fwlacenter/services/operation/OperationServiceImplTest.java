@@ -91,7 +91,7 @@ public class OperationServiceImplTest {
 
 		assertEquals(2, testee.getOperations().size());
 		assertSame(operation2, testee.get("id2").get());
-		assertSame(operation1, testee.getActiveOperation().get());
+		assertSame(operation2, testee.getActiveOperation().get());
 		assertEquals(2, testee.getCurrentOperations().size());
 		assertTrue(testee.hasActiveOperation());
 		assertTrue(testee.hasCurrentOperations());
@@ -140,7 +140,7 @@ public class OperationServiceImplTest {
 
 		assertEquals(2, testee.getOperations().size());
 		assertSame(operation2, testee.get("id2").get());
-		assertSame(operation1, testee.getActiveOperation().get());
+		assertSame(operation2, testee.getActiveOperation().get());
 		assertEquals(2, testee.getCurrentOperations().size());
 		assertTrue(testee.hasActiveOperation());
 		assertTrue(testee.hasCurrentOperations());

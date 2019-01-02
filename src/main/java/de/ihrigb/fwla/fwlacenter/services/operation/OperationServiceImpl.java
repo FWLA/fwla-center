@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OperationServiceImpl implements OperationService {
 
 	private Map<String, Operation> operations = new LinkedHashMap<>();
-	private List<String> currentOperationIds = new LinkedList<>();
+	private LinkedList<String> currentOperationIds = new LinkedList<>();
 	private String activeOperation;
 
 	@Scheduled(fixedRate = 60000)
@@ -58,7 +58,7 @@ public class OperationServiceImpl implements OperationService {
 
 		String id = operation.getId();
 		operations.put(id, operation);
-		currentOperationIds.add(id);
+		currentOperationIds.addFirst(id);
 		resetActiveOperation();
 	}
 
@@ -136,7 +136,7 @@ public class OperationServiceImpl implements OperationService {
 
 	private void resetActiveOperation() {
 		log.trace("resetActiveOperation()");
-		if (activeOperation == null && !currentOperationIds.isEmpty()) {
+		if (!currentOperationIds.isEmpty()) {
 			activeOperation = currentOperationIds.get(0);
 			log.info("New active operation: {}.", activeOperation);
 		}
