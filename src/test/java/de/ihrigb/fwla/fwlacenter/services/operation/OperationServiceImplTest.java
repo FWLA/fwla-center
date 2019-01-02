@@ -24,10 +24,12 @@ public class OperationServiceImplTest {
 	public MockitoRule mockito = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
 
 	private OperationServiceImpl testee;
+	private OperationProperties properties;
 
 	@Before
 	public void setUp() {
-		testee = new OperationServiceImpl();
+		properties = new OperationProperties();
+		testee = new OperationServiceImpl(properties);
 	}
 
 	@Test

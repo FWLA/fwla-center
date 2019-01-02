@@ -12,17 +12,23 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@EnableConfigurationProperties(OperationProperties.class)
+@RequiredArgsConstructor
 public class OperationServiceImpl implements OperationService {
+
+	private final OperationProperties properties;
 
 	private Map<String, Operation> operations = new LinkedHashMap<>();
 	private LinkedList<String> currentOperationIds = new LinkedList<>();
@@ -32,7 +38,7 @@ public class OperationServiceImpl implements OperationService {
 	public void timeoutOperations() {
 		log.debug("Scheduled timeout of operations.");
 		operations.values().stream().filter(o -> {
-			return Duration.between(o.getCreated(), Instant.now()).compareTo(Duration.ofMinutes(15)) > 0;
+			return Duration.between(o.getCreated(), Instant.now()).compareTo(properties.getTimeout()) > 0;
 		}).forEach(o -> {
 			log.info("Operation {} timed out. Closing it.", o.getId());
 			closeOperation(o.getId());
@@ -48,7 +54,7 @@ public class OperationServiceImpl implements OperationService {
 	public void purgeOperations() {
 		log.debug("Purge operations closed && older than 7 days.");
 		operations.values().stream().filter(Operation::isClosed).filter(o -> {
-			return Duration.between(o.getCreated(), Instant.now()).compareTo(Duration.ofDays(7)) > 0;
+			return Duration.between(o.getCreated(), Instant.now()).compareTo(properties.getPurge()) > 0;
 		}).forEach(o -> {
 			log.info("Purging operation {}.", o.getId());
 			purgeOperation(o.getId());
