@@ -29,3 +29,4 @@ src/main/resources/application-dev.yml
 
 ### VS Code ###
 .vscode/
+.attach_pid*
