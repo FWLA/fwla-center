@@ -26,7 +26,7 @@ public class RealEstate {
 	private String name;
 
 	@Column(name = "key", nullable = true, unique = true)
-	private String key;
+	private String pattern;
 
 	@Column(name = "information", nullable = true)
 	private String information;

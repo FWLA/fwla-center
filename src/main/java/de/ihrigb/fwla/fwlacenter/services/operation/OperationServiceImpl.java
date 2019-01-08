@@ -13,6 +13,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -46,9 +49,9 @@ public class OperationServiceImpl implements OperationService {
 	}
 
 	/*
-	 * Note: "0 0 0 * * ?" is valid but "0 0 0 * * *" is invalid. Spring and
-	 * Quartz document not mention this. Can use http://www.cronmaker.com/ to
-	 * validate the Quartz Cron expression.
+	 * Note: "0 0 0 * * ?" is valid but "0 0 0 * * *" is invalid. Spring and Quartz
+	 * document not mention this. Can use http://www.cronmaker.com/ to validate the
+	 * Quartz Cron expression.
 	 */
 	@Scheduled(cron = "0 0 0 * * ?") // Run at 12:00:00 AM (midnight) every day
 	public void purgeOperations() {
@@ -65,6 +68,20 @@ public class OperationServiceImpl implements OperationService {
 	public List<Operation> getOperations() {
 		log.trace("getOperations()");
 		return new ArrayList<>(operations.values());
+	}
+
+	@Override
+	public Page<Operation> getOperations(Pageable pageable) {
+		System.out.println(pageable.getOffset());
+		System.out.println(pageable.getPageNumber());
+		System.out.println(pageable.getPageSize());
+		if (pageable.getOffset() > getCount()) {
+			return new PageImpl<>(Collections.emptyList(), pageable, getCount());
+		}
+		return new PageImpl<>(
+				getOperations().subList((int) pageable.getOffset(),
+						(int) Math.min(getCount(), (pageable.getOffset() + pageable.getPageSize()))),
+				pageable, getCount());
 	}
 
 	@Override
@@ -154,6 +171,11 @@ public class OperationServiceImpl implements OperationService {
 			activeOperation = null;
 			resetActiveOperation();
 		}
+	}
+
+	@Override
+	public long getCount() {
+		return operations.size();
 	}
 
 	private void purgeOperation(String id) {

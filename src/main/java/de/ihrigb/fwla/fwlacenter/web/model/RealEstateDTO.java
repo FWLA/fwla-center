@@ -16,7 +16,7 @@ public class RealEstateDTO {
 
 	private String id;
 	private String name;
-	private String key;
+	private String pattern;
 	private String information;
 	private AddressDTO address;
 
@@ -25,7 +25,7 @@ public class RealEstateDTO {
 
 		this.id = realEstate.getId();
 		this.name = realEstate.getName();
-		this.key = realEstate.getKey();
+		this.pattern = realEstate.getPattern();
 		this.information = realEstate.getInformation();
 		if (realEstate.getAddress() != null) {
 			this.address = new AddressDTO(realEstate.getAddress());
@@ -37,7 +37,7 @@ public class RealEstateDTO {
 		RealEstate realEstate = new RealEstate();
 		realEstate.setId(id);
 		realEstate.setName(name);
-		realEstate.setKey(key);
+		realEstate.setPattern(pattern);
 		realEstate.setInformation(information);
 		if (address != null) {
 			realEstate.setAddress(address.getPersistenceModel());

@@ -1,8 +1,10 @@
 package de.ihrigb.fwla.fwlacenter.services.realestate;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
@@ -22,9 +24,10 @@ public class RealEstateProcessor implements Processor {
 	private final EventLogService eventLogService;
 
 	@Override
+	@Transactional(readOnly = true)
 	public void process(Operation operation) {
 		Assert.notNull(operation, "Operation must not be null.");
-		
+
 		log.debug("Processing operation {}.", operation.getId());
 
 		if (operation.getObject() == null) {
@@ -37,14 +40,30 @@ public class RealEstateProcessor implements Processor {
 			return;
 		}
 
-		Optional<RealEstate> optRealEstate = repository.findOneByKey(operation.getObject());
+		Optional<RealEstate> optRealEstate = repository.findOneByName(operation.getObject());
 		if (optRealEstate.isPresent()) {
-			RealEstate realEstate = optRealEstate.get();
-			log.debug("Setting real estate {} to operation.", realEstate.getName());
-			operation.setRealEstate(realEstate);
+			set(operation, optRealEstate.get());
 		} else {
-			log.debug("Did not find real estate for key {}.", operation.getObject());
-			eventLogService.error("Unable to find OperationKey with OBJECT '%s'.", operation.getObject());
+			optRealEstate = resolveByPattern(operation.getObject());
+			if (optRealEstate.isPresent()) {
+				set(operation, optRealEstate.get());
+			} else {
+				log.debug("Did not find real estate for key {}.", operation.getObject());
+				eventLogService.error("Unable to find OperationKey with OBJECT '%s'.", operation.getObject());
+			}
+		}
+	}
+
+	private void set(Operation operation, RealEstate realEstate) {
+		log.debug("Setting real estate {} to operation.", realEstate.getName());
+		operation.setRealEstate(realEstate);
+	}
+
+	private Optional<RealEstate> resolveByPattern(String key) {
+		try (Stream<RealEstate> stream = repository.streamAll()) {
+			return stream.filter(realEstate -> {
+				return key.matches(realEstate.getPattern());
+			}).findFirst();
 		}
 	}
 }
