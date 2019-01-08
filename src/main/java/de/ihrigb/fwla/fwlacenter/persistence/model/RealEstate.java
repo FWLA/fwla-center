@@ -1,10 +1,15 @@
 package de.ihrigb.fwla.fwlacenter.persistence.model;
 
+import java.util.Set;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -33,4 +38,9 @@ public class RealEstate {
 
 	@Embedded
 	private Address address;
+
+	@ElementCollection
+	@CollectionTable(name = "real_estate_links", joinColumns = @JoinColumn(name = "real_estate_id"))
+	@Column(name = "link", nullable = false)
+	private Set<String> links;
 }

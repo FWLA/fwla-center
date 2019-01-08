@@ -1,0 +1,22 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet id="00-create-realestate-links-table" author="ihrigb">
+		<createTable tableName="real_estate_links">
+			<column name="real_estate_id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="link" type="VARCHAR(512)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			baseTableName="real_estate_links"
+			baseColumnNames="real_estate_id"
+			constraintName="real_estate_links"
+			referencedTableName="real_estates"
+			referencedColumnNames="id"
+			onUpdate="CASCADE"
+			onDelete="CASCADE" />
+	</changeSet>
+</databaseChangeLog>

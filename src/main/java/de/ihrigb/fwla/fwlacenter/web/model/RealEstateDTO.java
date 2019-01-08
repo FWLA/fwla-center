@@ -1,5 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.web.model;
 
+import java.util.Set;
+
 import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,6 +21,7 @@ public class RealEstateDTO {
 	private String pattern;
 	private String information;
 	private AddressDTO address;
+	private Set<String> links;
 
 	public RealEstateDTO(RealEstate realEstate) {
 		Assert.notNull(realEstate, "RealEstate must not be null.");
@@ -30,6 +33,7 @@ public class RealEstateDTO {
 		if (realEstate.getAddress() != null) {
 			this.address = new AddressDTO(realEstate.getAddress());
 		}
+		this.links = realEstate.getLinks();
 	}
 
 	@JsonIgnore
@@ -42,6 +46,7 @@ public class RealEstateDTO {
 		if (address != null) {
 			realEstate.setAddress(address.getPersistenceModel());
 		}
+		realEstate.setLinks(links);
 		return realEstate;
 	}
 }
