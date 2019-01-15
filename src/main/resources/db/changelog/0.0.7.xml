@@ -19,4 +19,15 @@
 			onUpdate="CASCADE"
 			onDelete="CASCADE" />
 	</changeSet>
+
+	<changeSet id="01-add-coordinate-to-realestate" author="ihrigb">
+		<addColumn tableName="real_estates">
+			<column name="latitude" type="DOUBLE">
+				<constraints nullable="true" />
+			</column>
+			<column name="longitude" type="DOUBLE">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>

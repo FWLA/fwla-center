@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import de.ihrigb.fwla.fwlacenter.services.api.Coordinate;
 import lombok.Data;
 
 @Data
@@ -38,6 +39,9 @@ public class RealEstate {
 
 	@Embedded
 	private Address address;
+
+	@Embedded
+	private Coordinate coordinate;
 
 	@ElementCollection
 	@CollectionTable(name = "real_estate_links", joinColumns = @JoinColumn(name = "real_estate_id"))

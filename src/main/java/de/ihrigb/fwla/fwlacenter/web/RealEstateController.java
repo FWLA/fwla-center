@@ -15,14 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
+import de.ihrigb.fwla.fwlacenter.services.api.GeoServices;
 import de.ihrigb.fwla.fwlacenter.web.model.RealEstateDTO;
 
 @RestController
 @RequestMapping("/v1/realEstates")
 public class RealEstateController extends BaseController<RealEstate, String, RealEstateDTO> {
 
-	public RealEstateController(RealEstateRepository repository) {
+	private final GeoServices geoServices;
+
+	public RealEstateController(RealEstateRepository repository, GeoServices geoServices) {
 		super(repository);
+		this.geoServices = geoServices;
 	}
 
 	@GetMapping
@@ -69,5 +73,23 @@ public class RealEstateController extends BaseController<RealEstate, String, Rea
 	@Override
 	protected String getId(RealEstate t) {
 		return t.getId();
+	}
+
+	@Override
+	protected void beforeCreate(RealEstate entity) {
+		setCoordinate(entity);
+	}
+
+	@Override
+	protected void beforeUpdate(RealEstate entity) {
+		setCoordinate(entity);
+	}
+
+	private void setCoordinate(RealEstate realEstate) {
+		geoServices.geocoding().ifPresent(geocoding -> {
+			geocoding.geocode(realEstate.getAddress()).ifPresent(coordinate -> {
+				realEstate.setCoordinate(coordinate);
+			});
+		});
 	}
 }

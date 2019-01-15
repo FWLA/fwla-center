@@ -85,6 +85,7 @@ abstract class BaseController<T, ID extends Serializable, DTO> {
 
 	protected ResponseEntity<DataResponse<DTO>> doCreate(DTO dto) {
 		T t = getFromDTOFunction().apply(dto);
+		beforeCreate(t);
 		t = repository.save(t);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").build(getId(t));
@@ -99,6 +100,7 @@ abstract class BaseController<T, ID extends Serializable, DTO> {
 			return ResponseEntity.notFound().build();
 		}
 
+		beforeUpdate(t);
 		t = repository.save(t);
 
 		return ResponseEntity.ok(new DataResponse<>(getToDTOFunction().apply(t)));
@@ -109,7 +111,7 @@ abstract class BaseController<T, ID extends Serializable, DTO> {
 		return ResponseEntity.noContent().build();
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Set<ID> convertToIds(Object o) {
 		if (!(o instanceof Collection)) {
 			return Collections.emptySet();
@@ -122,4 +124,10 @@ abstract class BaseController<T, ID extends Serializable, DTO> {
 	abstract protected Function<? super DTO, ? extends T> getFromDTOFunction();
 
 	abstract protected ID getId(T t);
+
+	protected void beforeCreate(T entity) {
+	}
+
+	protected void beforeUpdate(T entity) {
+	}
 }
