@@ -2,7 +2,7 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.ihrigb.fwla.fwlacenter.persistence.model.Address;
+import de.ihrigb.fwla.fwlacenter.api.Address;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

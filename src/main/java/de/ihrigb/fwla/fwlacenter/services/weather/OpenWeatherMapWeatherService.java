@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import de.ihrigb.fwla.fwlacenter.services.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.services.api.Weather;
 import de.ihrigb.fwla.fwlacenter.services.api.WeatherService;
 import de.ihrigb.fwla.fwlacenter.services.api.Wind;

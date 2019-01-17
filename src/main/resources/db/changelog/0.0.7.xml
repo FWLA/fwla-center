@@ -30,4 +30,15 @@
 			</column>
 		</addColumn>
 	</changeSet>
+
+	<changeSet id="02-add-coordinate-to-station" author="ihrigb">
+		<addColumn tableName="stations">
+			<column name="latitude" type="DOUBLE">
+				<constraints nullable="true" />
+			</column>
+			<column name="longitude" type="DOUBLE">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>

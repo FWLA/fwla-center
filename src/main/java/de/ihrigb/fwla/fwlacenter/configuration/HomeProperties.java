@@ -2,7 +2,7 @@ package de.ihrigb.fwla.fwlacenter.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import de.ihrigb.fwla.fwlacenter.services.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import lombok.Getter;
 import lombok.Setter;
 

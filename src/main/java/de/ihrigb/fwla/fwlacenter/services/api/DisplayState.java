@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import de.ihrigb.fwla.fwlacenter.services.api.Weather;
 import lombok.Builder;

@@ -77,19 +77,14 @@ public class RealEstateController extends BaseController<RealEstate, String, Rea
 
 	@Override
 	protected void beforeCreate(RealEstate entity) {
-		setCoordinate(entity);
-	}
-
-	@Override
-	protected void beforeUpdate(RealEstate entity) {
-		setCoordinate(entity);
+		if (entity.getLocation().getCoordinate().getLatitude() == 0d && entity.getLocation().getCoordinate().getLongitude() == 0d) {
+			setCoordinate(entity);
+		}
 	}
 
 	private void setCoordinate(RealEstate realEstate) {
 		geoServices.geocoding().ifPresent(geocoding -> {
-			geocoding.geocode(realEstate.getAddress()).ifPresent(coordinate -> {
-				realEstate.setCoordinate(coordinate);
-			});
+			geocoding.geocode(realEstate.getLocation());
 		});
 	}
 }

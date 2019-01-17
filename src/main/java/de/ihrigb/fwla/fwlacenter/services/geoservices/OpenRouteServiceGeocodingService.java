@@ -11,14 +11,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import de.ihrigb.fwla.fwlacenter.persistence.model.Address;
-import de.ihrigb.fwla.fwlacenter.services.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Address;
+import de.ihrigb.fwla.fwlacenter.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Location;
 import de.ihrigb.fwla.fwlacenter.services.api.GeocodingService;
-import de.ihrigb.fwla.fwlacenter.services.api.Location;
 import de.ihrigb.fwla.fwlacenter.services.geoservices.visitors.PointVisitorPredicate;
 import de.ihrigb.fwla.fwlacenter.services.geoservices.visitors.ToCoordinateFunction;
 import lombok.extern.slf4j.Slf4j;
@@ -75,10 +76,12 @@ public class OpenRouteServiceGeocodingService implements GeocodingService {
 	}
 
 	private String stringify(Location location) {
-		return String.format("%s %s %s", location.getStreet(), location.getTown(), properties.getCountry());
+		Assert.notNull(location, "Location must not be null.");
+		return stringify(location.getAddress());
 	}
 
 	private String stringify(Address address) {
+		Assert.notNull(address, "Address must not be null.");
 		return String.format("%s %s %s", address.getStreet(), address.getTown(), properties.getCountry());
 	}
 

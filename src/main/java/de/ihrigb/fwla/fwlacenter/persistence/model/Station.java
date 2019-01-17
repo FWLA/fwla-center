@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import de.ihrigb.fwla.fwlacenter.api.Location;
 import lombok.Data;
 
 @Data
@@ -26,5 +27,5 @@ public class Station {
 	private String name;
 
 	@Embedded
-	private Address address;
+	private Location location;
 }

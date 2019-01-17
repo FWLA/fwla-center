@@ -13,7 +13,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import de.ihrigb.fwla.fwlacenter.services.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.services.api.DirectionsService;
 import lombok.extern.slf4j.Slf4j;
 

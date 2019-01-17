@@ -8,7 +8,7 @@ import org.geojson.GeoJsonObjectVisitor;
 import org.geojson.LngLatAlt;
 import org.geojson.Point;
 
-import de.ihrigb.fwla.fwlacenter.services.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 
 public class ToCoordinateFunction extends GeoJsonObjectVisitor.Adapter<Coordinate> implements Function<Feature, Coordinate> {
 

@@ -3,7 +3,7 @@ package de.ihrigb.fwla.fwlacenter.services.weather;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-import de.ihrigb.fwla.fwlacenter.services.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.services.api.Weather;
 import de.ihrigb.fwla.fwlacenter.services.api.WeatherService;
 

@@ -1,4 +1,4 @@
-package de.ihrigb.fwla.fwlacenter.services.api;
+package de.ihrigb.fwla.fwlacenter.api;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.geojson.FeatureCollection;
 
+import de.ihrigb.fwla.fwlacenter.api.Location;
 import de.ihrigb.fwla.fwlacenter.persistence.model.OperationKey;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Resource;

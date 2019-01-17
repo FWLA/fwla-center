@@ -15,14 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.Station;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
+import de.ihrigb.fwla.fwlacenter.services.api.GeoServices;
 import de.ihrigb.fwla.fwlacenter.web.model.StationDTO;
 
 @RestController
 @RequestMapping("/v1/stations")
 public class StationController extends BaseController<Station, String, StationDTO> {
 
-	public StationController(StationRepository repository) {
+	private final GeoServices geoServices;
+
+	public StationController(StationRepository repository, GeoServices geoServices) {
 		super(repository);
+		this.geoServices = geoServices;
 	}
 
 	@GetMapping
@@ -69,5 +73,18 @@ public class StationController extends BaseController<Station, String, StationDT
 	@Override
 	protected String getId(Station t) {
 		return t.getId();
+	}
+
+	@Override
+	protected void beforeCreate(Station entity) {
+		if (entity.getLocation().getCoordinate().getLatitude() == 0d && entity.getLocation().getCoordinate().getLongitude() == 0d) {
+			setCoordinate(entity);
+		}
+	}
+
+	private void setCoordinate(Station station) {
+		geoServices.geocoding().ifPresent(geocoding -> {
+			geocoding.geocode(station.getLocation());
+		});
 	}
 }

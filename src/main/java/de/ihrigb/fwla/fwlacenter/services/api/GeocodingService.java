@@ -2,7 +2,9 @@ package de.ihrigb.fwla.fwlacenter.services.api;
 
 import java.util.Optional;
 
-import de.ihrigb.fwla.fwlacenter.persistence.model.Address;
+import de.ihrigb.fwla.fwlacenter.api.Address;
+import de.ihrigb.fwla.fwlacenter.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Location;
 
 /**
  * Service to geocode locations.

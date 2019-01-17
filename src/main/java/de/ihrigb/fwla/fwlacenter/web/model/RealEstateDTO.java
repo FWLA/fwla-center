@@ -20,7 +20,7 @@ public class RealEstateDTO {
 	private String name;
 	private String pattern;
 	private String information;
-	private AddressDTO address;
+	private LocationDTO location;
 	private Set<String> links;
 
 	public RealEstateDTO(RealEstate realEstate) {
@@ -30,8 +30,8 @@ public class RealEstateDTO {
 		this.name = realEstate.getName();
 		this.pattern = realEstate.getPattern();
 		this.information = realEstate.getInformation();
-		if (realEstate.getAddress() != null) {
-			this.address = new AddressDTO(realEstate.getAddress());
+		if (realEstate.getLocation() != null) {
+			this.location = new LocationDTO(realEstate.getLocation());
 		}
 		this.links = realEstate.getLinks();
 	}
@@ -43,8 +43,8 @@ public class RealEstateDTO {
 		realEstate.setName(name);
 		realEstate.setPattern(pattern);
 		realEstate.setInformation(information);
-		if (address != null) {
-			realEstate.setAddress(address.getPersistenceModel());
+		if (location != null) {
+			realEstate.setLocation(location.getApiModel());
 		}
 		realEstate.setLinks(links);
 		return realEstate;

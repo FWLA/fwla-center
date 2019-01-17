@@ -13,8 +13,9 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 
-import de.ihrigb.fwla.fwlacenter.services.api.Coordinate;
-import de.ihrigb.fwla.fwlacenter.services.api.Location;
+import de.ihrigb.fwla.fwlacenter.api.Address;
+import de.ihrigb.fwla.fwlacenter.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Location;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +41,7 @@ public enum Fields implements Field {
 					try {
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 						LocalDateTime localDateTime = LocalDateTime.parse(value, formatter);
-			
+
 						ZoneId zoneId = ZoneId.of("Europe/Berlin");
 						ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, zoneId);
 						time = zonedDateTime.toInstant();
@@ -76,10 +77,8 @@ public enum Fields implements Field {
 		@Override
 		public BiConsumer<Operation, Matcher> getPopulator() {
 			return (operation, matcher) -> {
-				if (operation.getLocation() == null) {
-					operation.setLocation(new Location());
-				}
-				operation.getLocation().setTown(getSingleValue(matcher));
+				Fields.initLocation(operation);
+				operation.getLocation().getAddress().setTown(getSingleValue(matcher));
 			};
 		}
 	},
@@ -87,10 +86,8 @@ public enum Fields implements Field {
 		@Override
 		public BiConsumer<Operation, Matcher> getPopulator() {
 			return (operation, matcher) -> {
-				if (operation.getLocation() == null) {
-					operation.setLocation(new Location());
-				}
-				operation.getLocation().setDistrict(getSingleValue(matcher));
+				Fields.initLocation(operation);
+				operation.getLocation().getAddress().setDistrict(getSingleValue(matcher));
 			};
 		}
 	},
@@ -98,10 +95,8 @@ public enum Fields implements Field {
 		@Override
 		public BiConsumer<Operation, Matcher> getPopulator() {
 			return (operation, matcher) -> {
-				if (operation.getLocation() == null) {
-					operation.setLocation(new Location());
-				}
-				operation.getLocation().setStreet(getSingleValue(matcher));
+				Fields.initLocation(operation);
+				operation.getLocation().getAddress().setStreet(getSingleValue(matcher));
 			};
 		}
 	},
@@ -209,6 +204,15 @@ public enum Fields implements Field {
 			return 0;
 		}
 		return Double.parseDouble(value);
+	}
+
+	private static void initLocation(Operation operation) {
+		if (operation.getLocation() == null) {
+			operation.setLocation(new Location());
+		}
+		if (operation.getLocation().getAddress() == null) {
+			operation.getLocation().setAddress(new Address());
+		}
 	}
 
 	@Override

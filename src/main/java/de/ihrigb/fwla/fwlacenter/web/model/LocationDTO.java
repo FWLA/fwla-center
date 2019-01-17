@@ -4,7 +4,7 @@ import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.ihrigb.fwla.fwlacenter.services.api.Location;
+import de.ihrigb.fwla.fwlacenter.api.Location;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,17 +14,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LocationDTO {
 
-	private String street;
-	private String town;
-	private String district;
+	private AddressDTO address;
 	private CoordinateDTO coordinate;
 
 	public LocationDTO(Location location) {
 		Assert.notNull(location, "Location must not be null");
 
-		this.street = location.getStreet();
-		this.town = location.getTown();
-		this.district = location.getDistrict();
+		if (location.getAddress() != null) {
+			this.address = new AddressDTO(location.getAddress());
+		}
 		if (location.getCoordinate() != null) {
 			this.coordinate = new CoordinateDTO(location.getCoordinate());
 		}
@@ -33,9 +31,9 @@ public class LocationDTO {
 	@JsonIgnore
 	public Location getApiModel() {
 		Location location = new Location();
-		location.setStreet(street);
-		location.setTown(town);
-		location.setDistrict(district);
+		if (address != null) {
+			location.setAddress(address.getPersistenceModel());
+		}
 		if (coordinate != null) {
 			location.setCoordinate(coordinate.getApiModel());
 		}

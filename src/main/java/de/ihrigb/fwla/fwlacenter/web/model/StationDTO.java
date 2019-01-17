@@ -14,13 +14,13 @@ public class StationDTO {
 
 	private String id;
 	private String name;
-	private AddressDTO address;
+	private LocationDTO location;
 
 	public StationDTO(Station station) {
 		this.id = station.getId();
 		this.name = station.getName();
-		if (station.getAddress() != null) {
-			this.address = new AddressDTO(station.getAddress());
+		if (station.getLocation() != null) {
+			this.location = new LocationDTO(station.getLocation());
 		}
 	}
 
@@ -29,8 +29,8 @@ public class StationDTO {
 		Station station = new Station();
 		station.setId(id);
 		station.setName(name);
-		if (address != null) {
-			station.setAddress(address.getPersistenceModel());
+		if (location != null) {
+			station.setLocation(location.getApiModel());
 		}
 		return station;
 	}
