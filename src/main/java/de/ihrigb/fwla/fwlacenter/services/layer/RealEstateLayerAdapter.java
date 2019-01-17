@@ -32,7 +32,6 @@ class RealEstateLayerAdapter extends AbstractLayerAdapter<RealEstate> {
 
 	@Override
 	Feature toFeature(RealEstate t) {
-		return new PointFeature(t.getName(), t.getInformation(), t.getLocation().getCoordinate(),
-				t.getLocation().getAddress());
+		return new PointFeature(t.getName(), t.getInformation(), t.getLocation(), "green");
 	}
 }

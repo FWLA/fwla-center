@@ -32,6 +32,6 @@ class StationLayerAdapter extends AbstractLayerAdapter<Station> {
 
 	@Override
 	Feature toFeature(Station t) {
-		return new PointFeature(t.getName(), null, t.getLocation().getCoordinate(), t.getLocation().getAddress());
+		return new PointFeature(t.getName(), null, t.getLocation(), "grey");
 	}
 }

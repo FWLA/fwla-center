@@ -12,6 +12,7 @@ public class PointFeatureDTO extends FeatureDTO {
 
 	private CoordinateDTO coordinate;
 	private AddressDTO address;
+	private String color;
 
 	public PointFeatureDTO(PointFeature pointFeature) {
 		super(pointFeature);
@@ -21,5 +22,6 @@ public class PointFeatureDTO extends FeatureDTO {
 		if (pointFeature.getAddress() != null) {
 			this.address = new AddressDTO(pointFeature.getAddress());
 		}
+		this.color = pointFeature.getColor();
 	}
 }

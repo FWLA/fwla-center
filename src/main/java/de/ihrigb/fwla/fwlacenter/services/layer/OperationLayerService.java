@@ -36,7 +36,6 @@ class OperationLayerService implements LayerService {
 	}
 
 	private Feature map(Operation operation) {
-		return new PointFeature(operation.getCode(), operation.getMessage(), operation.getLocation().getCoordinate(),
-				operation.getLocation().getAddress());
+		return new PointFeature(operation.getCode(), operation.getMessage(), operation.getLocation(), "red");
 	}
 }
