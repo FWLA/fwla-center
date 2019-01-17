@@ -77,7 +77,8 @@ public class RealEstateController extends BaseController<RealEstate, String, Rea
 
 	@Override
 	protected void beforeCreate(RealEstate entity) {
-		if (entity.getLocation().getCoordinate().getLatitude() == 0d && entity.getLocation().getCoordinate().getLongitude() == 0d) {
+		if (entity.getLocation().getCoordinate() == null || entity.getLocation().getCoordinate().getLatitude() == 0d
+				&& entity.getLocation().getCoordinate().getLongitude() == 0d) {
 			setCoordinate(entity);
 		}
 	}

@@ -1,5 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.persistence.model;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -9,13 +11,15 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import de.ihrigb.fwla.fwlacenter.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Locatable;
 import de.ihrigb.fwla.fwlacenter.api.Location;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "stations")
-public class Station {
+public class Station implements Locatable {
 
 	@Id
 	@GeneratedValue(generator = "uuid2")
@@ -28,4 +32,12 @@ public class Station {
 
 	@Embedded
 	private Location location;
+
+	@Override
+	public Optional<Coordinate> locate() {
+		if (location == null) {
+			return Optional.empty();
+		}
+		return location.locate();
+	}
 }

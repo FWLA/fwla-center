@@ -77,7 +77,8 @@ public class StationController extends BaseController<Station, String, StationDT
 
 	@Override
 	protected void beforeCreate(Station entity) {
-		if (entity.getLocation().getCoordinate().getLatitude() == 0d && entity.getLocation().getCoordinate().getLongitude() == 0d) {
+		if (entity.getLocation().getCoordinate() == null || entity.getLocation().getCoordinate().getLatitude() == 0d
+				&& entity.getLocation().getCoordinate().getLongitude() == 0d) {
 			setCoordinate(entity);
 		}
 	}

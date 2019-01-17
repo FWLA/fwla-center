@@ -1,5 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.persistence.model;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -15,13 +16,14 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import de.ihrigb.fwla.fwlacenter.api.Coordinate;
+import de.ihrigb.fwla.fwlacenter.api.Locatable;
 import de.ihrigb.fwla.fwlacenter.api.Location;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "real_estates")
-public class RealEstate {
+public class RealEstate implements Locatable {
 
 	@Id
 	@GeneratedValue(generator = "uuid2")
@@ -45,4 +47,12 @@ public class RealEstate {
 	@CollectionTable(name = "real_estate_links", joinColumns = @JoinColumn(name = "real_estate_id"))
 	@Column(name = "link", nullable = false)
 	private Set<String> links;
+
+	@Override
+	public Optional<Coordinate> locate() {
+		if (location == null) {
+			return Optional.empty();
+		}
+		return this.location.locate();
+	}
 }
