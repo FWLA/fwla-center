@@ -13,7 +13,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.model.ResourceKeyPattern;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceKeyPatternRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

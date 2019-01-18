@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import de.ihrigb.fwla.fwlacenter.web.model.DataResponse;
 import de.ihrigb.fwla.fwlacenter.web.model.IdDTO;
 import de.ihrigb.fwla.fwlacenter.web.model.OperationDTO;

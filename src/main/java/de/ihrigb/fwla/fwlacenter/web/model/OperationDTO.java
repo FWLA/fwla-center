@@ -10,7 +10,7 @@ import org.geojson.FeatureCollection;
 import org.springframework.util.Assert;
 
 import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

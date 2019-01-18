@@ -9,7 +9,7 @@ import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
 import de.ihrigb.fwla.fwlacenter.persistence.model.AmbulancePattern;
 import de.ihrigb.fwla.fwlacenter.persistence.model.PatternMode;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.AmbulancePatternRepository;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import lombok.RequiredArgsConstructor;
 
 @Component

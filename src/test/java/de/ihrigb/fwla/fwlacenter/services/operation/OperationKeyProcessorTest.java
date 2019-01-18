@@ -8,10 +8,10 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import de.ihrigb.fwla.fwlacenter.persistence.model.OperationKey;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationKeyRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 
 public class OperationKeyProcessorTest {
 

@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
+
 public interface OperationService {
 
 	List<Operation> getOperations();

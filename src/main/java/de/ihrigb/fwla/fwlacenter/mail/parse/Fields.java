@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import de.ihrigb.fwla.fwlacenter.api.Address;
 import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.api.Location;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import de.ihrigb.fwla.fwlacenter.configuration.HomeProvider;
 import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
 import de.ihrigb.fwla.fwlacenter.services.api.DirectionsService;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import lombok.RequiredArgsConstructor;
 
 @Component

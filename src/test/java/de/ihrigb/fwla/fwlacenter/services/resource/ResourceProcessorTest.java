@@ -10,13 +10,13 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import de.ihrigb.fwla.fwlacenter.persistence.model.PatternMode;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Resource;
 import de.ihrigb.fwla.fwlacenter.persistence.model.ResourceKeyPattern;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceKeyPatternRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
 
 public class ResourceProcessorTest {
 

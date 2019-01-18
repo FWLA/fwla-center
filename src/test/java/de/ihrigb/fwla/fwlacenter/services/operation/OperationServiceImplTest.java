@@ -8,6 +8,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,7 +20,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
 
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
 
 public class OperationServiceImplTest {
 
@@ -24,12 +29,14 @@ public class OperationServiceImplTest {
 	public MockitoRule mockito = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
 
 	private OperationServiceImpl testee;
+	private OperationRepository operationRepository;
 	private OperationProperties properties;
 
 	@Before
 	public void setUp() {
+		operationRepository = mock(OperationRepository.class);
 		properties = new OperationProperties();
-		testee = new OperationServiceImpl(properties);
+		testee = new OperationServiceImpl(operationRepository, properties);
 	}
 
 	@Test
@@ -48,6 +55,10 @@ public class OperationServiceImplTest {
 
 		when(operation.isTraining()).thenReturn(false);
 		when(operation.getId()).thenReturn("id");
+
+		when(operationRepository.save(operation)).thenReturn(operation);
+		when(operationRepository.findById("id")).thenReturn(Optional.of(operation));
+		when(operationRepository.findAll()).thenReturn(Collections.singletonList(operation));
 
 		testee.addOperation(operation);
 
@@ -75,6 +86,10 @@ public class OperationServiceImplTest {
 		when(operation1.isTraining()).thenReturn(false);
 		when(operation1.getId()).thenReturn("id1");
 
+		when(operationRepository.save(operation1)).thenReturn(operation1);
+		when(operationRepository.findById("id1")).thenReturn(Optional.of(operation1));
+		when(operationRepository.findAll()).thenReturn(Collections.singletonList(operation1));
+
 		testee.addOperation(operation1);
 
 		assertEquals(1, testee.getOperations().size());
@@ -88,6 +103,10 @@ public class OperationServiceImplTest {
 
 		when(operation2.isTraining()).thenReturn(false);
 		when(operation2.getId()).thenReturn("id2");
+
+		when(operationRepository.save(operation2)).thenReturn(operation2);
+		when(operationRepository.findById("id2")).thenReturn(Optional.of(operation2));
+		when(operationRepository.findAll()).thenReturn(Arrays.asList(operation1, operation2));
 
 		testee.addOperation(operation2);
 
@@ -124,6 +143,10 @@ public class OperationServiceImplTest {
 		when(operation1.isTraining()).thenReturn(false);
 		when(operation1.getId()).thenReturn("id1");
 
+		when(operationRepository.save(operation1)).thenReturn(operation1);
+		when(operationRepository.findById("id1")).thenReturn(Optional.of(operation1));
+		when(operationRepository.findAll()).thenReturn(Collections.singletonList(operation1));
+
 		testee.addOperation(operation1);
 
 		assertEquals(1, testee.getOperations().size());
@@ -137,6 +160,10 @@ public class OperationServiceImplTest {
 
 		when(operation2.isTraining()).thenReturn(false);
 		when(operation2.getId()).thenReturn("id2");
+
+		when(operationRepository.save(operation2)).thenReturn(operation2);
+		when(operationRepository.findById("id2")).thenReturn(Optional.of(operation2));
+		when(operationRepository.findAll()).thenReturn(Arrays.asList(operation1, operation2));
 
 		testee.addOperation(operation2);
 
@@ -173,6 +200,11 @@ public class OperationServiceImplTest {
 		when(operation.isTraining()).thenReturn(false);
 		when(operation.getId()).thenReturn("id");
 		when(operation.getCreated()).thenReturn(Instant.ofEpochMilli(System.currentTimeMillis() - (16 * 60 * 1000)));
+
+		when(operationRepository.save(operation)).thenReturn(operation);
+		when(operationRepository.findById("id")).thenReturn(Optional.of(operation));
+		when(operationRepository.streamAll()).thenReturn(Stream.of(operation));
+		when(operationRepository.findAll()).thenReturn(Collections.singletonList(operation));
 
 		testee.addOperation(operation);
 

@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.Handler;
 import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 
 public class OperationsChainTest {
 

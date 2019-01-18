@@ -5,12 +5,12 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import de.ihrigb.fwla.fwlacenter.configuration.HomeProvider;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import de.ihrigb.fwla.fwlacenter.services.api.DisplayService;
 import de.ihrigb.fwla.fwlacenter.services.api.DisplayState;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.services.api.DisplayState.State;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.services.api.WeatherService;
-import de.ihrigb.fwla.fwlacenter.services.api.DisplayState.State;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

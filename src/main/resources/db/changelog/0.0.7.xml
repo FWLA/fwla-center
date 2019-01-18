@@ -41,4 +41,138 @@
 			</column>
 		</addColumn>
 	</changeSet>
+
+	<changeSet id="03-operation-persistence" author="ihrigb">
+		<createTable tableName="operations">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="time" type="TIMESTAMP">
+				<constraints nullable="true" />
+			</column>
+			<column name="place" type="VARCHAR(512)">
+				<constraints nullable="true" />
+			</column>
+			<column name="object" type="VARCHAR(512)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_street" type="VARCHAR(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_zip" type="VARCHAR(16)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_town" type="VARCHAR(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_district" type="VARCHAR(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="latitude" type="DOUBLE">
+				<constraints nullable="true" />
+			</column>
+			<column name="longitude" type="DOUBLE">
+				<constraints nullable="true" />
+			</column>
+			<column name="code" type="VARCHAR(64)">
+				<constraints nullable="true" />
+			</column>
+			<column name="message" type="VARCHAR(512)">
+				<constraints nullable="true" />
+			</column>
+			<column name="notice" type="VARCHAR(2048)">
+				<constraints nullable="true" />
+			</column>
+			<column name="operation_key_id" type="VARCHAR(64)">
+				<constraints nullable="true" />
+			</column>
+			<column name="real_estate_id" type="VARCHAR(64)">
+				<constraints nullable="true" />
+			</column>
+			<column name="ambulance_called" type="BOOLEAN">
+				<constraints nullable="true" />
+			</column>
+			<column name="directions" type="CLOB">
+				<constraints nullable="true" />
+			</column>
+			<column name="created" type="TIMESTAMP">
+				<constraints nullable="true" />
+			</column>
+			<column name="closed" type="BOOLEAN">
+				<constraints nullable="true" />
+			</column>
+			<column name="year" type="INTEGER">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			baseTableName="operations"
+			baseColumnNames="operation_key_id"
+			constraintName="operation-operation_key"
+			referencedTableName="operation_keys"
+			referencedColumnNames="id"
+			onUpdate="CASCADE"
+			onDelete="SET NULL" />
+
+		<addForeignKeyConstraint
+			baseTableName="operations"
+			baseColumnNames="real_estate_id"
+			constraintName="operation-real_estate"
+			referencedTableName="real_estates"
+			referencedColumnNames="id"
+			onUpdate="CASCADE"
+			onDelete="SET NULL" />
+
+		<createTable tableName="operation_resource_keys">
+			<column name="operation_id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="resource_key" type="VARCHAR(256)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="index" type="INTEGER">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			baseTableName="operation_resource_keys"
+			baseColumnNames="operation_id"
+			constraintName="operation_resource_keys_collection"
+			referencedTableName="operations"
+			referencedColumnNames="id"
+			onUpdate="CASCADE"
+			onDelete="CASCADE" />
+
+		<createTable tableName="operation_resources">
+			<column name="operation_id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="resource_id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="index" type="INTEGER">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			baseTableName="operation_resources"
+			baseColumnNames="operation_id"
+			constraintName="operation_resources_operations"
+			referencedTableName="operations"
+			referencedColumnNames="id"
+			onUpdate="CASCADE"
+			onDelete="CASCADE" />
+
+		<addForeignKeyConstraint
+			baseTableName="operation_resources"
+			baseColumnNames="resource_id"
+			constraintName="operation_resources_resources"
+			referencedTableName="resources"
+			referencedColumnNames="id"
+			onUpdate="CASCADE"
+			onDelete="CASCADE" />
+	</changeSet>
 </databaseChangeLog>

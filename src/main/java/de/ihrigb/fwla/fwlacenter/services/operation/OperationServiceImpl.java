@@ -4,23 +4,25 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,57 +33,43 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OperationServiceImpl implements OperationService {
 
+	private final OperationRepository operationRepository;
 	private final OperationProperties properties;
 
-	private Map<String, Operation> operations = new LinkedHashMap<>();
+	private Map<String, Operation> trainingOperations = new ConcurrentHashMap<>();
 	private LinkedList<String> currentOperationIds = new LinkedList<>();
 	private String activeOperation;
 
+	@Transactional
 	@Scheduled(fixedRate = 60000)
 	public void timeoutOperations() {
 		log.debug("Scheduled timeout of operations.");
-		operations.values().stream().filter(o -> {
+		operationRepository.streamAll().filter(o -> {
 			return Duration.between(o.getCreated(), Instant.now()).compareTo(properties.getTimeout()) > 0;
 		}).forEach(o -> {
 			log.info("Operation {} timed out. Closing it.", o.getId());
 			closeOperation(o.getId());
 		});
-	}
-
-	/*
-	 * Note: "0 0 0 * * ?" is valid but "0 0 0 * * *" is invalid. Spring and Quartz
-	 * document not mention this. Can use http://www.cronmaker.com/ to validate the
-	 * Quartz Cron expression.
-	 */
-	@Scheduled(cron = "0 0 0 * * ?") // Run at 12:00:00 AM (midnight) every day
-	public void purgeOperations() {
-		log.debug("Purge operations closed && older than 7 days.");
-		operations.values().stream().filter(Operation::isClosed).filter(o -> {
-			return Duration.between(o.getCreated(), Instant.now()).compareTo(properties.getPurge()) > 0;
+		trainingOperations.values().stream().filter(o -> {
+			return Duration.between(o.getCreated(), Instant.now()).compareTo(properties.getTimeout()) > 0;
 		}).forEach(o -> {
-			log.info("Purging operation {}.", o.getId());
-			purgeOperation(o.getId());
+			log.info("Traingin Operation {} timed out. Closing it.", o.getId());
+			closeOperation(o.getId());
 		});
 	}
 
 	@Override
 	public List<Operation> getOperations() {
 		log.trace("getOperations()");
-		return new ArrayList<>(operations.values());
+		ArrayList<Operation> operations = new ArrayList<>();
+		operations.addAll(operationRepository.findAll());
+		operations.addAll(trainingOperations.values());
+		return operations;
 	}
 
 	@Override
 	public Page<Operation> getOperations(Pageable pageable) {
-		System.out.println(pageable.getOffset());
-		System.out.println(pageable.getPageNumber());
-		System.out.println(pageable.getPageSize());
-		if (pageable.getOffset() > getCount()) {
-			return new PageImpl<>(Collections.emptyList(), pageable, getCount());
-		}
-		return new PageImpl<>(
-				getOperations().subList((int) pageable.getOffset(),
-						(int) Math.min(getCount(), (pageable.getOffset() + pageable.getPageSize()))),
-				pageable, getCount());
+		return operationRepository.findAll(pageable);
 	}
 
 	@Override
@@ -90,13 +78,18 @@ public class OperationServiceImpl implements OperationService {
 
 		log.info("Adding operation {}.", operation.getId());
 
+		String id = operation.getId();
+		if (!operation.isTraining()) {
+			operationRepository.save(operation);
+		} else {
+			trainingOperations.put(id, operation);
+		}
+
 		if (!operation.isTraining() && containsTraining()) {
 			log.debug("Clear existing training due to new real operation.");
 			clearTraining();
 		}
 
-		String id = operation.getId();
-		operations.put(id, operation);
 		currentOperationIds.addFirst(id);
 		resetActiveOperation();
 	}
@@ -122,7 +115,7 @@ public class OperationServiceImpl implements OperationService {
 		if (activeOperation == null) {
 			return Optional.empty();
 		}
-		return Optional.ofNullable(operations.get(activeOperation));
+		return get(activeOperation);
 	}
 
 	@Override
@@ -137,15 +130,15 @@ public class OperationServiceImpl implements OperationService {
 
 		log.trace("get({})", id);
 
-		return Optional.ofNullable(operations.get(id));
+		return Optional.ofNullable(operationRepository.findById(id).orElse(trainingOperations.get(id)));
 	}
 
 	@Override
 	public List<Operation> getCurrentOperations() {
 		log.trace("getCurrentOperations()");
 		return Collections.unmodifiableList(currentOperationIds.stream().map(id -> {
-			return operations.get(id);
-		}).collect(Collectors.toList()));
+			return get(id);
+		}).map(o -> o.orElse(null)).filter(Objects::nonNull).collect(Collectors.toList()));
 	}
 
 	@Override
@@ -163,6 +156,11 @@ public class OperationServiceImpl implements OperationService {
 		get(id).ifPresent(operation -> {
 			log.info("Close operation {}.", id);
 			operation.setClosed(true);
+			if (!operation.isTraining()) {
+				operationRepository.save(operation);
+			} else {
+				trainingOperations.remove(id);
+			}
 		});
 
 		currentOperationIds.remove(id);
@@ -175,11 +173,7 @@ public class OperationServiceImpl implements OperationService {
 
 	@Override
 	public long getCount() {
-		return operations.size();
-	}
-
-	private void purgeOperation(String id) {
-		operations.remove(id);
+		return operationRepository.count() + trainingOperations.size();
 	}
 
 	private void resetActiveOperation() {
@@ -192,20 +186,16 @@ public class OperationServiceImpl implements OperationService {
 
 	private boolean containsTraining() {
 		log.trace("containsTraining()");
-		return operations.values().stream().filter(o -> o.isTraining()).count() > 0;
+		return !trainingOperations.isEmpty();
 	}
 
 	private void clearTraining() {
 		log.trace("clearTraining()");
-		Set<String> trainingIds = operations.values().stream().filter(o -> o.isTraining()).map(o -> o.getId())
-				.collect(Collectors.toSet());
-		for (String id : trainingIds) {
-			log.debug("Removing training operation {}.", id);
-			operations.remove(id);
-		}
+		Set<String> trainingIds = trainingOperations.keySet();
 		currentOperationIds.removeAll(trainingIds);
 		if (trainingIds.contains(activeOperation)) {
 			activeOperation = null;
 		}
+		trainingOperations.clear();
 	}
 }

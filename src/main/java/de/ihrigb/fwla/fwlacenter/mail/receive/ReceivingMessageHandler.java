@@ -16,7 +16,7 @@ import org.springframework.messaging.MessagingException;
 import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
 import de.ihrigb.fwla.fwlacenter.mail.Email;
 import de.ihrigb.fwla.fwlacenter.mail.api.MailExtractionService;
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,7 +56,10 @@ public class ReceivingMessageHandler implements MessageHandler {
 
 				Email email = new Email(sender, subject, text, timestamp);
 				Operation operation = mailExtractionService.extract(email);
-				operation.setTraining(isTraining);
+				if (isTraining) {
+					operation.setTraining(true);
+					operation.setId("t-" + operation.getId());
+				}
 				operationChain.put(operation);
 			}
 		} catch (Exception e) {

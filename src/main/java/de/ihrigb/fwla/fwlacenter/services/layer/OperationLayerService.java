@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import de.ihrigb.fwla.fwlacenter.services.api.Operation;
-import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Feature;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerService;
@@ -15,24 +15,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class OperationLayerService implements LayerService {
 
-	private final OperationService operationService;
+	private final OperationRepository operationRepository;
 
 	@Override
 	public Set<? extends Feature> getFeatures() {
-		return operationService.getOperations().stream().map(operation -> map(operation)).collect(Collectors.toSet());
+		return null;
 	}
 
 	@Override
 	public Set<? extends Feature> getFeatures(String layer) {
-		if ("operations".equals(layer)) {
-			return getFeatures();
+		if (!layer.startsWith("operation")) {
+			return Collections.emptySet();
 		}
-		return Collections.emptySet();
+		int year = Integer.parseInt(layer.substring("operations".length()));
+		return operationRepository.findByYear(year).stream().map(o -> map(o)).collect(Collectors.toSet());
 	}
 
 	@Override
 	public Set<Layer> getLayers() {
-		return Collections.singleton(new Layer("operations", "Einsätze"));
+		return operationRepository.findYears().stream().map(year -> new Layer("operations" + year, "Einsätze " + year))
+				.collect(Collectors.toSet());
 	}
 
 	private Feature map(Operation operation) {
