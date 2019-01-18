@@ -15,6 +15,6 @@ public class ReceivingProperties {
 	private String host;
 	private String username;
 	private String password;
-	private Set<String> whitelist;
-	private Set<String> blacklist;
+	private Set<String> whitelistHot;
+	private Set<String> whitelistTraining;
 }

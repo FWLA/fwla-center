@@ -17,7 +17,6 @@ import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
 import de.ihrigb.fwla.fwlacenter.mail.Email;
 import de.ihrigb.fwla.fwlacenter.mail.api.MailExtractionService;
 import de.ihrigb.fwla.fwlacenter.services.api.Operation;
-import de.ihrigb.fwla.fwlacenter.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,34 +35,33 @@ public class ReceivingMessageHandler implements MessageHandler {
 
 			Address[] addresses = mimeMessage.getFrom();
 			String sender = ((InternetAddress) addresses[0]).getAddress();
-			if (addresses != null && filterSender(sender)) {
+			if (addresses != null) {
+
+				boolean isTraining;
+				switch (new MailFilter(properties).filter(sender)) {
+				case REJECTED:
+					return;
+				case TRAINING:
+					isTraining = true;
+					break;
+				case HOT:
+				default:
+					isTraining = false;
+					break;
+				}
+
 				String subject = mimeMessage.getSubject();
 				String text = getText(mimeMessage);
 				Instant timestamp = Instant.ofEpochMilli(message.getHeaders().getTimestamp());
 
 				Email email = new Email(sender, subject, text, timestamp);
 				Operation operation = mailExtractionService.extract(email);
+				operation.setTraining(isTraining);
 				operationChain.put(operation);
 			}
 		} catch (Exception e) {
 			log.error("Exception while handling incomming message.", e);
 		}
-	}
-
-	private boolean filterSender(String sender) {
-		if (properties.getWhitelist() != null && !properties.getWhitelist().isEmpty()) {
-			if (!StringUtils.containsIgnoreCase(properties.getWhitelist(), sender)) {
-				return false;
-			}
-		}
-
-		if (properties.getBlacklist() != null && !properties.getBlacklist().isEmpty()) {
-			if (StringUtils.containsIgnoreCase(properties.getBlacklist(), sender)) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	private String getText(Part p) throws javax.mail.MessagingException, IOException {
