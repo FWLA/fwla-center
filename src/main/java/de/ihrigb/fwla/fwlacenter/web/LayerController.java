@@ -1,5 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.web;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,9 +33,9 @@ public class LayerController {
 	private final LayerService layerService;
 
 	@GetMapping
-	public ResponseEntity<Set<LayerDTO>> getLayers() {
+	public ResponseEntity<List<LayerDTO>> getLayers() {
 		return ResponseEntity
-				.ok(layerService.getLayers().stream().map(layer -> new LayerDTO(layer)).collect(Collectors.toSet()));
+				.ok(layerService.getLayers().stream().map(layer -> new LayerDTO(layer)).collect(Collectors.toList()));
 	}
 
 	@GetMapping("/{layer}")

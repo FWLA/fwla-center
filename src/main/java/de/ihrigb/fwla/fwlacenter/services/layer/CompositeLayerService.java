@@ -1,6 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.services.layer;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,8 +17,10 @@ class CompositeLayerService implements LayerService {
 	}
 
 	@Override
-	public Set<Layer> getLayers() {
-		return layerServices.stream().flatMap(ls -> ls.getLayers().stream()).collect(Collectors.toSet());
+	public List<Layer> getLayers() {
+		List<Layer> layers = layerServices.stream().flatMap(ls -> ls.getLayers().stream()).collect(Collectors.toList());
+		layers.sort(LayerComparator.INSTANCE);
+		return layers;
 	}
 
 	@Override

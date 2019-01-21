@@ -1,6 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.services.layer;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -38,16 +39,17 @@ class OperationLayerService implements LayerService {
 					.orElse(Collections.emptySet());
 		}
 		int year = Integer.parseInt(layer.substring("operations".length()));
-		return operationRepository.findByYear(year).stream().map(map()).filter(Objects::nonNull)
+		return operationRepository.findByYear(year).stream().filter(o -> o.getLocation() != null)
+				.filter(o -> o.getLocation().getCoordinate() != null).map(map()).filter(Objects::nonNull)
 				.collect(Collectors.toSet());
 	}
 
 	@Override
-	public Set<Layer> getLayers() {
+	public List<Layer> getLayers() {
 		return Stream
 				.concat(Stream.of(new Layer("operation", "Einsatz")), operationRepository.findYears().stream()
 						.map(year -> new Layer("operations" + year, "Einsätze " + year)).filter(Objects::nonNull))
-				.collect(Collectors.toSet());
+				.collect(Collectors.toList());
 	}
 
 	private Function<Operation, Feature> map() {

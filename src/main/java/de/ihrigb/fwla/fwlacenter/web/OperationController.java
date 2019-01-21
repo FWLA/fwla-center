@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OperationController {
 
+	private final OperationRepository operationRepository;
 	private final OperationService operationService;
 	private final OperationChain OperationChain;
 
@@ -47,6 +49,12 @@ public class OperationController {
 		List<OperationDTO> list = pageResult.getContent().stream().map(toDTOMapper()).collect(Collectors.toList());
 
 		return ResponseEntity.ok(new DataResponse<>(list, operationService.getCount()));
+	}
+
+	@PostMapping("/all")
+	public ResponseEntity<?> importAll(@RequestBody List<Operation> operations) {
+		operationRepository.saveAll(operations);
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/active")

@@ -26,6 +26,7 @@
 		<!-- Versions -->
 		<easymock.version>4.0.2</easymock.version>
 		<geojson-jackson.version>1.8.1</geojson-jackson.version>
+		<commons-codec.version>1.11</commons-codec.version>
 	</properties>
 
 	<dependencies>
@@ -87,6 +88,11 @@
 			<groupId>de.grundid.opendatalab</groupId>
 			<artifactId>geojson-jackson</artifactId>
 			<version>${geojson-jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons-codec.version}</version>
 		</dependency>
 
 		<!-- Databases -->

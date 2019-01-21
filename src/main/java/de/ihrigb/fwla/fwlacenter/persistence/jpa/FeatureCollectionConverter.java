@@ -20,6 +20,9 @@ public class FeatureCollectionConverter implements AttributeConverter<FeatureCol
 
 	@Override
 	public String convertToDatabaseColumn(FeatureCollection attribute) {
+		if (attribute == null) {
+			return null;
+		}
 		try {
 			return objectMapper.writeValueAsString(attribute);
 		} catch (IOException e) {
@@ -31,6 +34,9 @@ public class FeatureCollectionConverter implements AttributeConverter<FeatureCol
 
 	@Override
 	public FeatureCollection convertToEntityAttribute(String dbData) {
+		if (dbData == null) {
+			return null;
+		}
 		try {
 			return objectMapper.readValue(dbData, FeatureCollection.class);
 		} catch (IOException e) {

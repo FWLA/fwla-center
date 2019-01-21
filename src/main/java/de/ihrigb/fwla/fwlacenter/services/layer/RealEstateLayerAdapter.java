@@ -1,7 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.services.layer;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
@@ -26,8 +26,8 @@ class RealEstateLayerAdapter extends AbstractLayerAdapter<RealEstate> {
 	}
 
 	@Override
-	public Set<Layer> getLayers() {
-		return Collections.singleton(new Layer("realEstate", "Objekte"));
+	public List<Layer> getLayers() {
+		return Collections.singletonList(new Layer("realEstate", "Objekte"));
 	}
 
 	@Override

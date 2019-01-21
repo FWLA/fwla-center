@@ -1,5 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.services.api.geo;
 
+import java.util.List;
 import java.util.Set;
 
 public interface LayerService {
@@ -9,7 +10,7 @@ public interface LayerService {
 	 *
 	 * @return
 	 */
-	Set<Layer> getLayers();
+	List<Layer> getLayers();
 
 	/**
 	 * Get all features

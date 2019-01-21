@@ -44,7 +44,7 @@ public class OperationServiceImpl implements OperationService {
 	@Scheduled(fixedRate = 60000)
 	public void timeoutOperations() {
 		log.debug("Scheduled timeout of operations.");
-		operationRepository.streamAll().filter(o -> {
+		operationRepository.streamByClosedFalse().filter(o -> {
 			return Duration.between(o.getCreated(), Instant.now()).compareTo(properties.getTimeout()) > 0;
 		}).forEach(o -> {
 			log.info("Operation {} timed out. Closing it.", o.getId());
