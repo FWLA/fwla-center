@@ -101,7 +101,7 @@ public class RealEstateProcessorTest {
 		realEstate.setPattern("otherobject.*");
 		expect(realEstateRepository.streamAll()).andReturn(Collections.singleton(realEstate).stream());
 
-		eventLogService.error(anyString(), anyString());
+		eventLogService.error(anyString(), anyString(), anyString());
 		expectLastCall();
 
 		replay(realEstateRepository, eventLogService);
