@@ -1,5 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.api;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import javax.persistence.Column;
@@ -23,5 +24,10 @@ public final class Coordinate implements Locatable {
 	@Override
 	public Optional<Coordinate> locate() {
 		return Optional.of(this);
+	}
+
+	@Override
+	public String toString() {
+		return String.format(Locale.US, "[%f, %f]", this.latitude, this.longitude);
 	}
 }
