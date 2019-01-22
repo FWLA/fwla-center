@@ -3,11 +3,13 @@ package de.ihrigb.fwla.fwlacenter.services.realestate;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
+import de.ihrigb.fwla.fwlacenter.handling.core.ProcessorOrder;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@Order(ProcessorOrder.REAL_ESTATE_PROCESSOR_ORDER)
 @RequiredArgsConstructor
 public class RealEstateProcessor implements Processor {
 

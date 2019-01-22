@@ -2,9 +2,11 @@ package de.ihrigb.fwla.fwlacenter.services.operation;
 
 import java.util.Optional;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
+import de.ihrigb.fwla.fwlacenter.handling.core.ProcessorOrder;
 import de.ihrigb.fwla.fwlacenter.persistence.model.OperationKey;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationKeyRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@Order(ProcessorOrder.OPERATION_KEY_PROCESSOR_ORDER)
 @RequiredArgsConstructor
 public class OperationKeyProcessor implements Processor {
 

@@ -2,6 +2,7 @@ package de.ihrigb.fwla.fwlacenter.handling.core;
 
 import java.util.Set;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.Handler;
@@ -16,17 +17,17 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OperationsChain implements OperationChain {
 
-	private final Set<Processor> processors;
+	private final ObjectProvider<Processor> processors;
 	private final Set<Handler> handlers;
 
 	@Override
 	public void put(Operation operation) {
 		log.debug("New operation {} put into chain.", operation.getId());
 		try {
-			for (Processor processor : processors) {
+			processors.orderedStream().forEach(processor -> {
 				log.debug("Processing operation by processor {}.", processor.getClass().getName());
 				processor.process(operation);
-			}
+			});
 			for (Handler handler : handlers) {
 				log.debug("Handling operation by handler {}.", handler.getClass().getName());
 				handler.handle(operation);

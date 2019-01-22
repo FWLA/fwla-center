@@ -4,10 +4,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
+import de.ihrigb.fwla.fwlacenter.handling.core.ProcessorOrder;
 import de.ihrigb.fwla.fwlacenter.persistence.model.PatternMode;
 import de.ihrigb.fwla.fwlacenter.persistence.model.ResourceKeyPattern;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceKeyPatternRepository;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@Order(ProcessorOrder.RESOURCE_PROCESSOR_ORDER)
 @RequiredArgsConstructor
 public class ResourceProcessor implements Processor {
 
