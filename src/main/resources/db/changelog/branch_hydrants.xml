@@ -1,0 +1,43 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet id="00-create-realestate-links-table" author="ihrigb">
+		<createTable tableName="hydrants">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="address_street" type="VARCHAR(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_zip" type="VARCHAR(16)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_town" type="VARCHAR(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_district" type="VARCHAR(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="latitude" type="DOUBLE">
+				<constraints nullable="true" />
+			</column>
+			<column name="longitude" type="DOUBLE">
+				<constraints nullable="true" />
+			</column>
+			<column name="hydrant_sign_l" type="FLOAT">
+				<constraints nullable="true" />
+			</column>
+			<column name="hydrant_sign_r" type="FLOAT">
+				<constraints nullable="true" />
+			</column>
+			<column name="hydrant_sign_c" type="FLOAT">
+				<constraints nullable="true" />
+			</column>
+			<column name="diameter" type="INTEGER">
+				<constraints nullable="true" />
+			</column>
+			<column name="notes" type="CLOB">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+	</changeSet>
+</databaseChangeLog>

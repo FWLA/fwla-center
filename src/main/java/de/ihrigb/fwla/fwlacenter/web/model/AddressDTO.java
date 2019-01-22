@@ -25,7 +25,7 @@ public class AddressDTO {
 	}
 
 	@JsonIgnore
-	public Address getPersistenceModel() {
+	public Address getApiModel() {
 		Address address = new Address();
 		address.setStreet(street);
 		address.setZip(zip);

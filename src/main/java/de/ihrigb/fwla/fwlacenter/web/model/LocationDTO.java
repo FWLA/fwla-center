@@ -32,7 +32,7 @@ public class LocationDTO {
 	public Location getApiModel() {
 		Location location = new Location();
 		if (address != null) {
-			location.setAddress(address.getPersistenceModel());
+			location.setAddress(address.getApiModel());
 		}
 		if (coordinate != null) {
 			location.setCoordinate(coordinate.getApiModel());
