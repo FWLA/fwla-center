@@ -203,7 +203,7 @@ public class OperationServiceImplTest {
 
 		when(operationRepository.save(operation)).thenReturn(operation);
 		when(operationRepository.findById("id")).thenReturn(Optional.of(operation));
-		when(operationRepository.streamAll()).thenReturn(Stream.of(operation));
+		when(operationRepository.streamByClosedFalse()).thenReturn(Stream.of(operation));
 		when(operationRepository.findAll()).thenReturn(Collections.singletonList(operation));
 
 		testee.addOperation(operation);
