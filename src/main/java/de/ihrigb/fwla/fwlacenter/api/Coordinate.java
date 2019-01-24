@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import de.ihrigb.fwla.fwlacenter.utils.CoordinateUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,5 +30,9 @@ public final class Coordinate implements Locatable {
 	@Override
 	public String toString() {
 		return String.format(Locale.US, "[%f, %f]", this.latitude, this.longitude);
+	}
+
+	public double distance(Coordinate other) {
+		return CoordinateUtils.haversine(this, other);
 	}
 }

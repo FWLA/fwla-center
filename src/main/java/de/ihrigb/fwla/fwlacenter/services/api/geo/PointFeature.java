@@ -15,10 +15,9 @@ public class PointFeature extends Feature {
 	private Address address;
 	private String color;
 
-	public PointFeature(String name, String text, Location location, String color) {
-		super(name, text);
+	public PointFeature(String name, String text, String color, Location location) {
+		super("point", name, text, color);
 		this.coordinate = location.getCoordinate();
 		this.address = location.getAddress();
-		this.color = color;
 	}
 }
