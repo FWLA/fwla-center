@@ -13,7 +13,7 @@ public interface OperationRepository extends JpaRepository<Operation, String> {
 	@Query("select o from Operation o")
 	Stream<Operation> streamAll();
 
-	Set<Operation> findByYear(int year);
+	Stream<Operation> findByYear(int year);
 
 	@Query("select o.year from Operation o group by o.year")
 	Set<Integer> findYears();

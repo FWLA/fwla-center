@@ -39,7 +39,7 @@ class OperationLayerService implements LayerService {
 					.orElse(Collections.emptySet());
 		}
 		int year = Integer.parseInt(layer.substring("operations".length()));
-		return operationRepository.findByYear(year).stream().filter(o -> o.getLocation() != null)
+		return operationRepository.findByYear(year).filter(o -> o.getLocation() != null)
 				.filter(o -> o.getLocation().getCoordinate() != null).map(map()).filter(Objects::nonNull)
 				.collect(Collectors.toSet());
 	}
