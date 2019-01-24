@@ -2,7 +2,7 @@ spring:
   application:
     name: fwla-center
   jpa:
-    open-in-view: true
+    open-in-view: false
   liquibase:
     change-log: 'classpath:/db/changelog/db.changelog-master.xml'
 management:

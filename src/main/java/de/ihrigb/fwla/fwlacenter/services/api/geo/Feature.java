@@ -10,8 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Feature {
-	private String type;
 	private String name;
 	private String text;
-	private String color;
 }
