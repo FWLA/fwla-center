@@ -48,6 +48,9 @@ public class RealEstate implements Locatable {
 	@Column(name = "link", nullable = false)
 	private Set<String> links;
 
+	@Column(name="folder_address", nullable = true)
+	private Integer folderAddress;
+
 	@Override
 	public Optional<Coordinate> locate() {
 		if (location == null) {

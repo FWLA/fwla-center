@@ -22,6 +22,7 @@ public class RealEstateDTO {
 	private String information;
 	private LocationDTO location;
 	private Set<String> links;
+	private Integer folderAddress;
 
 	public RealEstateDTO(RealEstate realEstate) {
 		Assert.notNull(realEstate, "RealEstate must not be null.");
@@ -34,6 +35,7 @@ public class RealEstateDTO {
 			this.location = new LocationDTO(realEstate.getLocation());
 		}
 		this.links = realEstate.getLinks();
+		this.folderAddress = realEstate.getFolderAddress();
 	}
 
 	@JsonIgnore
@@ -47,6 +49,7 @@ public class RealEstateDTO {
 			realEstate.setLocation(location.getApiModel());
 		}
 		realEstate.setLinks(links);
+		realEstate.setFolderAddress(folderAddress);
 		return realEstate;
 	}
 }

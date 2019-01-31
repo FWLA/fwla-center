@@ -4,4 +4,12 @@
 		<dropPrimaryKey tableName="operation_resource_keys" />
 		<addPrimaryKey columnNames="operation_id, resource_key, index" constraintName="pk_operation_resource_keys" tableName="operation_resource_keys" />
 	</changeSet>
+
+	<changeSet id="01-add-real-estate-folder-address" author="ihrigb">
+		<addColumn tableName="real_estates">
+			<column name="folder_address" type="INTEGER">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>
