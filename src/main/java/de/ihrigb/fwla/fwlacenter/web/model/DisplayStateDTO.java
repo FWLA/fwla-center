@@ -15,6 +15,7 @@ import lombok.Setter;
 public class DisplayStateDTO {
 
 	private String state;
+	private String serverVersion;
 	private OperationDTO operation;
 	private WeatherDTO weather;
 	private CoordinateDTO home;
@@ -23,6 +24,7 @@ public class DisplayStateDTO {
 	public DisplayStateDTO(DisplayState displayState) {
 		Assert.notNull(displayState, "DisplayState must not be null.");
 		this.state = displayState.getState().name();
+		this.serverVersion = displayState.getServerVersion();
 		this.operation = displayState.getOperation().map(o -> new OperationDTO(o)).orElse(null);
 		this.weather = displayState.getWeather().map(w -> new WeatherDTO(w)).orElse(null);
 		this.home = displayState.getHome().map(c -> new CoordinateDTO(c)).orElse(null);

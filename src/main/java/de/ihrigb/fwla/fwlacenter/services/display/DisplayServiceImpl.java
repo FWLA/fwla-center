@@ -2,6 +2,7 @@ package de.ihrigb.fwla.fwlacenter.services.display;
 
 import java.util.Optional;
 
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Component;
 
 import de.ihrigb.fwla.fwlacenter.configuration.HomeProvider;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class DisplayServiceImpl implements DisplayService {
 
+	private final Optional<BuildProperties> buildProperties;
 	private final OperationService operationService;
 	private final Optional<WeatherService> weatherService;
 	private final Optional<HomeProvider> homeProvider;
@@ -28,6 +30,10 @@ public class DisplayServiceImpl implements DisplayService {
 		log.trace("getDisplayState()");
 
 		DisplayState.DisplayStateBuilder builder = DisplayState.builder();
+
+		buildProperties.ifPresent(p -> {
+			builder.serverVersion(p.getVersion());
+		});
 
 		if (operationService.hasActiveOperation()) {
 			log.debug("Display is in operation state.");

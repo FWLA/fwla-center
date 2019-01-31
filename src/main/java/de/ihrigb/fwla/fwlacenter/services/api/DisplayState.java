@@ -16,6 +16,7 @@ import lombok.Getter;
 @JsonInclude(Include.NON_NULL)
 public class DisplayState {
 	private final State state;
+	private final String serverVersion;
 	@Builder.Default
 	private Optional<Weather> weather = Optional.empty();
 	@Builder.Default
