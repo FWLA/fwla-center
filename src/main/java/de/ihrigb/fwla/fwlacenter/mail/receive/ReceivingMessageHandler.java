@@ -31,6 +31,7 @@ public class ReceivingMessageHandler implements MessageHandler {
 	@Override
 	public void handleMessage(Message<?> message) throws MessagingException {
 		try {
+			log.info("Handling incoming email.");
 			MimeMessage mimeMessage = (MimeMessage) message.getPayload();
 
 			Address[] addresses = mimeMessage.getFrom();
@@ -40,12 +41,15 @@ public class ReceivingMessageHandler implements MessageHandler {
 				boolean isTraining;
 				switch (new MailFilter(properties).filter(sender)) {
 				case REJECTED:
+					log.info("Mail from '{}' was rejected.", sender);
 					return;
 				case TRAINING:
+					log.info("Mail from '{}' classified as training.", sender);
 					isTraining = true;
 					break;
 				case HOT:
 				default:
+					log.info("Mail from '{}' classified as hot.", sender);
 					isTraining = false;
 					break;
 				}
