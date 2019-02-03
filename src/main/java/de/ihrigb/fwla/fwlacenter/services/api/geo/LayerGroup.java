@@ -1,6 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.services.api.geo;
 
-import java.util.Set;
+import java.util.Collections;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +12,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LayerGroup {
+public class LayerGroup implements Comparable<LayerGroup> {
 
 	private String name;
-	private Set<Layer> layers;
+	private List<Layer> layers;
+
+	@Override
+	public int compareTo(LayerGroup o) {
+		return name.compareTo(o.name);
+	}
+
+	public void sortLayers() {
+		Collections.sort(layers);
+	}
 }

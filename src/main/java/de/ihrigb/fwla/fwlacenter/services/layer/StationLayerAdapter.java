@@ -29,7 +29,7 @@ class StationLayerAdapter extends AbstractLayerAdapter<Station> {
 	@Override
 	public List<LayerGroup> getLayerGroups() {
 		return Collections
-				.singletonList(new LayerGroup("stations", Collections.singleton(new Layer("stations", "Standorte"))));
+				.singletonList(new LayerGroup("stations", Collections.singletonList(new Layer("stations", "Standorte"))));
 	}
 
 	@Override

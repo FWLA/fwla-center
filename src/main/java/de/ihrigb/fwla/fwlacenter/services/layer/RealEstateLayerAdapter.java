@@ -29,7 +29,7 @@ class RealEstateLayerAdapter extends AbstractLayerAdapter<RealEstate> {
 	@Override
 	public List<LayerGroup> getLayerGroups() {
 		return Collections
-				.singletonList(new LayerGroup("realEstate", Collections.singleton(new Layer("realEstate", "Objekte"))));
+				.singletonList(new LayerGroup("realEstate", Collections.singletonList(new Layer("realEstate", "Objekte"))));
 	}
 
 	@Override

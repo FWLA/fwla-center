@@ -9,8 +9,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Layer {
+public class Layer implements Comparable<Layer> {
 
 	private String id;
 	private String name;
+
+	@Override
+	public int compareTo(Layer o) {
+		return name.compareTo(o.name);
+	}
 }

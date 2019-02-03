@@ -49,11 +49,11 @@ class OperationLayerService implements LayerService {
 	public List<LayerGroup> getLayerGroups() {
 
 		LayerGroup currentOperationLayerGroup = new LayerGroup("operation",
-				Collections.singleton(new Layer("operation", "Einsatz")));
+				Collections.singletonList(new Layer("operation", "Einsatz")));
 		LayerGroup operationsLayerGroup = new LayerGroup("operations",
 				operationRepository.findYears().stream().map(year -> {
 					return new Layer("operations" + year, "Einsätze " + year);
-				}).filter(Objects::nonNull).collect(Collectors.toSet()));
+				}).filter(Objects::nonNull).collect(Collectors.toList()));
 
 		return Arrays.asList(currentOperationLayerGroup, operationsLayerGroup);
 	}
