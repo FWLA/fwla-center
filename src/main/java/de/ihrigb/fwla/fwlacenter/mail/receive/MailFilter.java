@@ -10,7 +10,7 @@ class MailFilter {
 
 	FilterResult filter(String sender) {
 		if (properties.getWhitelistHot() != null && !properties.getWhitelistHot().isEmpty()) {
-			if (!StringUtils.containsIgnoreCase(properties.getWhitelistHot(), sender)) {
+			if (StringUtils.containsIgnoreCase(properties.getWhitelistHot(), sender)) {
 				return FilterResult.HOT;
 			}
 		}
