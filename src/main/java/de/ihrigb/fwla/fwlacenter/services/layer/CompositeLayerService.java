@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Feature;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerService;
 
 class CompositeLayerService implements LayerService {
@@ -17,10 +17,10 @@ class CompositeLayerService implements LayerService {
 	}
 
 	@Override
-	public List<Layer> getLayers() {
-		List<Layer> layers = layerServices.stream().flatMap(ls -> ls.getLayers().stream()).collect(Collectors.toList());
-		layers.sort(LayerComparator.INSTANCE);
-		return layers;
+	public List<LayerGroup> getLayerGroups() {
+		List<LayerGroup> layerGroups = layerServices.stream().flatMap(ls -> ls.getLayerGroups().stream())
+				.collect(Collectors.toList());
+		return layerGroups;
 	}
 
 	@Override

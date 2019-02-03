@@ -15,7 +15,7 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.Feature;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerService;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.PointFeature;
 import de.ihrigb.fwla.fwlacenter.web.model.FeatureDTO;
-import de.ihrigb.fwla.fwlacenter.web.model.LayerDTO;
+import de.ihrigb.fwla.fwlacenter.web.model.LayerGroupDTO;
 import de.ihrigb.fwla.fwlacenter.web.model.PointFeatureDTO;
 import lombok.RequiredArgsConstructor;
 
@@ -35,9 +35,9 @@ public class LayerController {
 	private final LayerService layerService;
 
 	@GetMapping
-	public ResponseEntity<List<LayerDTO>> getLayers() {
-		return ResponseEntity
-				.ok(layerService.getLayers().stream().map(layer -> new LayerDTO(layer)).collect(Collectors.toList()));
+	public ResponseEntity<List<LayerGroupDTO>> getLayers() {
+		return ResponseEntity.ok(layerService.getLayerGroups().stream().map(layerGroup -> new LayerGroupDTO(layerGroup))
+				.collect(Collectors.toList()));
 	}
 
 	@GetMapping("/{layer}")

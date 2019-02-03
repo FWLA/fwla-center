@@ -1,5 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.services.layer;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -7,13 +8,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Feature;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerService;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.PointFeature;
 import lombok.RequiredArgsConstructor;
@@ -45,11 +46,16 @@ class OperationLayerService implements LayerService {
 	}
 
 	@Override
-	public List<Layer> getLayers() {
-		return Stream
-				.concat(Stream.of(new Layer("operation", "Einsatz")), operationRepository.findYears().stream()
-						.map(year -> new Layer("operations" + year, "Einsätze " + year)).filter(Objects::nonNull))
-				.collect(Collectors.toList());
+	public List<LayerGroup> getLayerGroups() {
+
+		LayerGroup currentOperationLayerGroup = new LayerGroup("operation",
+				Collections.singleton(new Layer("operation", "Einsatz")));
+		LayerGroup operationsLayerGroup = new LayerGroup("operations",
+				operationRepository.findYears().stream().map(year -> {
+					return new Layer("operations" + year, "Einsätze " + year);
+				}).filter(Objects::nonNull).collect(Collectors.toSet()));
+
+		return Arrays.asList(currentOperationLayerGroup, operationsLayerGroup);
 	}
 
 	private Function<Operation, Feature> map() {

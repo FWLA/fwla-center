@@ -7,6 +7,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Feature;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.PointFeature;
 
 class RealEstateLayerAdapter extends AbstractLayerAdapter<RealEstate> {
@@ -26,8 +27,9 @@ class RealEstateLayerAdapter extends AbstractLayerAdapter<RealEstate> {
 	}
 
 	@Override
-	public List<Layer> getLayers() {
-		return Collections.singletonList(new Layer("realEstate", "Objekte"));
+	public List<LayerGroup> getLayerGroups() {
+		return Collections
+				.singletonList(new LayerGroup("realEstate", Collections.singleton(new Layer("realEstate", "Objekte"))));
 	}
 
 	@Override

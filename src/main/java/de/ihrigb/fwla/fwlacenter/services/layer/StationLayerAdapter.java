@@ -7,6 +7,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.model.Station;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Feature;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.PointFeature;
 
 class StationLayerAdapter extends AbstractLayerAdapter<Station> {
@@ -26,8 +27,9 @@ class StationLayerAdapter extends AbstractLayerAdapter<Station> {
 	}
 
 	@Override
-	public List<Layer> getLayers() {
-		return Collections.singletonList(new Layer("station", "Standorte"));
+	public List<LayerGroup> getLayerGroups() {
+		return Collections
+				.singletonList(new LayerGroup("stations", Collections.singleton(new Layer("stations", "Standorte"))));
 	}
 
 	@Override

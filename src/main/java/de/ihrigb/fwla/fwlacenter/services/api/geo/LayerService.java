@@ -10,7 +10,7 @@ public interface LayerService {
 	 *
 	 * @return
 	 */
-	List<Layer> getLayers();
+	List<LayerGroup> getLayerGroups();
 
 	/**
 	 * Get all features

@@ -29,7 +29,11 @@ abstract class AbstractLayerAdapter<T extends Locatable> implements LayerService
 
 	@Override
 	public Set<? extends Feature> getFeatures(String layer) {
-		if (getLayers().stream().findFirst().map(l -> layer.equals(l.getId())).orElse(false)) {
+		if (getLayerGroups().stream().findFirst().map(layerGroup -> {
+			return layerGroup.getLayers().stream().findFirst().map(l -> {
+				return layer.equals(l.getId());
+			}).orElse(false);
+		}).orElse(false)) {
 			return getFeatures();
 		}
 		return Collections.emptySet();
