@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "mail.receive")
+@ConfigurationProperties(prefix = "app.mail.receive")
 public class ReceivingProperties {
 
 	private String host;
