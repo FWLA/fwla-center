@@ -2,15 +2,15 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.geojson.FeatureCollection;
 import org.springframework.util.Assert;
 
+import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationKeyRepository;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OperationDTO {
+public class OperationDisplayDTO {
 	private String id;
 	private Instant time;
 	private String place;
@@ -30,12 +30,13 @@ public class OperationDTO {
 	private boolean isTraining = false;
 	private boolean closed;
 	private List<String> resourceKeys;
-	private String operationKeyId;
-	private String realEstateId;
-	private List<String> resources;
+	private OperationKeyDTO operationKey;
+	private RealEstateDTO realEstate;
+	private List<ResourceDTO> resources;
 	private boolean ambulanceCalled;
+	private FeatureCollection directions;
 
-	public OperationDTO(Operation operation) {
+	public OperationDisplayDTO(Operation operation) {
 		Assert.notNull(operation, "Operation must not be null.");
 
 		this.id = operation.getId();
@@ -52,19 +53,20 @@ public class OperationDTO {
 		this.closed = operation.isClosed();
 		this.resourceKeys = operation.getResourceKeys();
 		if (operation.getOperationKey() != null) {
-			this.operationKeyId = operation.getOperationKey().getId();
+			this.operationKey = new OperationKeyDTO(operation.getOperationKey());
 		}
 		if (operation.getRealEstate() != null) {
-			this.realEstateId = operation.getRealEstate().getId();
+			this.realEstate = new RealEstateDTO(operation.getRealEstate());
 		}
 		if (operation.getResources() != null) {
-			this.resources = operation.getResources().stream().map(r -> r.getId()).collect(Collectors.toList());
+			this.resources = operation.getResources().stream().map(r -> new ResourceDTO(r)).collect(Collectors.toList());
 		}
 		this.ambulanceCalled = operation.isAmbulanceCalled();
+		this.directions = operation.getDirections();
 	}
 
-	public Operation getPersistenceModel(OperationKeyRepository operationKeyRepository,
-			RealEstateRepository realEstateRepository, ResourceRepository resourceRepository) {
+	@JsonIgnore
+	public Operation getApiModel(StationRepository stationRepository) {
 		Operation operation = new Operation();
 		operation.setId(id);
 		operation.setTime(time);
@@ -79,19 +81,18 @@ public class OperationDTO {
 		operation.setTraining(isTraining);
 		operation.setClosed(closed);
 		operation.setResourceKeys(resourceKeys);
-		if (operationKeyId != null) {
-			operation.setOperationKey(operationKeyRepository.findById(operationKeyId).orElse(null));
+		if (operationKey != null) {
+			operation.setOperationKey(operationKey.getPersistenceModel());
 		}
-		if (realEstateId != null) {
-			operation.setRealEstate(realEstateRepository.findById(realEstateId).orElse(null));
+		if (realEstate != null) {
+			operation.setRealEstate(realEstate.getPersistenceModel());
 		}
 		if (resources != null) {
-			operation.setResources(
-					resources.stream().map(resourceId -> resourceRepository.findById(resourceId).orElse(null))
-							.filter(Objects::nonNull).collect(Collectors.toList()));
+			operation.setResources(resources.stream().map(dto -> dto.getPersistenceModel(stationRepository))
+					.collect(Collectors.toList()));
 		}
 		operation.setAmbulanceCalled(ambulanceCalled);
-
+		operation.setDirections(directions);
 		return operation;
 	}
 }

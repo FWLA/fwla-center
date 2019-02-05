@@ -5,9 +5,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,36 +16,48 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
-import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
-import de.ihrigb.fwla.fwlacenter.web.model.DataResponse;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationKeyRepository;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceRepository;
+import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.web.model.IdDTO;
 import de.ihrigb.fwla.fwlacenter.web.model.OperationDTO;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/v1/operations")
-@RequiredArgsConstructor
-public class OperationController {
+public class OperationController extends BaseController<Operation, String, OperationDTO> {
 
 	private final OperationRepository operationRepository;
 	private final OperationService operationService;
-	private final OperationChain OperationChain;
+	private final OperationChain operationChain;
+	private final OperationKeyRepository operationKeyRepository;
+	private final RealEstateRepository realEstateRepository;
+	private final ResourceRepository resourceRepository;
 
-	private final StationRepository stationRepository;
+	public OperationController(OperationRepository operationRepository, OperationService operationService,
+			OperationChain operationChain, OperationKeyRepository operationKeyRepository,
+			RealEstateRepository realEstateRepository, ResourceRepository resourceRepository) {
+		super(operationRepository);
+		this.operationRepository = operationRepository;
+		this.operationService = operationService;
+		this.operationChain = operationChain;
+		this.operationKeyRepository = operationKeyRepository;
+		this.realEstateRepository = realEstateRepository;
+		this.resourceRepository = resourceRepository;
+	}
 
 	@GetMapping
 	public ResponseEntity<?> getOperations(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
-			@RequestParam(name = "size", required = false, defaultValue = "10") int size) {
+			@RequestParam(name = "size", required = false, defaultValue = "10") int size,
+			@RequestParam(name = "sort", required = false) String sort) {
+		return super.doGetAll(page, size, null, sort);
+	}
 
-		Pageable pageable = PageRequest.of(page - 1, size);
-		Page<Operation> pageResult = operationService.getOperations(pageable);
-
-		List<OperationDTO> list = pageResult.getContent().stream().map(toDTOMapper()).collect(Collectors.toList());
-
-		return ResponseEntity.ok(new DataResponse<>(list, operationService.getCount()));
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getOne(@PathVariable("id") String id) {
+		return super.doGetOne(id);
 	}
 
 	@PostMapping("/all")
@@ -59,22 +68,22 @@ public class OperationController {
 
 	@GetMapping("/active")
 	public ResponseEntity<?> getActiveOperation() {
-		return operationService.getActiveOperation().map(toDTOMapper()).map(dto -> ResponseEntity.ok(dto))
+		return operationService.getActiveOperation().map(getToDTOFunction()).map(dto -> ResponseEntity.ok(dto))
 				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@GetMapping("/current")
 	public ResponseEntity<?> getCurrentOperations() {
-		return ResponseEntity
-				.ok(operationService.getCurrentOperations().stream().map(toDTOMapper()).collect(Collectors.toList()));
+		return ResponseEntity.ok(
+				operationService.getCurrentOperations().stream().map(getToDTOFunction()).collect(Collectors.toList()));
 	}
 
 	@PostMapping
 	public ResponseEntity<?> createTraining(@RequestBody OperationDTO dto) {
-		Operation operation = fromDTOMapper().apply(dto);
+		Operation operation = getFromDTOFunction().apply(dto);
 		operation.setId("training-" + UUID.randomUUID().toString());
 		operation.setTraining(true);
-		OperationChain.put(operation);
+		operationChain.put(operation);
 		return ResponseEntity.accepted().build();
 	}
 
@@ -90,11 +99,18 @@ public class OperationController {
 		return ResponseEntity.accepted().build();
 	}
 
-	private Function<OperationDTO, Operation> fromDTOMapper() {
-		return dto -> dto == null ? null : dto.getApiModel(stationRepository);
+	@Override
+	protected Function<? super Operation, ? extends OperationDTO> getToDTOFunction() {
+		return operation -> operation == null ? null : new OperationDTO(operation);
 	}
 
-	private Function<Operation, OperationDTO> toDTOMapper() {
-		return operation -> operation == null ? null : new OperationDTO(operation);
+	@Override
+	protected Function<? super OperationDTO, ? extends Operation> getFromDTOFunction() {
+		return dto -> dto.getPersistenceModel(operationKeyRepository, realEstateRepository, resourceRepository);
+	}
+
+	@Override
+	protected String getId(Operation t) {
+		return t.getId();
 	}
 }

@@ -38,6 +38,16 @@ abstract class BaseController<T, ID extends Serializable, DTO> {
 	private static final Pattern sortPattern = Pattern
 			.compile("\\[\\\"(?<property>[\\w\\d]+)\\\"\\,\\\"(?<direction>ASC|DESC)\\\"\\]");
 
+	private static Optional<Sort> handleSort(String sort) {
+		return Optional.ofNullable(sort).filter(s -> {
+			return sortPattern.matcher(s).matches();
+		}).map(s -> {
+			Matcher m = sortPattern.matcher(s);
+			m.matches();
+			return Sort.by(Direction.fromString(m.group("direction")), m.group("property"));
+		});
+	}
+
 	private final JpaRepository<T, ID> repository;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -131,16 +141,6 @@ abstract class BaseController<T, ID extends Serializable, DTO> {
 			return Collections.emptySet();
 		}
 		return new HashSet<>((Collection) o);
-	}
-
-	private Optional<Sort> handleSort(String sort) {
-		return Optional.ofNullable(sort).filter(s -> {
-			return sortPattern.matcher(s).matches();
-		}).map(s -> {
-			Matcher m = sortPattern.matcher(s);
-			m.matches();
-			return Sort.by(Direction.fromString(m.group("direction")), m.group("property"));
-		});
 	}
 
 	abstract protected Function<? super T, ? extends DTO> getToDTOFunction();
