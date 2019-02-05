@@ -32,8 +32,9 @@ public class ResourceController extends BaseController<Resource, String, Resourc
 	@GetMapping
 	public ResponseEntity<?> getAll(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 			@RequestParam(name = "size", required = false, defaultValue = "10") int size,
-			@RequestParam(name = "filter", required = false) String filter) {
-		return super.doGetAll(page, size, filter);
+			@RequestParam(name = "filter", required = false) String filter,
+			@RequestParam(name = "sort", required = false) String sort) {
+		return super.doGetAll(page, size, filter, sort);
 	}
 
 	@GetMapping("/{id}")

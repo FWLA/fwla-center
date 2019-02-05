@@ -9,13 +9,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +35,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 abstract class BaseController<T, ID extends Serializable, DTO> {
 
+	private static final Pattern sortPattern = Pattern
+			.compile("\\[\\\"(?<property>[\\w\\d]+)\\\"\\,\\\"(?<direction>ASC|DESC)\\\"\\]");
+
 	private final JpaRepository<T, ID> repository;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -43,6 +51,10 @@ abstract class BaseController<T, ID extends Serializable, DTO> {
 	}
 
 	protected ResponseEntity<DataResponse<List<DTO>>> doGetAll(int page, int size, String filter) {
+		return doGetAll(page, size, filter, null);
+	}
+
+	protected ResponseEntity<DataResponse<List<DTO>>> doGetAll(int page, int size, String filter, String sort) {
 
 		if (filter != null) {
 			TypeReference<Map<String, Object>> type = new TypeReference<Map<String, Object>>() {
@@ -57,7 +69,9 @@ abstract class BaseController<T, ID extends Serializable, DTO> {
 			}
 		}
 
-		Pageable pageable = PageRequest.of(page - 1, size);
+		Pageable pageable = handleSort(sort).map(s -> {
+			return PageRequest.of(page - 1, size, s);
+		}).orElse(PageRequest.of(page - 1, size));
 		Page<T> pageResult = repository.findAll(pageable);
 
 		List<DTO> list = pageResult.getContent().stream().map(getToDTOFunction()).collect(Collectors.toList());
@@ -117,6 +131,16 @@ abstract class BaseController<T, ID extends Serializable, DTO> {
 			return Collections.emptySet();
 		}
 		return new HashSet<>((Collection) o);
+	}
+
+	private Optional<Sort> handleSort(String sort) {
+		return Optional.ofNullable(sort).filter(s -> {
+			return sortPattern.matcher(s).matches();
+		}).map(s -> {
+			Matcher m = sortPattern.matcher(s);
+			m.matches();
+			return Sort.by(Direction.fromString(m.group("direction")), m.group("property"));
+		});
 	}
 
 	abstract protected Function<? super T, ? extends DTO> getToDTOFunction();
