@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 @EnableIntegration
-@ConditionalOnProperty("mail.receive.host")
+@ConditionalOnProperty("app.mail.receive.host")
 @EnableConfigurationProperties(ReceivingProperties.class)
 public class MailConfiguration {
 
