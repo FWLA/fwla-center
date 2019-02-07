@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.web.model.IdDTO;
 import de.ihrigb.fwla.fwlacenter.web.model.OperationDTO;
 
+@Transactional
 @RestController
 @RequestMapping("/v1/operations")
 public class OperationController extends BaseController<Operation, String, OperationDTO> {

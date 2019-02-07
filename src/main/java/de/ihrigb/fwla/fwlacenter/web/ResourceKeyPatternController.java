@@ -3,6 +3,7 @@ package de.ihrigb.fwla.fwlacenter.web;
 import java.util.function.Function;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.model.ResourceKeyPattern;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceKeyPatternRepository;
 import de.ihrigb.fwla.fwlacenter.web.model.ResourceKeyPatternDTO;
 
+@Transactional
 @RestController
 @RequestMapping("/v1/resourceKeyPatterns")
 public class ResourceKeyPatternController extends BasePatternController<ResourceKeyPattern, ResourceKeyPatternDTO> {

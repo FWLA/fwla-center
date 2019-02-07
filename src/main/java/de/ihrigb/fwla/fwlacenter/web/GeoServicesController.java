@@ -3,6 +3,7 @@ package de.ihrigb.fwla.fwlacenter.web;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,7 @@ import de.ihrigb.fwla.fwlacenter.services.api.GeocodingService;
 import de.ihrigb.fwla.fwlacenter.web.model.CoordinateDTO;
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @RestController
 @RequestMapping("/v1/services/geo")
 @ConditionalOnBean(GeocodingService.class)

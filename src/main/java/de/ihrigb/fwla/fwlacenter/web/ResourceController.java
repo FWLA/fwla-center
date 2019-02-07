@@ -3,6 +3,7 @@ package de.ihrigb.fwla.fwlacenter.web;
 import java.util.function.Function;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.web.model.ResourceDTO;
 
+@Transactional
 @RestController
 @RequestMapping("/v1/resources")
 public class ResourceController extends BaseController<Resource, String, ResourceDTO> {
