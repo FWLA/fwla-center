@@ -90,7 +90,9 @@ public class OperationServiceImpl implements OperationService {
 			clearTraining();
 		}
 
-		currentOperationIds.addFirst(id);
+		if (!currentOperationIds.contains(id)) {
+			currentOperationIds.addFirst(id);
+		}
 		resetActiveOperation();
 	}
 
@@ -147,6 +149,7 @@ public class OperationServiceImpl implements OperationService {
 		return !currentOperationIds.isEmpty();
 	}
 
+	@Transactional
 	@Override
 	public void closeOperation(String id) {
 		Assert.notNull(id, "Operation ID must not be null.");

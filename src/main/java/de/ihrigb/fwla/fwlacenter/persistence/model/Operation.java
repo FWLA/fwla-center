@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -104,6 +105,7 @@ public class Operation {
 	private int year;
 
 	@PrePersist
+	@PreUpdate
 	public void setYear() {
 		Instant source;
 		if (time != null) {

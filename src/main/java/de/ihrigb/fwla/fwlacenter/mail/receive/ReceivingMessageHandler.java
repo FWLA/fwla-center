@@ -12,6 +12,7 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
 import de.ihrigb.fwla.fwlacenter.mail.Email;
@@ -28,6 +29,7 @@ public class ReceivingMessageHandler implements MessageHandler {
 	private final MailExtractionService mailExtractionService;
 	private final OperationChain operationChain;
 
+	@Transactional
 	@Override
 	public void handleMessage(Message<?> message) throws MessagingException {
 		try {
