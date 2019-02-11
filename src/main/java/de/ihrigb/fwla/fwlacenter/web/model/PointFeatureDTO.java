@@ -11,16 +11,12 @@ import lombok.Setter;
 public class PointFeatureDTO extends FeatureDTO {
 
 	private CoordinateDTO coordinate;
-	private AddressDTO address;
 	private String color;
 
 	public PointFeatureDTO(PointFeature pointFeature) {
 		super(pointFeature);
 		if (pointFeature.getCoordinate() != null) {
 			this.coordinate = new CoordinateDTO(pointFeature.getCoordinate());
-		}
-		if (pointFeature.getAddress() != null) {
-			this.address = new AddressDTO(pointFeature.getAddress());
 		}
 		this.color = pointFeature.getColor();
 	}

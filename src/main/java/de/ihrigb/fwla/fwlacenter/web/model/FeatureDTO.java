@@ -1,6 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.web.model;
 
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Feature;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,11 +11,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FeatureDTO {
 
-	private String name;
-	private String text;
+	private String id;
+	private FeatureType type;
 
 	public FeatureDTO(Feature feature) {
-		this.name = feature.getName();
-		this.text = feature.getText();
+		this.id = feature.getId();
+		this.type = feature.getType();
 	}
 }

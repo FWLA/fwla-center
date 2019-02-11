@@ -1,5 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.services.layer;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,8 +14,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-abstract class AbstractLayerAdapter<T extends Locatable> implements LayerService {
-	private final JpaRepository<T, ?> repository;
+abstract class AbstractLayerAdapter<T extends Locatable, ID extends Serializable> implements LayerService {
+
+	private final JpaRepository<T, ID> repository;
 
 	abstract String getId(T t);
 
@@ -37,5 +39,9 @@ abstract class AbstractLayerAdapter<T extends Locatable> implements LayerService
 			return getFeatures();
 		}
 		return Collections.emptySet();
+	}
+
+	protected JpaRepository<T, ID> getRepository() {
+		return repository;
 	}
 }

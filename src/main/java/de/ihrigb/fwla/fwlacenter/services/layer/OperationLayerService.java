@@ -13,6 +13,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Feature;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerService;
@@ -61,18 +62,28 @@ class OperationLayerService implements LayerService {
 	private Function<Operation, Feature> map() {
 		return (operation) -> {
 			return Optional.ofNullable(operation).map(o -> {
-				String name = null;
-				if (o.getOperationKey() != null) {
-					name = o.getOperationKey().getKey();
-				}
-				if (name == null) {
-					name = o.getCode();
-				}
-				if (name == null) {
-					name = o.getMessage();
-				}
-				return new PointFeature(name, o.getMessage(), o.getLocation(), "red");
+				return new PointFeature(o.getId(), o.getLocation().getCoordinate(), "red");
 			}).orElse(null);
 		};
+	}
+
+	@Override
+	public Optional<FeatureDetails> getFeatureDetails(String layer, String featureId) {
+		if (!layer.startsWith("operation")) {
+			return Optional.empty();
+		}
+		return operationRepository.findById(featureId).map(o -> {
+			String name = null;
+			if (o.getOperationKey() != null) {
+				name = o.getOperationKey().getKey();
+			}
+			if (name == null) {
+				name = o.getCode();
+			}
+			if (name == null) {
+				name = o.getMessage();
+			}
+			return new FeatureDetails(name, o.getMessage(), o.getLocation().getAddress());
+		});
 	}
 }
