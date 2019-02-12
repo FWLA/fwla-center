@@ -14,13 +14,6 @@ public interface LayerService {
 	List<LayerGroup> getLayerGroups();
 
 	/**
-	 * Get all features
-	 *
-	 * @return
-	 */
-	Set<? extends Feature> getFeatures();
-
-	/**
 	 * Get features for a specific layer.
 	 *
 	 * @param layer

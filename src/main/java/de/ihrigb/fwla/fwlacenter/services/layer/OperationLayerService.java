@@ -27,11 +27,6 @@ class OperationLayerService implements LayerService {
 	private final OperationService operationService;
 
 	@Override
-	public Set<? extends Feature> getFeatures() {
-		return null;
-	}
-
-	@Override
 	public Set<? extends Feature> getFeatures(String layer) {
 		if (!layer.startsWith("operation")) {
 			return Collections.emptySet();

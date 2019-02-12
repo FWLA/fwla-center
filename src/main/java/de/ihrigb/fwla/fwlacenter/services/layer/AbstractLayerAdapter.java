@@ -24,8 +24,7 @@ abstract class AbstractLayerAdapter<T extends Locatable, ID extends Serializable
 
 	abstract Feature toFeature(T t);
 
-	@Override
-	public Set<? extends Feature> getFeatures() {
+	protected Set<? extends Feature> getFeatures() {
 		return repository.findAll().stream().map(t -> toFeature(t)).collect(Collectors.toSet());
 	}
 

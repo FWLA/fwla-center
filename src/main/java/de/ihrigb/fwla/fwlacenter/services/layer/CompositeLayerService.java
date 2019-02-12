@@ -26,11 +26,6 @@ class CompositeLayerService implements LayerService {
 	}
 
 	@Override
-	public Set<? extends Feature> getFeatures() {
-		return layerServices.stream().flatMap(ls -> ls.getFeatures().stream()).collect(Collectors.toSet());
-	}
-
-	@Override
 	public Set<? extends Feature> getFeatures(String layer) {
 		return layerServices.stream().flatMap(ls -> ls.getFeatures(layer).stream()).collect(Collectors.toSet());
 	}
