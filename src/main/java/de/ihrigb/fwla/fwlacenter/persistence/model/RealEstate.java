@@ -1,9 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.persistence.model;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -78,8 +76,9 @@ public class RealEstate implements Locatable {
 			information = null;
 		}
 		if (links != null) {
-			links = links.stream().filter(Objects::nonNull).filter(link -> !"".equals(link))
-					.collect(Collectors.toSet());
+			links.forEach(link -> {
+				link.clearEmptyStrings();
+			});
 		}
 	}
 }
