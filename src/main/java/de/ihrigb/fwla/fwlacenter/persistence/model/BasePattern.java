@@ -6,6 +6,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -27,4 +29,15 @@ public abstract class BasePattern {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "mode", nullable = false)
 	private PatternMode mode;
+
+	@PrePersist
+	@PostPersist
+	public void clearEmptyStrings() {
+		if ("".equals(id)) {
+			id = null;
+		}
+		if ("".equals(pattern)) {
+			pattern = null;
+		}
+	}
 }

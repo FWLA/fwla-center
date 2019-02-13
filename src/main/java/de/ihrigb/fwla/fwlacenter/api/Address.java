@@ -19,4 +19,19 @@ public class Address {
 	private String town;
 	@Column(name = "address_district")
 	private String district;
+
+	public void clearEmptyStrings() {
+		if ("".equals(street)) {
+			street = null;
+		}
+		if ("".equals(zip)) {
+			zip = null;
+		}
+		if ("".equals(town)) {
+			town = null;
+		}
+		if ("".equals(district)) {
+			district = null;
+		}
+	}
 }

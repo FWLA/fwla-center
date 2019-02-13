@@ -6,6 +6,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -35,4 +37,18 @@ public class OperationKey {
 
 	@Column(name = "danger_to_life", nullable = false)
 	private boolean dangerToLife;
+
+	@PrePersist
+	@PostPersist
+	public void clearEmptyStrings() {
+		if ("".equals(id)) {
+			id = null;
+		}
+		if ("".equals(key)) {
+			key = null;
+		}
+		if ("".equals(code)) {
+			code = null;
+		}
+	}
 }

@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -40,4 +42,21 @@ public class Resource {
 
 	@Column(name = "in_service", nullable = false)
 	private boolean inService = Boolean.TRUE;
+
+	@PrePersist
+	@PostPersist
+	public void clearEmptyStrings() {
+		if ("".equals(id)) {
+			id = null;
+		}
+		if ("".equals(name)) {
+			name = null;
+		}
+		if ("".equals(key)) {
+			key = null;
+		}
+		if ("".equals(radio)) {
+			radio = null;
+		}
+	}
 }

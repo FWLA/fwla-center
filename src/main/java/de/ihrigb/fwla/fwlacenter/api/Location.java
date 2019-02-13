@@ -22,4 +22,10 @@ public class Location implements Locatable {
 	public Optional<Coordinate> locate() {
 		return Optional.ofNullable(coordinate);
 	}
+
+	public void clearEmptyStrings() {
+		if (address != null) {
+			address.clearEmptyStrings();
+		}
+	}
 }

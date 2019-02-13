@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -105,7 +107,17 @@ public class Operation {
 	private int year;
 
 	@PrePersist
+	public void prePersist() {
+		clearEmptyStrings();
+		setYear();
+	}
+
 	@PreUpdate
+	public void preUpdate() {
+		clearEmptyStrings();
+		setYear();
+	}
+
 	public void setYear() {
 		Instant source;
 		if (time != null) {
@@ -114,10 +126,37 @@ public class Operation {
 			source = created;
 		}
 
-
 		ZoneId zoneId = ZoneId.of("Europe/Berlin");
 		ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(source, zoneId);
 
 		this.year = zonedDateTime.getYear();
+	}
+
+	public void clearEmptyStrings() {
+		if ("".equals(id)) {
+			id = null;
+		}
+		if ("".equals(place)) {
+			place = null;
+		}
+		if ("".equals(object)) {
+			object = null;
+		}
+		if (location != null) {
+			location.clearEmptyStrings();
+		}
+		if ("".equals(code)) {
+			code = null;
+		}
+		if ("".equals(message)) {
+			message = null;
+		}
+		if ("".equals(notice)) {
+			notice = null;
+		}
+		if (resourceKeys != null) {
+			resourceKeys = resourceKeys.stream().filter(Objects::nonNull).filter(rk -> !"".equals(rk))
+					.collect(Collectors.toList());
+		}
 	}
 }

@@ -7,6 +7,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -39,5 +41,19 @@ public class Station implements Locatable {
 			return Optional.empty();
 		}
 		return location.locate();
+	}
+
+	@PrePersist
+	@PostPersist
+	public void clearEmptyStrings() {
+		if ("".equals(id)) {
+			id = null;
+		}
+		if ("".equals(name)) {
+			name = null;
+		}
+		if (location != null) {
+			location.clearEmptyStrings();
+		}
 	}
 }

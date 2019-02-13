@@ -1,7 +1,9 @@
 package de.ihrigb.fwla.fwlacenter.persistence.model;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -11,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -48,7 +52,7 @@ public class RealEstate implements Locatable {
 	@Column(name = "link", nullable = false)
 	private Set<String> links;
 
-	@Column(name="folder_address", nullable = true)
+	@Column(name = "folder_address", nullable = true)
 	private Integer folderAddress;
 
 	@Override
@@ -57,5 +61,26 @@ public class RealEstate implements Locatable {
 			return Optional.empty();
 		}
 		return this.location.locate();
+	}
+
+	@PrePersist
+	@PostPersist
+	public void clearEmptyStrings() {
+		if ("".equals(id)) {
+			id = null;
+		}
+		if ("".equals(name)) {
+			name = null;
+		}
+		if ("".equals(pattern)) {
+			pattern = null;
+		}
+		if ("".equals(information)) {
+			information = null;
+		}
+		if (links != null) {
+			links = links.stream().filter(Objects::nonNull).filter(link -> !"".equals(link))
+					.collect(Collectors.toSet());
+		}
 	}
 }
