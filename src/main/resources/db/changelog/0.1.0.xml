@@ -2,9 +2,12 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 	<changeSet id="00-add-description-column" author="ihrigb">
 		<addColumn tableName="real_estate_links">
-            <column name="description" type="VARCHAR(256)">
-                <constraints nullable="true" />
-            </column>
-        </addColumn>
+			<column name="description" type="VARCHAR(256)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="01-increase-column-size-realestate-pattern" author="ihrigb">
+		<modifyDataType tableName="real_estates" columnName="key" newDataType="VARCHAR(512)" />
 	</changeSet>
 </databaseChangeLog>
