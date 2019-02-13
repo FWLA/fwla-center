@@ -49,8 +49,7 @@ public class RealEstate implements Locatable {
 
 	@ElementCollection
 	@CollectionTable(name = "real_estate_links", joinColumns = @JoinColumn(name = "real_estate_id"))
-	@Column(name = "link", nullable = false)
-	private Set<String> links;
+	private Set<Link> links;
 
 	@Column(name = "folder_address", nullable = true)
 	private Integer folderAddress;

@@ -1,6 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.web.model;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.util.Assert;
 
@@ -21,7 +22,7 @@ public class RealEstateDTO {
 	private String pattern;
 	private String information;
 	private LocationDTO location;
-	private Set<String> links;
+	private Set<LinkDTO> links;
 	private Integer folderAddress;
 
 	public RealEstateDTO(RealEstate realEstate) {
@@ -34,7 +35,9 @@ public class RealEstateDTO {
 		if (realEstate.getLocation() != null) {
 			this.location = new LocationDTO(realEstate.getLocation());
 		}
-		this.links = realEstate.getLinks();
+		if (realEstate.getLinks() != null) {
+			this.links = realEstate.getLinks().stream().map(link -> new LinkDTO(link)).collect(Collectors.toSet());
+		}
 		this.folderAddress = realEstate.getFolderAddress();
 	}
 
@@ -48,7 +51,9 @@ public class RealEstateDTO {
 		if (location != null) {
 			realEstate.setLocation(location.getApiModel());
 		}
-		realEstate.setLinks(links);
+		if (links != null) {
+			realEstate.setLinks(links.stream().map(link -> link.getPersistenceModel()).collect(Collectors.toSet()));
+		}
 		realEstate.setFolderAddress(folderAddress);
 		return realEstate;
 	}
