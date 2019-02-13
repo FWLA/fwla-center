@@ -2,6 +2,8 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 
 import org.springframework.util.Assert;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.ihrigb.fwla.fwlacenter.persistence.model.Link;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,7 @@ public class LinkDTO {
 		this.description = link.getDescription();
 	}
 
+	@JsonIgnore
 	public Link getPersistenceModel() {
 		Link link = new Link();
 		link.setLink(this.link);

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Embeddable
 public class Link {
 
-	@Column(name = "href", nullable = false)
+	@Column(name = "link", nullable = false)
 	private String link;
 
 	@Column(name = "description", nullable = false)
