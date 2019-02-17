@@ -14,21 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.ihrigb.fwla.fwlacenter.persistence.model.Resource;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceRepository;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
-import de.ihrigb.fwla.fwlacenter.web.model.ResourceDTO;
+import de.ihrigb.fwla.fwlacenter.persistence.model.RiverSector;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.RiverSectorRepository;
+import de.ihrigb.fwla.fwlacenter.web.model.RiverSectorDTO;
 
 @Transactional
 @RestController
-@RequestMapping("/v1/resources")
-public class ResourceController extends BaseController<Resource, String, ResourceDTO> {
+@RequestMapping("/v1/riverSectors")
+public class RiverSectorController extends BaseController<RiverSector, String, RiverSectorDTO> {
 
-	private final StationRepository stationRepository;
-
-	public ResourceController(ResourceRepository repository, StationRepository stationRepository) {
+	public RiverSectorController(RiverSectorRepository repository) {
 		super(repository);
-		this.stationRepository = stationRepository;
 	}
 
 	@GetMapping
@@ -45,12 +41,12 @@ public class ResourceController extends BaseController<Resource, String, Resourc
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody ResourceDTO dto) {
+	public ResponseEntity<?> create(@RequestBody RiverSectorDTO dto) {
 		return super.doCreate(dto);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable("id") String id, @RequestBody ResourceDTO dto) {
+	public ResponseEntity<?> update(@PathVariable("id") String id, @RequestBody RiverSectorDTO dto) {
 		return super.doUpdate(id, dto);
 	}
 
@@ -60,21 +56,21 @@ public class ResourceController extends BaseController<Resource, String, Resourc
 	}
 
 	@Override
-	protected Function<? super Resource, ? extends ResourceDTO> getToDTOFunction() {
-		return resource -> {
-			return new ResourceDTO(resource);
+	protected Function<? super RiverSector, ? extends RiverSectorDTO> getToDTOFunction() {
+		return riverSector -> {
+			return new RiverSectorDTO(riverSector);
 		};
 	}
 
 	@Override
-	protected Function<? super ResourceDTO, ? extends Resource> getFromDTOFunction() {
+	protected Function<? super RiverSectorDTO, ? extends RiverSector> getFromDTOFunction() {
 		return dto -> {
-			return dto.getPersistenceModel(stationRepository);
+			return dto.getPersistenceModel();
 		};
 	}
 
 	@Override
-	protected String getId(Resource t) {
+	protected String getId(RiverSector t) {
 		return t.getId();
 	}
 }

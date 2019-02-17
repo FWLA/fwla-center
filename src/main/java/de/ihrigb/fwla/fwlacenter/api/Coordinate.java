@@ -6,6 +6,9 @@ import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.geojson.Point;
+import org.springframework.util.Assert;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +18,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Embeddable
 public final class Coordinate implements Locatable {
+
+	public static Coordinate of(Point point) {
+		Assert.notNull(point, "Point must not be null.");
+		double lat = point.getCoordinates().getLatitude();
+		double lng = point.getCoordinates().getLongitude();
+		return new Coordinate(lat, lng);
+	}
 
 	@Column(name = "latitude")
 	private double latitude;

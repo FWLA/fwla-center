@@ -10,4 +10,23 @@
 	<changeSet id="01-increase-column-size-realestate-pattern" author="ihrigb">
 		<modifyDataType tableName="real_estates" columnName="key" newDataType="VARCHAR(512)" />
 	</changeSet>
+	<changeSet id="02-create-riversector-table" author="ihrigb">
+		<createTable tableName="river_sectors">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="river" type="VARCHAR(128)">
+				<constraints nullable="false" />
+			</column>
+			<column name="kmfrom" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+			<column name="kmto" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+			<column name="kminterval" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
 </databaseChangeLog>
