@@ -155,8 +155,9 @@ public class Operation {
 			notice = null;
 		}
 		if (resourceKeys != null) {
-			resourceKeys = resourceKeys.stream().filter(Objects::nonNull).filter(rk -> !"".equals(rk))
-					.collect(Collectors.toList());
+			resourceKeys.removeIf(resourceKey -> {
+				return resourceKey == null || "".equals(resourceKey);
+			});
 		}
 	}
 }
