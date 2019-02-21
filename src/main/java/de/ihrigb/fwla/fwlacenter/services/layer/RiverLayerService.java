@@ -75,7 +75,11 @@ public class RiverLayerService implements LayerService {
 		}
 
 		String bWaStrId = optBWaStrId.get();
-		River river = River.ofBWaStrId(bWaStrId);
+		Optional<River> optRiver = River.ofBWaStrId(bWaStrId);
+		if (!optRiver.isPresent()) {
+			return Collections.emptySet();
+		}
+		River river = optRiver.get();
 		Set<Float> km = new HashSet<>();
 
 		// (1) get all river sectors of this river and add kms by interval to set.
@@ -128,8 +132,11 @@ public class RiverLayerService implements LayerService {
 		}
 
 		Optional<String> optBWaStrId = RiverLayerService.extractBWaStrId(layer);
-		return optBWaStrId.map(bWaStrId -> {
-			River river = River.ofBWaStrId(bWaStrId);
+		if (!optBWaStrId.isPresent()) {
+			return Optional.empty();
+		}
+
+		return River.ofBWaStrId(optBWaStrId.get()).map(river -> {
 			return new FeatureDetails(river.getName(),
 					String.format(Locale.GERMANY, "Kilometer %f", Float.parseFloat(featureId)), null);
 		});
