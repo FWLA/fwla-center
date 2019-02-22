@@ -29,4 +29,23 @@
 			</column>
 		</createTable>
 	</changeSet>
+	<changeSet id="03-create-railway_coordinate_boxes" author="ihrigb">
+		<createTable tableName="railway_coordinate_boxes">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="ul_latitude" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+			<column name="ul_longitude" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+			<column name="lr_latitude" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+			<column name="lr_longitude" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
 </databaseChangeLog>

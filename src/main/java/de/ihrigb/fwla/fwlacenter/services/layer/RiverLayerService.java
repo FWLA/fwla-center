@@ -138,7 +138,7 @@ public class RiverLayerService implements LayerService {
 
 		return River.ofBWaStrId(optBWaStrId.get()).map(river -> {
 			return new FeatureDetails(river.getName(),
-					String.format(Locale.GERMANY, "Kilometer %f", Float.parseFloat(featureId)), null);
+					String.format(Locale.GERMANY, "Kilometer %.2f", Float.parseFloat(featureId)), null);
 		});
 	}
 }
