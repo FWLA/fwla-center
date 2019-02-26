@@ -23,9 +23,9 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.PointFeature;
 import de.ihrigb.fwla.fwlacenter.services.river.CachingWSVRestServiceClient;
 import de.ihrigb.fwla.fwlacenter.services.river.model.Fehlkilometer;
 import de.ihrigb.fwla.fwlacenter.services.river.model.GeocodierungQuery;
+import de.ihrigb.fwla.fwlacenter.services.river.model.GeocodierungQuery.Stationierung;
 import de.ihrigb.fwla.fwlacenter.services.river.model.GeocodierungResult;
 import de.ihrigb.fwla.fwlacenter.services.river.model.RootResult;
-import de.ihrigb.fwla.fwlacenter.services.river.model.GeocodierungQuery.Stationierung;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -42,6 +42,9 @@ public class RiverLayerService implements LayerService {
 	}
 
 	private static boolean isInFehlkilometer(float km, List<Fehlkilometer> fehlkilometer) {
+		if (fehlkilometer == null) {
+			return false;
+		}
 		for (Fehlkilometer fk : fehlkilometer) {
 			if (fk.getKmVon() < km && fk.getKmBis() > km) {
 				return true;
@@ -99,7 +102,9 @@ public class RiverLayerService implements LayerService {
 				.getFehlkilometer();
 
 		// (4) remove from list, if within fehlkilometer
-		kmsList.removeIf(k -> RiverLayerService.isInFehlkilometer(k, fehlkilometer));
+		if (fehlkilometer != null) {
+			kmsList.removeIf(k -> RiverLayerService.isInFehlkilometer(k, fehlkilometer));
+		}
 
 		List<GeocodierungQuery> queries = new ArrayList<>();
 
