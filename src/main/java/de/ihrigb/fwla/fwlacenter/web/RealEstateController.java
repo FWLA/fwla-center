@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.GeoServices;
+import de.ihrigb.fwla.fwlacenter.utils.Sanitizers;
 import de.ihrigb.fwla.fwlacenter.web.model.RealEstateDTO;
 
 @Transactional
@@ -80,10 +81,18 @@ public class RealEstateController extends BaseController<RealEstate, String, Rea
 
 	@Override
 	protected void beforeCreate(RealEstate entity) {
-		if (entity.getLocation().getCoordinate() == null || entity.getLocation().getCoordinate().getLatitude() == 0d
-				&& entity.getLocation().getCoordinate().getLongitude() == 0d) {
-			setCoordinate(entity);
+		if (entity.getLocation() != null) {
+			if (entity.getLocation().getCoordinate() == null || entity.getLocation().getCoordinate().getLatitude() == 0d
+					&& entity.getLocation().getCoordinate().getLongitude() == 0d) {
+				setCoordinate(entity);
+			}
 		}
+		Sanitizers.LOCATION_SANITIZER.accept(entity.getLocation());
+	}
+
+	@Override
+	protected void beforeUpdate(RealEstate entity) {
+		Sanitizers.LOCATION_SANITIZER.accept(entity.getLocation());
 	}
 
 	private void setCoordinate(RealEstate realEstate) {
