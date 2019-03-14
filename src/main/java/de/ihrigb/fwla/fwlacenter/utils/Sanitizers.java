@@ -3,10 +3,41 @@ package de.ihrigb.fwla.fwlacenter.utils;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.springframework.util.ReflectionUtils;
+
 import de.ihrigb.fwla.fwlacenter.api.Address;
 import de.ihrigb.fwla.fwlacenter.api.Location;
 
 public final class Sanitizers {
+
+	public static void clearWhitespaceOnlyFields(Object o) {
+		Sanitizers.clearWhitespaceOnlyFields(o, new String[0]);
+	}
+
+	public static void clearWhitespaceOnlyFields(Object o, String... excludedFieldNames) {
+		ReflectionUtils.doWithFields(o.getClass(), field -> {
+			// can only be string due to filter
+			String value = (String) field.get(o);
+			if (value == null) {
+				return;
+			}
+
+			if ("".equals(value.trim())) {
+				field.set(o, null);
+			}
+
+		}, field -> {
+			if (field.getType() != String.class) {
+				return false;
+			}
+
+			if (excludedFieldNames == null || excludedFieldNames.length == 0) {
+				return true;
+			}
+
+			return ArrayUtils.contains(excludedFieldNames, field.getName());
+		});
+	}
 
 	public static final Function<String, String> STRING_SANITIZER = (string) -> {
 		if (string == null) {
