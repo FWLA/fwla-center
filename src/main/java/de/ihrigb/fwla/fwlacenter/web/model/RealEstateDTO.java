@@ -20,6 +20,7 @@ public class RealEstateDTO {
 	private String id;
 	private String name;
 	private String pattern;
+	private String number;
 	private String information;
 	private LocationDTO location;
 	private Set<LinkDTO> links;
@@ -31,6 +32,7 @@ public class RealEstateDTO {
 		this.id = realEstate.getId();
 		this.name = realEstate.getName();
 		this.pattern = realEstate.getPattern();
+		this.number = realEstate.getNumber();
 		this.information = realEstate.getInformation();
 		if (realEstate.getLocation() != null) {
 			this.location = new LocationDTO(realEstate.getLocation());
@@ -47,6 +49,7 @@ public class RealEstateDTO {
 		realEstate.setId(id);
 		realEstate.setName(name);
 		realEstate.setPattern(pattern);
+		realEstate.setNumber(number);
 		realEstate.setInformation(information);
 		if (location != null) {
 			realEstate.setLocation(location.getApiModel());

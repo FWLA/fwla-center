@@ -39,6 +39,9 @@ public class RealEstate implements Locatable {
 	@Column(name = "key", nullable = true, unique = true)
 	private String pattern;
 
+	@Column(name = "number", nullable = true, unique = true)
+	private String number;
+
 	@Column(name = "information", nullable = true)
 	private String information;
 
@@ -71,6 +74,9 @@ public class RealEstate implements Locatable {
 		}
 		if ("".equals(pattern)) {
 			pattern = null;
+		}
+		if ("".equals(number)) {
+			number = null;
 		}
 		if ("".equals(information)) {
 			information = null;
