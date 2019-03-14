@@ -9,4 +9,29 @@
 		</addColumn>
 	</changeSet>
 
+	<changeSet id="01-create_realestate_tags_table" author="ihrigb">
+		<createTable tableName="real_estate_tags">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="VARCHAR(128)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addUniqueConstraint
+			tableName="real_estate_tags"
+			columnNames="name"
+			constraintName="real_estate_tags-name" />
+
+		<createTable tableName="real_estate_real_estate_tags">
+			<column name="real_estate_id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="real_estate_tag_id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
 </databaseChangeLog>

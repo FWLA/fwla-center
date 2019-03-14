@@ -8,6 +8,8 @@ import org.springframework.util.Assert;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateTagRepository;
+import de.ihrigb.fwla.fwlacenter.web.ReferenceNotFoundException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +27,7 @@ public class RealEstateDTO {
 	private LocationDTO location;
 	private Set<LinkDTO> links;
 	private Integer folderAddress;
+	private Set<String> realEstateTags;
 
 	public RealEstateDTO(RealEstate realEstate) {
 		Assert.notNull(realEstate, "RealEstate must not be null.");
@@ -41,10 +44,14 @@ public class RealEstateDTO {
 			this.links = realEstate.getLinks().stream().map(link -> new LinkDTO(link)).collect(Collectors.toSet());
 		}
 		this.folderAddress = realEstate.getFolderAddress();
+		if (realEstate.getRealEstateTags() != null) {
+			this.realEstateTags = realEstate.getRealEstateTags().stream().map(ret -> ret.getId())
+					.collect(Collectors.toSet());
+		}
 	}
 
 	@JsonIgnore
-	public RealEstate getPersistenceModel() {
+	public RealEstate getPersistenceModel(RealEstateTagRepository realEstateTagRepository) {
 		RealEstate realEstate = new RealEstate();
 		realEstate.setId(id);
 		realEstate.setName(name);
@@ -58,6 +65,12 @@ public class RealEstateDTO {
 			realEstate.setLinks(links.stream().map(link -> link.getPersistenceModel()).collect(Collectors.toSet()));
 		}
 		realEstate.setFolderAddress(folderAddress);
+		if (realEstateTags != null) {
+			realEstate.setRealEstateTags(realEstateTags.stream()
+					.map(realEstateTagId -> realEstateTagRepository.findById(realEstateTagId)
+							.orElseThrow(() -> new ReferenceNotFoundException("resource -> station")))
+					.collect(Collectors.toSet()));
+		}
 		return realEstate;
 	}
 }

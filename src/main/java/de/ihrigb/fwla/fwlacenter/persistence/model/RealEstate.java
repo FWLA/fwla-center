@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PostPersist;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -54,6 +56,10 @@ public class RealEstate implements Locatable {
 
 	@Column(name = "folder_address", nullable = true)
 	private Integer folderAddress;
+
+	@ManyToMany
+	@JoinTable(name = "real_estate_real_estate_tags", joinColumns = @JoinColumn(name = "real_estate_id"), inverseJoinColumns = @JoinColumn(name = "real_estate_tag_id"))
+	private Set<RealEstateTag> realEstateTags;
 
 	@Override
 	public Optional<Coordinate> locate() {

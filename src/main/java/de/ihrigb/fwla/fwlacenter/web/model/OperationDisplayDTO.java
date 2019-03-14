@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.geojson.FeatureCollection;
 import org.springframework.util.Assert;
 
+import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateTagRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import lombok.Getter;
@@ -66,7 +67,7 @@ public class OperationDisplayDTO {
 	}
 
 	@JsonIgnore
-	public Operation getApiModel(StationRepository stationRepository) {
+	public Operation getApiModel(StationRepository stationRepository, RealEstateTagRepository realEstateTagRepository) {
 		Operation operation = new Operation();
 		operation.setId(id);
 		operation.setTime(time);
@@ -85,7 +86,7 @@ public class OperationDisplayDTO {
 			operation.setOperationKey(operationKey.getPersistenceModel());
 		}
 		if (realEstate != null) {
-			operation.setRealEstate(realEstate.getPersistenceModel());
+			operation.setRealEstate(realEstate.getPersistenceModel(realEstateTagRepository));
 		}
 		if (resources != null) {
 			operation.setResources(resources.stream().map(dto -> dto.getPersistenceModel(stationRepository))

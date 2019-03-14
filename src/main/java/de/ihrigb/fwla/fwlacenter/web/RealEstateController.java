@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateTagRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.GeoServices;
 import de.ihrigb.fwla.fwlacenter.utils.Sanitizers;
 import de.ihrigb.fwla.fwlacenter.web.model.RealEstateDTO;
@@ -25,10 +26,12 @@ import de.ihrigb.fwla.fwlacenter.web.model.RealEstateDTO;
 @RequestMapping("/v1/realEstates")
 public class RealEstateController extends BaseController<RealEstate, String, RealEstateDTO> {
 
+	private final RealEstateTagRepository realEstateTagRepository;
 	private final GeoServices geoServices;
 
-	public RealEstateController(RealEstateRepository repository, GeoServices geoServices) {
+	public RealEstateController(RealEstateRepository repository, RealEstateTagRepository realEstateTagRepository, GeoServices geoServices) {
 		super(repository);
+		this.realEstateTagRepository = realEstateTagRepository;
 		this.geoServices = geoServices;
 	}
 
@@ -70,7 +73,7 @@ public class RealEstateController extends BaseController<RealEstate, String, Rea
 	@Override
 	protected Function<? super RealEstateDTO, ? extends RealEstate> getFromDTOFunction() {
 		return dto -> {
-			return dto.getPersistenceModel();
+			return dto.getPersistenceModel(realEstateTagRepository);
 		};
 	}
 
