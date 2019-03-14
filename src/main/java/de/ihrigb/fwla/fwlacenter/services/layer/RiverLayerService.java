@@ -126,7 +126,8 @@ public class RiverLayerService implements LayerService {
 		// (7) build features from results
 		return result.getResult().stream().map(res -> {
 			Coordinate coordinate = Coordinate.of(res.getGeometry());
-			return new PointFeature(String.format(Locale.US, "%f", kmsList.get(res.getQid())), coordinate, "blue");
+			return new PointFeature(String.format(Locale.US, "%f", kmsList.get(res.getQid())),
+					String.format(Locale.GERMANY, "KM %.2f", kmsList.get(res.getQid())), coordinate, "blue");
 		}).collect(Collectors.toSet());
 	}
 

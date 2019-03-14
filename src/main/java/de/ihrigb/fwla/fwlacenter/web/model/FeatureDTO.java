@@ -12,10 +12,12 @@ import lombok.Setter;
 public class FeatureDTO {
 
 	private String id;
+	private String tooltip;
 	private FeatureType type;
 
 	public FeatureDTO(Feature feature) {
 		this.id = feature.getId();
+		this.tooltip = feature.getTooltip();
 		this.type = feature.getType();
 	}
 }

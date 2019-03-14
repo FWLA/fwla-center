@@ -41,7 +41,9 @@ public class RailwayLayerService implements LayerService {
 
 	private static PointFeature map(org.geojson.Feature feature) {
 		Coordinate coordinate = Coordinate.of((Point) feature.getGeometry());
-		return new PointFeature(feature.getProperty("id"), coordinate, "violet");
+		double km = feature.getProperty("location");
+		return new PointFeature(feature.getProperty("id"), String.format(Locale.GERMANY, "KM %.2f", km), coordinate,
+				"violet");
 	}
 
 	private static boolean isWithinBox(org.geojson.Feature feature, List<RailwayCoordinateBox> railwayCoordinateBoxes) {
@@ -78,8 +80,8 @@ public class RailwayLayerService implements LayerService {
 		if (repository.count() == 0) {
 			return Collections.emptyList();
 		}
-		return Collections
-				.singletonList(new LayerGroup(LAYER_GROUP_NAME, Collections.singletonList(new Layer(LAYER_ID, LAYER_NAME))));
+		return Collections.singletonList(
+				new LayerGroup(LAYER_GROUP_NAME, Collections.singletonList(new Layer(LAYER_ID, LAYER_NAME))));
 	}
 
 	@Override

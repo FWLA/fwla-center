@@ -57,7 +57,9 @@ class OperationLayerService implements LayerService {
 	private Function<Operation, Feature> map() {
 		return (operation) -> {
 			return Optional.ofNullable(operation).map(o -> {
-				return new PointFeature(o.getId(), o.getLocation().getCoordinate(), "red");
+				return new PointFeature(o.getId(),
+						Optional.ofNullable(o.getOperationKey()).map(ok -> ok.getKey()).orElse(operation.getCode()),
+						o.getLocation().getCoordinate(), "red");
 			}).orElse(null);
 		};
 	}

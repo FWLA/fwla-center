@@ -11,5 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Feature {
 	private String id;
+	private String tooltip;
 	private FeatureType type;
 }
