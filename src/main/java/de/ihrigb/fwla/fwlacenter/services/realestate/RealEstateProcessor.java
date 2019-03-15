@@ -52,7 +52,7 @@ public class RealEstateProcessor implements Processor {
 				set(operation, optRealEstate.get());
 			} else {
 				log.debug("Did not find real estate for key {}.", operation.getObject());
-				eventLogService.error("Unable to find OperationKey with OBJECT '%s' (Coordinate %s).",
+				eventLogService.error("Unable to find RealEstate with OBJECT '%s' (Coordinate %s).",
 						operation.getObject(), Optional.ofNullable(operation.getLocation()).map(l -> l.getCoordinate())
 								.map(c -> c.toString()).orElse("n/a"));
 			}
