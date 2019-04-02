@@ -1,0 +1,28 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="01-create_cameras_table" author="ihrigb">
+		<createTable tableName="cameras">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="VARCHAR(128)">
+				<constraints nullable="false" />
+			</column>
+			<column name="uri" type="VARCHAR(1024)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addUniqueConstraint
+			tableName="cameras"
+			columnNames="name"
+			constraintName="cameras-name" />
+
+		<addUniqueConstraint
+			tableName="cameras"
+			columnNames="uri"
+			constraintName="cameras-uri" />
+	</changeSet>
+
+</databaseChangeLog>
