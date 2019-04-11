@@ -1,7 +1,5 @@
 package de.ihrigb.fwla.fwlacenter.utils;
 
-import org.springframework.util.Assert;
-
 public final class ArrayUtils {
 
 	public static <T> boolean contains(T[] array, T needle) {
@@ -9,15 +7,14 @@ public final class ArrayUtils {
 	}
 
 	public static <T> int indexOf(T[] array, T needle) {
-		Assert.notNull(needle, "Needle must not be null.");
-
 		int index = -1;
 		if (array == null || array.length == 0) {
 			return index;
 		}
 
 		for (int i = 0; i < array.length; i++) {
-			if (needle.equals(array[i])) {
+			T atIndex = array[i];
+			if ((needle == null && atIndex == null) || (needle != null && needle.equals(atIndex))) {
 				index = i;
 				break;
 			}

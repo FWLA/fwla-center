@@ -17,6 +17,7 @@ public final class Sanitizers {
 	public static void clearWhitespaceOnlyFields(Object o, String... excludedFieldNames) {
 		ReflectionUtils.doWithFields(o.getClass(), field -> {
 			// can only be string due to filter
+			ReflectionUtils.makeAccessible(field);
 			String value = (String) field.get(o);
 			if (value == null) {
 				return;
@@ -35,7 +36,7 @@ public final class Sanitizers {
 				return true;
 			}
 
-			return ArrayUtils.contains(excludedFieldNames, field.getName());
+			return !ArrayUtils.contains(excludedFieldNames, field.getName());
 		});
 	}
 
@@ -61,10 +62,16 @@ public final class Sanitizers {
 	});
 
 	public static final Consumer<Address> ADDRESS_SANITIZER = (address) -> {
+		if (address == null) {
+			return;
+		}
 		address.setStreet(STREET_SANITIZER.apply(address.getStreet()));
 	};
 
 	public static final Consumer<Location> LOCATION_SANITIZER = (location) -> {
+		if (location == null) {
+			return;
+		}
 		ADDRESS_SANITIZER.accept(location.getAddress());
 	};
 

@@ -18,11 +18,6 @@ public final class AlternativeUtils {
 	}
 
 	@SafeVarargs
-	public static <T> T alternativeNull(T defaultValue, Supplier<T>... suppliers) {
-		return AlternativeUtils.alternative(Objects::nonNull, defaultValue, suppliers);
-	}
-
-	@SafeVarargs
 	public static <T> T alternative(Predicate<T> check, T defaultValue, Supplier<T>... suppliers) {
 		for (Supplier<T> supplier : suppliers) {
 			T t = supplier.get();
