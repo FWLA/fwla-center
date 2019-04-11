@@ -25,4 +25,24 @@
 			constraintName="cameras-uri" />
 	</changeSet>
 
+	<changeSet id="02-create_displayevents_table" author="ihrigb">
+		<createTable tableName="display_events">
+			<column name="id" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="start_time" type="TIMESTAMP">
+				<constraints nullable="true" />
+			</column>
+			<column name="end_time" type="TIMESTAMP">
+				<constraints nullable="true" />
+			</column>
+			<column name="text" type="CLOB">
+				<constraints nullable="true" />
+			</column>
+			<column name="show_operation" type="BOOLEAN">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
 </databaseChangeLog>
