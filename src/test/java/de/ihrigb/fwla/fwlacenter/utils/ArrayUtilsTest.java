@@ -47,6 +47,6 @@ public class ArrayUtilsTest {
 
 	@Test
 	public void testIndexOfNullNeedleNotFound() throws Exception {
-		assertEquals("indexOf should return 1", 1, ArrayUtils.indexOf(new String[] { "value1", "value2" }, "value3"));
+		assertEquals("indexOf should return -1", -1, ArrayUtils.indexOf(new String[] { "value1", "value2" }, "value3"));
 	}
 }
