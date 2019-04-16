@@ -21,7 +21,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.CameraDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/cameras")
-public class CameraController extends BaseController<Camera, String, CameraDTO> {
+public class CameraController extends BaseController<Camera, String, CameraDTO, CameraRepository> {
 
 	public CameraController(CameraRepository repository) {
 		super(repository);

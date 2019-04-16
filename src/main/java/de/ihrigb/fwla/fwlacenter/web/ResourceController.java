@@ -22,7 +22,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.ResourceDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/resources")
-public class ResourceController extends BaseController<Resource, String, ResourceDTO> {
+public class ResourceController extends BaseController<Resource, String, ResourceDTO, ResourceRepository> {
 
 	private final StationRepository stationRepository;
 

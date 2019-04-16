@@ -1,5 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.web;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -23,7 +24,8 @@ import de.ihrigb.fwla.fwlacenter.web.model.DisplayEventDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/displayEvents")
-public class DisplayEventController extends BaseController<DisplayEvent, String, DisplayEventDTO> {
+public class DisplayEventController
+		extends BaseController<DisplayEvent, String, DisplayEventDTO, DisplayEventRepository> {
 
 	public DisplayEventController(DisplayEventRepository repository) {
 		super(repository);
@@ -78,19 +80,38 @@ public class DisplayEventController extends BaseController<DisplayEvent, String,
 
 	@Override
 	protected void beforeCreate(DisplayEvent entity) {
+		handleNullInstants(entity);
 		validateDisplayEvent(entity);
+		checkTimeRangeUniqueness(entity);
 	}
 
 	@Override
 	protected void beforeUpdate(DisplayEvent entity) {
+		handleNullInstants(entity);
 		validateDisplayEvent(entity);
+		checkTimeRangeUniqueness(entity);
+	}
+
+	private void handleNullInstants(DisplayEvent displayEvent) {
+		if (displayEvent.getStartTime() == null) {
+			displayEvent.setStartTime(Instant.MIN);
+		}
+		if (displayEvent.getEndTime() == null) {
+			displayEvent.setEndTime(Instant.MAX);
+		}
 	}
 
 	private void validateDisplayEvent(DisplayEvent displayEvent) {
-		if (displayEvent.getStartTime() != null && displayEvent.getEndTime() != null) {
-			if (displayEvent.getStartTime().isAfter(displayEvent.getEndTime())) {
-				throw new BadRequestException("Start time must be before end time.", Optional.of(displayEvent));
-			}
+		if (displayEvent.getStartTime().isAfter(displayEvent.getEndTime())) {
+			throw new BadRequestException("Start time must be before end time.", Optional.of(displayEvent));
+		}
+	}
+
+	private void checkTimeRangeUniqueness(DisplayEvent displayEvent) {
+		if (!getRepository().getEventsIntersectingTimeRange(displayEvent.getStartTime(), displayEvent.getEndTime())
+				.isEmpty()) {
+			throw new BadRequestException("Time range does intersect with another display event.",
+					Optional.of(displayEvent));
 		}
 	}
 }

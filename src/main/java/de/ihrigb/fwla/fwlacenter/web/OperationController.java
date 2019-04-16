@@ -29,7 +29,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.OperationDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/operations")
-public class OperationController extends BaseController<Operation, String, OperationDTO> {
+public class OperationController extends BaseController<Operation, String, OperationDTO, OperationRepository> {
 
 	private final OperationRepository operationRepository;
 	private final OperationService operationService;

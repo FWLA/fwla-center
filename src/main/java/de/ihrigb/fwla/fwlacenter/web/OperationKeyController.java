@@ -21,7 +21,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.OperationKeyDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/operationKeys")
-public class OperationKeyController extends BaseController<OperationKey, String, OperationKeyDTO> {
+public class OperationKeyController extends BaseController<OperationKey, String, OperationKeyDTO, OperationKeyRepository> {
 
 	public OperationKeyController(OperationKeyRepository repository) {
 		super(repository);

@@ -1,6 +1,9 @@
 package de.ihrigb.fwla.fwlacenter.web;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
@@ -21,15 +24,15 @@ import lombok.Setter;
 
 public class BaseControllerTest {
 
-	private BaseController<Entity, String, EntityDTO> testee;
+	private BaseController<Entity, String, EntityDTO, EntityRepository> testee;
 
-	private JpaRepository<Entity, String> repository;
+	private EntityRepository repository;
 
 	@Before
 	public void setUp() {
-		repository = mock(JpaRepository.class);
+		repository = mock(EntityRepository.class);
 
-		testee = new BaseController<Entity, String, EntityDTO>(repository) {
+		testee = new BaseController<Entity, String, EntityDTO, EntityRepository>(repository) {
 
 			@Override
 			protected Function<? super Entity, ? extends EntityDTO> getToDTOFunction() {
@@ -98,5 +101,8 @@ public class BaseControllerTest {
 			entity.setName(name);
 			return entity;
 		}
+	}
+
+	public static interface EntityRepository extends JpaRepository<Entity, String> {
 	}
 }

@@ -21,7 +21,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.AmbulancePatternDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/ambulancePatterns")
-public class AmbulancePatternController extends BasePatternController<AmbulancePattern, AmbulancePatternDTO> {
+public class AmbulancePatternController extends BasePatternController<AmbulancePattern, AmbulancePatternDTO, AmbulancePatternRepository> {
 
 	public AmbulancePatternController(AmbulancePatternRepository AmbulancePatternRepository) {
 		super(AmbulancePatternRepository);

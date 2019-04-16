@@ -24,7 +24,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.RealEstateDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/realEstates")
-public class RealEstateController extends BaseController<RealEstate, String, RealEstateDTO> {
+public class RealEstateController extends BaseController<RealEstate, String, RealEstateDTO, RealEstateRepository> {
 
 	private final RealEstateTagRepository realEstateTagRepository;
 	private final GeoServices geoServices;

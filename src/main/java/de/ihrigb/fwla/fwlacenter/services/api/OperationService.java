@@ -26,6 +26,12 @@ public interface OperationService {
 
 	Optional<Operation> getActiveOperation();
 
+	/**
+	 * Checks, if service has active operation.
+	 *
+	 * @deprecated Deprecated since 0.1.2. Use optional of getActiveOperation instead.
+	 */
+	@Deprecated
 	default boolean hasActiveOperation() {
 		return getActiveOperation().isPresent();
 	}

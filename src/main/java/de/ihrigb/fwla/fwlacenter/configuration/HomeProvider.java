@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @EnableConfigurationProperties(HomeProperties.class)
 @RequiredArgsConstructor
-public final class HomeProvider {
+public class HomeProvider {
 
 	private final HomeProperties properties;
 

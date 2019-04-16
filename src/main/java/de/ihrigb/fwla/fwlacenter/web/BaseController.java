@@ -30,10 +30,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.ihrigb.fwla.fwlacenter.web.model.DataResponse;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-abstract class BaseController<T, ID extends Serializable, DTO> {
+abstract class BaseController<T, ID extends Serializable, DTO, Repository extends JpaRepository<T, ID>> {
 
 	private static final Pattern sortPattern = Pattern
 			.compile("\\[\\\"(?<property>[\\w\\d]+)\\\"\\,\\\"(?<direction>ASC|DESC)\\\"\\]");
@@ -48,10 +50,11 @@ abstract class BaseController<T, ID extends Serializable, DTO> {
 		});
 	}
 
-	private final JpaRepository<T, ID> repository;
+	@Getter(AccessLevel.PROTECTED)
+	private final Repository repository;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	protected BaseController(JpaRepository<T, ID> repository) {
+	protected BaseController(Repository repository) {
 		this.repository = repository;
 	}
 

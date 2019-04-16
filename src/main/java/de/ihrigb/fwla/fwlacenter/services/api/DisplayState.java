@@ -10,9 +10,11 @@ import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import de.ihrigb.fwla.fwlacenter.services.api.Weather;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Builder
 @Getter
+@Setter
 @JsonInclude(Include.NON_NULL)
 public class DisplayState {
 	private final State state;

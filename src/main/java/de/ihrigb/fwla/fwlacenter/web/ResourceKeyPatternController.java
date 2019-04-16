@@ -21,7 +21,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.ResourceKeyPatternDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/resourceKeyPatterns")
-public class ResourceKeyPatternController extends BasePatternController<ResourceKeyPattern, ResourceKeyPatternDTO> {
+public class ResourceKeyPatternController extends BasePatternController<ResourceKeyPattern, ResourceKeyPatternDTO, ResourceKeyPatternRepository> {
 
 	public ResourceKeyPatternController(ResourceKeyPatternRepository resourceKeyPatternRepository) {
 		super(resourceKeyPatternRepository);

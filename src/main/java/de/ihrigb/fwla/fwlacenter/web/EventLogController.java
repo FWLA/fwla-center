@@ -18,7 +18,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.EventLogDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/eventLogs")
-public class EventLogController extends BaseController<EventLog, String, EventLogDTO> {
+public class EventLogController extends BaseController<EventLog, String, EventLogDTO, EventLogRepository> {
 
 	public EventLogController(EventLogRepository repository) {
 		super(repository);

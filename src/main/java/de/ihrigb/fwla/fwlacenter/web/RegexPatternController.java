@@ -19,7 +19,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.RegexPatternDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/regexPatterns")
-public class RegexPatternController extends BaseController<RegexPattern, String, RegexPatternDTO> {
+public class RegexPatternController extends BaseController<RegexPattern, String, RegexPatternDTO, RegexPatternRepository> {
 
 	public RegexPatternController(RegexPatternRepository repository) {
 		super(repository);

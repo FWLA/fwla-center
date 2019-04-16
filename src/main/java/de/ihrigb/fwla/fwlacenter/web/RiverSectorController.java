@@ -21,7 +21,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.RiverSectorDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/riverSectors")
-public class RiverSectorController extends BaseController<RiverSector, String, RiverSectorDTO> {
+public class RiverSectorController extends BaseController<RiverSector, String, RiverSectorDTO, RiverSectorRepository> {
 
 	public RiverSectorController(RiverSectorRepository repository) {
 		super(repository);

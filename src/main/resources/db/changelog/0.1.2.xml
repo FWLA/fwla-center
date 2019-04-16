@@ -31,10 +31,10 @@
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="start_time" type="TIMESTAMP">
-				<constraints nullable="true" />
+				<constraints nullable="false" />
 			</column>
 			<column name="end_time" type="TIMESTAMP">
-				<constraints nullable="true" />
+				<constraints nullable="false" />
 			</column>
 			<column name="text" type="CLOB">
 				<constraints nullable="true" />

@@ -24,10 +24,10 @@ public class DisplayEvent {
 	@Column(name = "id", nullable = false, unique = true)
 	private String id;
 
-	@Column(name = "start_time", nullable = true)
+	@Column(name = "start_time", nullable = false)
 	private Instant startTime;
 
-	@Column(name = "end_time", nullable = true)
+	@Column(name = "end_time", nullable = false)
 	private Instant endTime;
 
 	@Lob

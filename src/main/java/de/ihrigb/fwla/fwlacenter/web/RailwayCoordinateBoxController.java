@@ -21,7 +21,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.RailwayCoordinateBoxDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/railwayCoordinateBoxes")
-public class RailwayCoordinateBoxController extends BaseController<RailwayCoordinateBox, String, RailwayCoordinateBoxDTO> {
+public class RailwayCoordinateBoxController extends BaseController<RailwayCoordinateBox, String, RailwayCoordinateBoxDTO, RailwayCoordinateBoxRepository> {
 
 	public RailwayCoordinateBoxController(RailwayCoordinateBoxRepository repository) {
 		super(repository);

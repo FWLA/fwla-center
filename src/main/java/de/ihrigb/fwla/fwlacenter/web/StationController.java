@@ -22,7 +22,7 @@ import de.ihrigb.fwla.fwlacenter.web.model.StationDTO;
 @Transactional
 @RestController
 @RequestMapping("/v1/stations")
-public class StationController extends BaseController<Station, String, StationDTO> {
+public class StationController extends BaseController<Station, String, StationDTO, StationRepository> {
 
 	private final GeoServices geoServices;
 
