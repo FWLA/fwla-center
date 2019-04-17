@@ -82,14 +82,14 @@ public class DisplayEventController
 	protected void beforeCreate(DisplayEvent entity) {
 		handleNullInstants(entity);
 		validateDisplayEvent(entity);
-		checkTimeRangeUniqueness(entity);
+		checkTimeRangeUniqueness(entity, false);
 	}
 
 	@Override
 	protected void beforeUpdate(DisplayEvent entity) {
 		handleNullInstants(entity);
 		validateDisplayEvent(entity);
-		checkTimeRangeUniqueness(entity);
+		checkTimeRangeUniqueness(entity, true);
 	}
 
 	private void handleNullInstants(DisplayEvent displayEvent) {
@@ -107,9 +107,12 @@ public class DisplayEventController
 		}
 	}
 
-	private void checkTimeRangeUniqueness(DisplayEvent displayEvent) {
-		if (!getRepository().getEventsIntersectingTimeRange(displayEvent.getStartTime(), displayEvent.getEndTime())
+	private void checkTimeRangeUniqueness(DisplayEvent displayEvent, boolean isUpdate) {
+		if (!isUpdate && !getRepository().getEventsIntersectingTimeRange(displayEvent.getStartTime(), displayEvent.getEndTime())
 				.isEmpty()) {
+			throw new BadRequestException("Time range does intersect with another display event.",
+					Optional.of(displayEvent));
+		} else if (!getRepository().getEventsIntersectingTimeRangeExcludeId(displayEvent.getStartTime(), displayEvent.getEndTime(), displayEvent.getId()).isEmpty()) {
 			throw new BadRequestException("Time range does intersect with another display event.",
 					Optional.of(displayEvent));
 		}
