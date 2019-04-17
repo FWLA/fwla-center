@@ -2,6 +2,8 @@
 
 Central server for FWLA-Center system.
 
+## [Changelog](./documentation/changelog/README.md)
+
 ## Build
 
 ```shell
