@@ -32,6 +32,7 @@ public class OperationDTO {
 	private List<String> resourceKeys;
 	private String operationKeyId;
 	private String realEstateId;
+	private String realEstateAdditional;
 	private List<String> resources;
 	private boolean ambulanceCalled;
 
@@ -57,6 +58,7 @@ public class OperationDTO {
 		if (operation.getRealEstate() != null) {
 			this.realEstateId = operation.getRealEstate().getId();
 		}
+		this.realEstateAdditional = operation.getRealEstateAdditional();
 		if (operation.getResources() != null) {
 			this.resources = operation.getResources().stream().map(r -> r.getId()).collect(Collectors.toList());
 		}
@@ -85,6 +87,7 @@ public class OperationDTO {
 		if (realEstateId != null) {
 			operation.setRealEstate(realEstateRepository.findById(realEstateId).orElse(null));
 		}
+		operation.setRealEstateAdditional(realEstateAdditional);
 		if (resources != null) {
 			operation.setResources(
 					resources.stream().map(resourceId -> resourceRepository.findById(resourceId).orElse(null))

@@ -33,6 +33,7 @@ public class OperationDisplayDTO {
 	private List<String> resourceKeys;
 	private OperationKeyDTO operationKey;
 	private RealEstateDTO realEstate;
+	private String realEstateAdditional;
 	private List<ResourceDTO> resources;
 	private boolean ambulanceCalled;
 	private FeatureCollection directions;
@@ -59,6 +60,7 @@ public class OperationDisplayDTO {
 		if (operation.getRealEstate() != null) {
 			this.realEstate = new RealEstateDTO(operation.getRealEstate());
 		}
+		this.realEstateAdditional = operation.getRealEstateAdditional();
 		if (operation.getResources() != null) {
 			this.resources = operation.getResources().stream().map(r -> new ResourceDTO(r)).collect(Collectors.toList());
 		}
@@ -88,6 +90,7 @@ public class OperationDisplayDTO {
 		if (realEstate != null) {
 			operation.setRealEstate(realEstate.getPersistenceModel(realEstateTagRepository));
 		}
+		operation.setRealEstateAdditional(realEstateAdditional);
 		if (resources != null) {
 			operation.setResources(resources.stream().map(dto -> dto.getPersistenceModel(stationRepository))
 					.collect(Collectors.toList()));
