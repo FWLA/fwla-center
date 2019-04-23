@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
@@ -41,6 +42,7 @@ public class RealEstateProcessorTest {
 		testee.process(operation);
 
 		assertNull(operation.getRealEstate());
+		assertNull(operation.getRealEstateAdditional());
 		verify(realEstateRepository, eventLogService);
 	}
 
@@ -54,6 +56,7 @@ public class RealEstateProcessorTest {
 		testee.process(operation);
 
 		assertSame(realEstate, operation.getRealEstate());
+		assertNull(operation.getRealEstateAdditional());
 		verify(realEstateRepository, eventLogService);
 	}
 
@@ -69,6 +72,7 @@ public class RealEstateProcessorTest {
 		testee.process(operation);
 
 		assertSame(realEstate, operation.getRealEstate());
+		assertNull(operation.getRealEstateAdditional());
 		verify(realEstateRepository, eventLogService);
 	}
 
@@ -87,6 +91,45 @@ public class RealEstateProcessorTest {
 		testee.process(operation);
 
 		assertSame(realEstate, operation.getRealEstate());
+		assertNull(operation.getRealEstateAdditional());
+		verify(realEstateRepository, eventLogService);
+	}
+
+	@Test
+	public void testProcessFoundByPatternWithAdditionalRegex() throws Exception {
+		Operation operation = new Operation();
+		operation.setObject("object - 1OG");
+
+		expect(realEstateRepository.findOneByName("object - 1OG")).andReturn(Optional.empty());
+
+		RealEstate realEstate = new RealEstate();
+		realEstate.setPattern("object[\\s\\-]*(.*)");
+		expect(realEstateRepository.streamAll()).andReturn(Collections.singleton(realEstate).stream());
+
+		replay(realEstateRepository, eventLogService);
+		testee.process(operation);
+
+		assertSame(realEstate, operation.getRealEstate());
+		assertEquals("1OG", operation.getRealEstateAdditional());
+		verify(realEstateRepository, eventLogService);
+	}
+
+	@Test
+	public void testProcessFoundByPatternWithAdditional() throws Exception {
+		Operation operation = new Operation();
+		operation.setObject("object");
+
+		expect(realEstateRepository.findOneByName("object")).andReturn(Optional.empty());
+
+		RealEstate realEstate = new RealEstate();
+		realEstate.setPattern("object[\\s\\-]*(.*)");
+		expect(realEstateRepository.streamAll()).andReturn(Collections.singleton(realEstate).stream());
+
+		replay(realEstateRepository, eventLogService);
+		testee.process(operation);
+
+		assertSame(realEstate, operation.getRealEstate());
+		assertNull(operation.getRealEstateAdditional());
 		verify(realEstateRepository, eventLogService);
 	}
 
@@ -108,6 +151,7 @@ public class RealEstateProcessorTest {
 		testee.process(operation);
 
 		assertNull(operation.getRealEstate());
+		assertNull(operation.getRealEstateAdditional());
 		verify(realEstateRepository, eventLogService);
 	}
 }

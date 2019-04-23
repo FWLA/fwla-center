@@ -77,6 +77,9 @@ public class Operation {
 	@JoinColumn(name = "real_estate_id", nullable = true)
 	private RealEstate realEstate;
 
+	@Column(name = "real_estate_additional", nullable = true)
+	private String realEstateAdditional;
+
 	@ManyToMany
 	@JoinTable(name = "operation_resources", joinColumns = @JoinColumn(name = "operation_id"), inverseJoinColumns = @JoinColumn(name = "resource_id"))
 	@OrderColumn(name = "index")

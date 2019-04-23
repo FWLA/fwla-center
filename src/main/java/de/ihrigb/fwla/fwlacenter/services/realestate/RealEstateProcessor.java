@@ -1,12 +1,15 @@
 package de.ihrigb.fwla.fwlacenter.services.realestate;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
 import de.ihrigb.fwla.fwlacenter.handling.core.ProcessorOrder;
@@ -62,6 +65,20 @@ public class RealEstateProcessor implements Processor {
 	private void set(Operation operation, RealEstate realEstate) {
 		log.debug("Setting real estate {} to operation.", realEstate.getName());
 		operation.setRealEstate(realEstate);
+		if (realEstate.getPattern() != null) {
+			Pattern pattern = Pattern.compile(realEstate.getPattern());
+			Matcher matcher = pattern.matcher(operation.getObject());
+			if (matcher.matches()) {
+				try {
+					String additional = matcher.group(1);
+					if (StringUtils.hasLength(additional)) {
+						operation.setRealEstateAdditional(additional);
+					}
+				} catch (IndexOutOfBoundsException e) {
+					log.debug("No group with additional information.");
+				}
+			}
+		}
 	}
 
 	private Optional<RealEstate> resolveByPattern(String key) {
