@@ -11,7 +11,7 @@ VOLUME /tmp
 EXPOSE 8080
 
 # The application's jar file
-ARG JAR_FILE=target/fwla-center-0.1.3.jar
+ARG JAR_FILE=target/fwla-center-0.1.4-SNAPSHOT.jar
 
 # Add the application's jar to the container
 COPY ${JAR_FILE} fwla-center.jar
