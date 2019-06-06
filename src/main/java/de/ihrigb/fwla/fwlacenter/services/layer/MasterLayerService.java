@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.PersonnelRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RailwayCoordinateBoxRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RiverSectorRepository;
@@ -20,9 +21,9 @@ public class MasterLayerService extends CompositeLayerService {
 	public MasterLayerService(OperationRepository operationRepository, OperationService operationService,
 			StationRepository stationRepository, RealEstateRepository realEstateRepository,
 			RiverSectorRepository riverSectorRepository, CachingWSVRestServiceClient wsvRestClient,
-			RailwayCoordinateBoxRepository railwayCoordinateBoxRepository) {
+			RailwayCoordinateBoxRepository railwayCoordinateBoxRepository, PersonnelRepository personnelRepository) {
 		super(new SystemLayerService(operationRepository, operationService, stationRepository, realEstateRepository,
-				riverSectorRepository, wsvRestClient, railwayCoordinateBoxRepository));
+				riverSectorRepository, wsvRestClient, railwayCoordinateBoxRepository, personnelRepository));
 	}
 
 	@Override
