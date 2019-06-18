@@ -1,7 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.services.layer;
 
 import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.PersonnelRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RailwayCoordinateBoxRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RiverSectorRepository;
@@ -14,11 +13,10 @@ class SystemLayerService extends CompositeLayerService {
 	SystemLayerService(OperationRepository operationRepository, OperationService operationService,
 			StationRepository stationRepository, RealEstateRepository realEstateRepository,
 			RiverSectorRepository riverSectorRepository, CachingWSVRestServiceClient wsvRestClient,
-			RailwayCoordinateBoxRepository railwayCoordinateBoxRepository, PersonnelRepository personnelRepository) {
+			RailwayCoordinateBoxRepository railwayCoordinateBoxRepository) {
 		super(new OperationLayerService(operationRepository, operationService),
 				new StationLayerAdapter(stationRepository), new RealEstateLayerAdapter(realEstateRepository),
 				new RiverLayerService(riverSectorRepository, wsvRestClient),
-				new RailwayLayerService(railwayCoordinateBoxRepository),
-				new PersonnelLayerService(personnelRepository));
+				new RailwayLayerService(railwayCoordinateBoxRepository));
 	}
 }
