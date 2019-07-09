@@ -20,6 +20,10 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerService;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.PointFeature;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @deprecated 0.1.4
+ */
+@Deprecated
 @RequiredArgsConstructor
 class OperationLayerService implements LayerService {
 

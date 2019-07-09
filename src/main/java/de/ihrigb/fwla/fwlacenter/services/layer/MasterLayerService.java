@@ -14,6 +14,10 @@ import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.services.river.CachingWSVRestServiceClient;
 
+/**
+ * @deprecated 0.1.4
+ */
+@Deprecated
 @Component
 public class MasterLayerService extends CompositeLayerService {
 

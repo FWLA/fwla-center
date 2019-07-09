@@ -8,6 +8,10 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.services.river.CachingWSVRestServiceClient;
 
+/**
+ * @deprecated 0.1.4
+ */
+@Deprecated
 class SystemLayerService extends CompositeLayerService {
 
 	SystemLayerService(OperationRepository operationRepository, OperationService operationService,

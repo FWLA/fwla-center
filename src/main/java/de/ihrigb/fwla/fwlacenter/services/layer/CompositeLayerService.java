@@ -11,6 +11,10 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerService;
 
+/**
+ * @deprecated 0.1.4
+ */
+@Deprecated
 class CompositeLayerService implements LayerService {
 	private final Set<? extends LayerService> layerServices;
 

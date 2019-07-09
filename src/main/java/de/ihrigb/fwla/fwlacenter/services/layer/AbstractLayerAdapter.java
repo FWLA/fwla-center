@@ -13,6 +13,10 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @deprecated 0.1.4
+ */
+@Deprecated
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 abstract class AbstractLayerAdapter<T extends Locatable, ID extends Serializable> implements LayerService {
 

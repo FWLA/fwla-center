@@ -4,14 +4,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
 
+import org.geojson.Feature;
+import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
 import org.geojson.Point;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
@@ -20,34 +21,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RailwayCoordinateBox;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RailwayCoordinateBoxRepository;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.Feature;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerService;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.PointFeature;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerProvider;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @deprecated 0.1.4
- */
-@Deprecated
+@Component
 @Slf4j
-public class RailwayLayerService implements LayerService {
+public class RailwayLayerProvider implements LayerProvider {
 
 	static final String LAYER_GROUP_NAME = "Bahn";
 	static final String LAYER_ID = "railway";
 	static final String LAYER_NAME = "Bahn";
+	private static final String iconColor = "violet";
 	private static final String geoJsonFile = "DB-markerPosts.geojson";
 
-	private static PointFeature map(org.geojson.Feature feature) {
-		Coordinate coordinate = Coordinate.of((Point) feature.getGeometry());
+	private static void standartize(Feature feature) {
 		double km = feature.getProperty("location");
-		return new PointFeature(feature.getProperty("id"), String.format(Locale.GERMANY, "KM %.2f", km), coordinate,
-				"violet");
+		feature.setProperty("name", String.format(Locale.GERMANY, "KM %.2f", km));
+		feature.setProperty("color", RailwayLayerProvider.iconColor);
 	}
 
 	private static boolean isWithinBox(org.geojson.Feature feature, List<RailwayCoordinateBox> railwayCoordinateBoxes) {
@@ -74,7 +69,7 @@ public class RailwayLayerService implements LayerService {
 	private final RailwayCoordinateBoxRepository repository;
 	private final Cache<String, org.geojson.Feature> featureCache;
 
-	public RailwayLayerService(RailwayCoordinateBoxRepository repository) {
+	public RailwayLayerProvider(RailwayCoordinateBoxRepository repository) {
 		this.repository = repository;
 		this.featureCache = Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(365)).build();
 	}
@@ -89,16 +84,21 @@ public class RailwayLayerService implements LayerService {
 	}
 
 	@Override
-	public Set<? extends Feature> getFeatures(String layer) {
+	public boolean supports(String layerId) {
+		return RailwayLayerProvider.LAYER_ID.equals(layerId);
+	}
+
+	@Override
+	public FeatureCollection getFeatures(String layer) {
 		if (!LAYER_ID.equals(layer)) {
-			return Collections.emptySet();
+			return new FeatureCollection();
 		}
 		List<RailwayCoordinateBox> railwayCoordinateBoxes = repository.findAll();
 		if (railwayCoordinateBoxes.isEmpty()) {
-			return Collections.emptySet();
+			return new FeatureCollection();
 		}
 
-		Set<PointFeature> features = new HashSet<>();
+		FeatureCollection features = new FeatureCollection();
 
 		JsonFactory factory = new JsonFactory();
 		ObjectMapper mapper = new ObjectMapper(factory);
@@ -139,8 +139,9 @@ public class RailwayLayerService implements LayerService {
 			while (parser.nextToken() == JsonToken.START_OBJECT) {
 				org.geojson.Feature feature = mapper.readValue(parser, org.geojson.Feature.class);
 				if (isWithinBox(feature, railwayCoordinateBoxes)) {
+					standartize(feature);
 					doCache(feature);
-					features.add(map(feature));
+					features.add(feature);
 				}
 			}
 		} catch (IOException e) {

@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * @deprecated 0.1.4
+ */
+@Deprecated
 @Getter
 @Setter
 @NoArgsConstructor

@@ -16,6 +16,10 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 
+/**
+ * @deprecated 0.1.4
+ */
+@Deprecated
 public class RailwayLayerServiceTest {
 
 	private RailwayLayerService testee;

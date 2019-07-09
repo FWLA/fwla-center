@@ -11,31 +11,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.geojson.Feature;
+import org.geojson.FeatureCollection;
+import org.geojson.Point;
+import org.springframework.stereotype.Component;
+
 import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.persistence.model.River;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RiverSectorRepository;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.Feature;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerService;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.PointFeature;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerProvider;
 import de.ihrigb.fwla.fwlacenter.services.river.CachingWSVRestServiceClient;
 import de.ihrigb.fwla.fwlacenter.services.river.model.Fehlkilometer;
 import de.ihrigb.fwla.fwlacenter.services.river.model.GeocodierungQuery;
 import de.ihrigb.fwla.fwlacenter.services.river.model.GeocodierungQuery.Stationierung;
+import de.ihrigb.fwla.fwlacenter.utils.GeoJsonUtils;
 import de.ihrigb.fwla.fwlacenter.services.river.model.GeocodierungResult;
 import de.ihrigb.fwla.fwlacenter.services.river.model.RootResult;
 import lombok.RequiredArgsConstructor;
 
-/**
- * @deprecated 0.1.4
- */
-@Deprecated
+@Component
 @RequiredArgsConstructor
-public class RiverLayerService implements LayerService {
+public class RiverLayerProvider implements LayerProvider {
 
-	private static Pattern layerIdPattern = Pattern.compile("river-(?<bwastrid>\\d+)");
+	private static final String iconColor = "blue";
+	private static final String layerIdPrefix = "river-";
+	private static final Pattern layerIdPattern = Pattern.compile(layerIdPrefix + "(?<bwastrid>\\d+)");
 
 	private static Optional<String> extractBWaStrId(String layerId) {
 		Matcher matcher = layerIdPattern.matcher(layerId);
@@ -64,27 +67,32 @@ public class RiverLayerService implements LayerService {
 	public List<LayerGroup> getLayerGroups() {
 
 		List<Layer> layers = repository.findRivers().stream().map(river -> {
-			return new Layer("river-" + river.getBWaStrId(), river.getName());
+			return new Layer(RiverLayerProvider.layerIdPrefix + river.getBWaStrId(), river.getName());
 		}).collect(Collectors.toList());
 
 		return Collections.singletonList(new LayerGroup("Wasserstraßen", layers));
 	}
 
 	@Override
-	public Set<? extends Feature> getFeatures(String layer) {
-		if (layer == null || !layer.startsWith("river-")) {
-			return Collections.emptySet();
+	public boolean supports(String layerId) {
+		return layerId != null && layerId.startsWith(RiverLayerProvider.layerIdPrefix);
+	}
+
+	@Override
+	public FeatureCollection getFeatures(String layer) {
+		if (layer == null || !layer.startsWith(RiverLayerProvider.layerIdPrefix)) {
+			return new FeatureCollection();
 		}
 
-		Optional<String> optBWaStrId = RiverLayerService.extractBWaStrId(layer);
+		Optional<String> optBWaStrId = RiverLayerProvider.extractBWaStrId(layer);
 		if (!optBWaStrId.isPresent()) {
-			return Collections.emptySet();
+			return new FeatureCollection();
 		}
 
 		String bWaStrId = optBWaStrId.get();
 		Optional<River> optRiver = River.ofBWaStrId(bWaStrId);
 		if (!optRiver.isPresent()) {
-			return Collections.emptySet();
+			return new FeatureCollection();
 		}
 		River river = optRiver.get();
 		Set<Float> km = new HashSet<>();
@@ -107,7 +115,7 @@ public class RiverLayerService implements LayerService {
 
 		// (4) remove from list, if within fehlkilometer
 		if (fehlkilometer != null) {
-			kmsList.removeIf(k -> RiverLayerService.isInFehlkilometer(k, fehlkilometer));
+			kmsList.removeIf(k -> RiverLayerProvider.isInFehlkilometer(k, fehlkilometer));
 		}
 
 		List<GeocodierungQuery> queries = new ArrayList<>();
@@ -130,18 +138,23 @@ public class RiverLayerService implements LayerService {
 		// (7) build features from results
 		return result.getResult().stream().map(res -> {
 			Coordinate coordinate = Coordinate.of(res.getGeometry());
-			return new PointFeature(String.format(Locale.US, "%f", kmsList.get(res.getQid())),
-					String.format(Locale.GERMANY, "KM %.2f", kmsList.get(res.getQid())), coordinate, "blue");
-		}).collect(Collectors.toSet());
+			Point point = GeoJsonUtils.toPoint(coordinate);
+			Feature feature = new Feature();
+			feature.setGeometry(point);
+			feature.setId(String.format(Locale.US, "%f", kmsList.get(res.getQid())));
+			feature.setProperty("name", String.format(Locale.GERMANY, "KM %.2f", kmsList.get(res.getQid())));
+			feature.setProperty("color", RiverLayerProvider.iconColor);
+			return feature;
+		}).collect(GeoJsonUtils.collector());
 	}
 
 	@Override
 	public Optional<FeatureDetails> getFeatureDetails(String layer, String featureId) {
-		if (!layer.startsWith("river-")) {
+		if (!layer.startsWith(RiverLayerProvider.layerIdPrefix)) {
 			return Optional.empty();
 		}
 
-		Optional<String> optBWaStrId = RiverLayerService.extractBWaStrId(layer);
+		Optional<String> optBWaStrId = RiverLayerProvider.extractBWaStrId(layer);
 		if (!optBWaStrId.isPresent()) {
 			return Optional.empty();
 		}
