@@ -18,6 +18,7 @@ public interface LayerProvider {
 	 * Get features for a specific layer.
 	 *
 	 * @param layerId layer id
+	 * @return feature collection
 	 */
 	FeatureCollection getFeatures(String layerId);
 
