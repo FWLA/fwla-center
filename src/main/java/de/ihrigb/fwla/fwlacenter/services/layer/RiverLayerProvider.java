@@ -22,7 +22,6 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.RiverSectorRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerProvider;
 import de.ihrigb.fwla.fwlacenter.services.river.CachingWSVRestServiceClient;
 import de.ihrigb.fwla.fwlacenter.services.river.model.Fehlkilometer;
 import de.ihrigb.fwla.fwlacenter.services.river.model.GeocodierungQuery;
@@ -34,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class RiverLayerProvider implements LayerProvider {
+public class RiverLayerProvider extends AbstractLayerProvider {
 
 	private static final String iconColor = "blue";
 	private static final String layerIdPrefix = "river-";
@@ -139,11 +138,13 @@ public class RiverLayerProvider implements LayerProvider {
 		return result.getResult().stream().map(res -> {
 			Coordinate coordinate = Coordinate.of(res.getGeometry());
 			Point point = GeoJsonUtils.toPoint(coordinate);
-			Feature feature = new Feature();
-			feature.setGeometry(point);
-			feature.setId(String.format(Locale.US, "%f", kmsList.get(res.getQid())));
-			feature.setProperty("name", String.format(Locale.GERMANY, "KM %.2f", kmsList.get(res.getQid())));
-			feature.setProperty("color", RiverLayerProvider.iconColor);
+
+			String id = String.format(Locale.US, "%f", kmsList.get(res.getQid()));
+			String name = String.format(Locale.GERMANY, "KM %.2f", kmsList.get(res.getQid()));
+
+			Feature feature = createFeature(id, point, true);
+			setNameProperty(feature, name);
+			setColorProperty(feature, RiverLayerProvider.iconColor);
 			return feature;
 		}).collect(GeoJsonUtils.collector());
 	}

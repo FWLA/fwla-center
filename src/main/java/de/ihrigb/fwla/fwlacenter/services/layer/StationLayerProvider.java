@@ -15,7 +15,7 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.utils.GeoJsonUtils;
 
 @Component
-public class StationLayerProvider extends AbstractLayerProviderAdapter<Station, String> {
+public class StationLayerProvider extends AbstractRepositoryLayerProviderAdapter<Station, String> {
 
 	private static final String layerId = "stations";
 	private static final String layerName = "Standorte";

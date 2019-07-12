@@ -19,13 +19,12 @@ import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerProvider;
 import de.ihrigb.fwla.fwlacenter.utils.GeoJsonUtils;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-class OperationLayerProvider implements LayerProvider {
+class OperationLayerProvider extends AbstractLayerProvider {
 
 	private static final String iconColor = "red";
 
@@ -76,12 +75,10 @@ class OperationLayerProvider implements LayerProvider {
 		return (operation) -> {
 			return Optional.ofNullable(operation).map(o -> {
 				Point point = GeoJsonUtils.toPoint(o.getLocation().getCoordinate());
-				Feature feature = new Feature();
-				feature.setGeometry(point);
-				feature.setId(o.getId());
-				feature.setProperty("name",
+				Feature feature = createFeature(o.getId(), point, true);
+				setNameProperty(feature,
 						Optional.ofNullable(o.getOperationKey()).map(ok -> ok.getKey()).orElse(operation.getCode()));
-				feature.setProperty("color", OperationLayerProvider.iconColor);
+				setColorProperty(feature, OperationLayerProvider.iconColor);
 				return feature;
 			}).orElse(null);
 		};

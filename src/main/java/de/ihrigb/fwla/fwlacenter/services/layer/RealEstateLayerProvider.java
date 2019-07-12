@@ -15,7 +15,7 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.utils.GeoJsonUtils;
 
 @Component
-public class RealEstateLayerProvider extends AbstractLayerProviderAdapter<RealEstate, String> {
+public class RealEstateLayerProvider extends AbstractRepositoryLayerProviderAdapter<RealEstate, String> {
 
 	private static final String layerId = "realEstate";
 	private static final String layerName = "Objekte";

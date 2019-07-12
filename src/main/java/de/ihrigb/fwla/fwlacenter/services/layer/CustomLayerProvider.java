@@ -12,12 +12,11 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.MapLayerRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerProvider;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class CustomLayerProvider implements LayerProvider {
+public class CustomLayerProvider extends AbstractLayerProvider {
 
 	private final static String mapLayerIdPrefix = "custom-";
 

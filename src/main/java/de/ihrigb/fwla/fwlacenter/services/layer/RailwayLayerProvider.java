@@ -26,24 +26,17 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.RailwayCoordinateBoxRepo
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerProvider;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class RailwayLayerProvider implements LayerProvider {
+public class RailwayLayerProvider extends AbstractLayerProvider {
 
 	static final String LAYER_GROUP_NAME = "Bahn";
 	static final String LAYER_ID = "railway";
 	static final String LAYER_NAME = "Bahn";
 	private static final String iconColor = "violet";
 	private static final String geoJsonFile = "DB-markerPosts.geojson";
-
-	private static void standartize(Feature feature) {
-		double km = feature.getProperty("location");
-		feature.setProperty("name", String.format(Locale.GERMANY, "KM %.2f", km));
-		feature.setProperty("color", RailwayLayerProvider.iconColor);
-	}
 
 	private static boolean isWithinBox(org.geojson.Feature feature, List<RailwayCoordinateBox> railwayCoordinateBoxes) {
 		if (!(feature.getGeometry() instanceof Point)) {
@@ -137,7 +130,7 @@ public class RailwayLayerProvider implements LayerProvider {
 			}
 
 			while (parser.nextToken() == JsonToken.START_OBJECT) {
-				org.geojson.Feature feature = mapper.readValue(parser, org.geojson.Feature.class);
+				Feature feature = mapper.readValue(parser, Feature.class);
 				if (isWithinBox(feature, railwayCoordinateBoxes)) {
 					standartize(feature);
 					doCache(feature);
@@ -158,7 +151,7 @@ public class RailwayLayerProvider implements LayerProvider {
 			return Optional.empty();
 		}
 
-		org.geojson.Feature feature = featureCache.getIfPresent(featureId);
+		Feature feature = featureCache.getIfPresent(featureId);
 		if (feature == null) {
 			getFeatures(layer);
 		}
@@ -174,11 +167,18 @@ public class RailwayLayerProvider implements LayerProvider {
 				String.format("Bahnstrecke %s", trackName), null));
 	}
 
-	private void doCache(org.geojson.Feature feature) {
+	private void doCache(Feature feature) {
 		if (!feature.getProperties().containsKey("id")) {
 			log.warn("Feature not cachable.");
 			return;
 		}
 		featureCache.put(feature.getProperty("id"), feature);
+	}
+
+	private void standartize(Feature feature) {
+		double km = feature.getProperty("location");
+		setNameProperty(feature, String.format(Locale.GERMANY, "KM %.2f", km));
+		setColorProperty(feature, RailwayLayerProvider.iconColor);
+		setHasDetailsProperty(feature, true);
 	}
 }

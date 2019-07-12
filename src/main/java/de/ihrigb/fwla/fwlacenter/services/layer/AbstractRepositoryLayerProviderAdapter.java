@@ -8,13 +8,12 @@ import org.geojson.GeoJsonObject;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import de.ihrigb.fwla.fwlacenter.api.Locatable;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerProvider;
 import de.ihrigb.fwla.fwlacenter.utils.GeoJsonUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-abstract class AbstractLayerProviderAdapter<T extends Locatable, ID extends Serializable> implements LayerProvider {
+abstract class AbstractRepositoryLayerProviderAdapter<T extends Locatable, ID extends Serializable> extends AbstractLayerProvider {
 
 	private final JpaRepository<T, ID> repository;
 
@@ -45,11 +44,9 @@ abstract class AbstractLayerProviderAdapter<T extends Locatable, ID extends Seri
 	}
 
 	protected Feature createFeature(T t, GeoJsonObject geometry, String color) {
-		Feature feature = new Feature();
-		feature.setGeometry(geometry);
-		feature.setId(getId(t));
-		feature.setProperty("name", getName(t));
-		feature.setProperty("color", color);
+		Feature feature = createFeature(getId(t), geometry, true);
+		setNameProperty(feature, getName(t));
+		setColorProperty(feature, color);
 		return feature;
 	}
 }
