@@ -1,7 +1,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet id="01-create-map-layers-tabnle" author="ihrigb">
+	<changeSet id="00-create-map-layers-table" author="ihrigb">
 		<createTable tableName="maplayers">
 			<column name="id" type="VARCHAR(64)">
 				<constraints primaryKey="true" nullable="false" />
@@ -13,6 +13,13 @@
 				<constraints nullable="true" />
 			</column>
 		</createTable>
+	</changeSet>
+
+	<changeSet id="01-fix-code-regex" author="ihrigb">
+		<update tableName="regex_patterns">
+			<column name="pattern" value="^\d+\s\/\s([FHO]\-[^-]+)\s\-\s.*$" />
+			<where>id = 'CODE'</where>
+		</update>
 	</changeSet>
 
 </databaseChangeLog>
