@@ -53,7 +53,7 @@ public class OperationServiceImpl implements OperationService {
 		trainingOperations.values().stream().filter(o -> {
 			return Duration.between(o.getCreated(), Instant.now()).compareTo(properties.getTimeout()) > 0;
 		}).forEach(o -> {
-			log.info("Traingin Operation {} timed out. Closing it.", o.getId());
+			log.info("Training Operation {} timed out. Closing it.", o.getId());
 			closeOperation(o.getId());
 		});
 	}
