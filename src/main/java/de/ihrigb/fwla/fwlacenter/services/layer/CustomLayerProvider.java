@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.geojson.FeatureCollection;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.MapLayer;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.MapLayerRepository;
@@ -16,9 +15,7 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CustomLayerProvider extends AbstractLayerProvider {
@@ -60,8 +57,6 @@ public class CustomLayerProvider extends AbstractLayerProvider {
 		if (!supports(layerId)) {
 			throw new LayerUpdateNotSupportedException(layerId);
 		}
-
-		log.info("Updating layer {}.", layerId);
 
 		MapLayer mapLayer = mapLayerRepository.findById(extractId(layerId))
 				.orElseThrow(() -> new LayerUpdateNotSupportedException(layerId));
