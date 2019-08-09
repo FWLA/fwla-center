@@ -13,6 +13,7 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerProvider;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerServiceV2;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,9 +44,28 @@ public class GlobalLayerServiceV2 implements LayerServiceV2 {
 	@Override
 	public FeatureCollection getFeatures(String layerId) {
 
-		log.trace("Get features of layer id {layerId}.", layerId);
+		log.trace("Get features of layer id {}.", layerId);
 
 		return getLayerProvider(layerId).map(lp -> lp.getFeatures(layerId)).orElseGet(() -> new FeatureCollection());
+	}
+
+	@Override
+	public boolean isEditable(String layerId) {
+
+		log.trace("isEditable of layer id {},", layerId);
+
+		return getLayerProvider(layerId).map(lp -> lp.isEditable(layerId)).orElse(false);
+	}
+
+	@Override
+	public void update(String layerId, FeatureCollection featureCollection) throws LayerUpdateNotSupportedException {
+
+		log.trace("Update of layer id {}.", layerId);
+
+		getLayerProvider(layerId).orElseThrow(() -> {
+			log.warn("No provider found for layer {}.", layerId);
+			return new LayerUpdateNotSupportedException(layerId);
+		}).update(layerId, featureCollection);
 	}
 
 	@Override

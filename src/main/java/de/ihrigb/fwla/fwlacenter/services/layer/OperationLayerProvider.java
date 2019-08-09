@@ -19,6 +19,7 @@ import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import de.ihrigb.fwla.fwlacenter.utils.GeoJsonUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +39,16 @@ class OperationLayerProvider extends AbstractLayerProvider {
 	public boolean supports(String layerId) {
 		return OperationLayerProvider.operationLayerId.equals(layerId)
 				|| layerId != null && layerId.startsWith(OperationLayerProvider.operationsLayerIdPrefix);
+	}
+
+	@Override
+	public boolean isEditable(String layerId) {
+		return false;
+	}
+
+	@Override
+	public void update(String layerId, FeatureCollection featureCollection) throws LayerUpdateNotSupportedException {
+		throw new LayerUpdateNotSupportedException(layerId);
 	}
 
 	@Override

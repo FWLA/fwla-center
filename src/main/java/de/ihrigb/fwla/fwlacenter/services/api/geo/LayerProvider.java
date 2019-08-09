@@ -38,4 +38,21 @@ public interface LayerProvider {
 	 * @return true, if layer id is supported.
 	 */
 	boolean supports(String layerId);
+
+	/**
+	 * Check, if layer is editable.
+	 *
+	 * @param layerId layer id
+	 * @return true, if layer can be edited
+	 */
+	boolean isEditable(String layerId);
+
+	/**
+	 * Update the layer by new geojson data.
+	 *
+	 * @param layerId           layer id
+	 * @param featureCollection geojson feature collection
+	 * @throws LayerUpdateNotSupportedException if layer does not support update
+	 */
+	void update(String layerId, FeatureCollection featureCollection) throws LayerUpdateNotSupportedException;
 }

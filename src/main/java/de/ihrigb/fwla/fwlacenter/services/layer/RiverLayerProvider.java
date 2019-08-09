@@ -22,6 +22,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.RiverSectorRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import de.ihrigb.fwla.fwlacenter.services.river.CachingWSVRestServiceClient;
 import de.ihrigb.fwla.fwlacenter.services.river.model.Fehlkilometer;
 import de.ihrigb.fwla.fwlacenter.services.river.model.GeocodierungQuery;
@@ -75,6 +76,16 @@ public class RiverLayerProvider extends AbstractLayerProvider {
 	@Override
 	public boolean supports(String layerId) {
 		return layerId != null && layerId.startsWith(RiverLayerProvider.layerIdPrefix);
+	}
+
+	@Override
+	public boolean isEditable(String layerId) {
+		return false;
+	}
+
+	@Override
+	public void update(String layerId, FeatureCollection featureCollection) throws LayerUpdateNotSupportedException {
+		throw new LayerUpdateNotSupportedException(layerId);
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.RailwayCoordinateBoxRepo
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -79,6 +80,16 @@ public class RailwayLayerProvider extends AbstractLayerProvider {
 	@Override
 	public boolean supports(String layerId) {
 		return RailwayLayerProvider.LAYER_ID.equals(layerId);
+	}
+
+	@Override
+	public boolean isEditable(String layerId) {
+		return false;
+	}
+
+	@Override
+	public void update(String layerId, FeatureCollection featureCollection) throws LayerUpdateNotSupportedException {
+		throw new LayerUpdateNotSupportedException(layerId);
 	}
 
 	@Override

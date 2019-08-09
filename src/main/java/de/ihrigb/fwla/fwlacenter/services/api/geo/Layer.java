@@ -13,6 +13,11 @@ public class Layer implements Comparable<Layer> {
 
 	private String id;
 	private String name;
+	private boolean editable;
+
+	public Layer(String id, String name) {
+		this(id, name, false);
+	}
 
 	@Override
 	public int compareTo(Layer o) {

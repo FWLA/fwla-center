@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.geojson.Feature;
+import org.geojson.FeatureCollection;
 import org.springframework.stereotype.Component;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
@@ -12,6 +13,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import de.ihrigb.fwla.fwlacenter.utils.GeoJsonUtils;
 
 @Component
@@ -58,6 +60,16 @@ public class RealEstateLayerProvider extends AbstractRepositoryLayerProviderAdap
 	@Override
 	public boolean supports(String layerId) {
 		return RealEstateLayerProvider.layerId.equals(layerId);
+	}
+
+	@Override
+	public boolean isEditable(String layerId) {
+		return false;
+	}
+
+	@Override
+	public void update(String layerId, FeatureCollection featureCollection) throws LayerUpdateNotSupportedException {
+		throw new LayerUpdateNotSupportedException(layerId);
 	}
 
 	@Override

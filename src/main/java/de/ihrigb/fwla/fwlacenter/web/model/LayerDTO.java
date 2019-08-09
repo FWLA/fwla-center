@@ -11,9 +11,11 @@ import lombok.Setter;
 public class LayerDTO {
 	private String id;
 	private String name;
+	private boolean editable;
 
 	public LayerDTO(Layer layer) {
 		this.id = layer.getId();
 		this.name = layer.getName();
+		this.editable = layer.isEditable();
 	}
 }
