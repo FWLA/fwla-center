@@ -1,6 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.mail.parse;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +39,11 @@ public class RegexTest {
 		assertEquals("F-2", parse("1234567890 / F-2 - , Musterstadt-Musterort, Musterstraße", Fields.CODE).getCode());
 		assertEquals("H-PWASS", parse("1234567890 / H-PWASS - , Musterstadt-Musterort, Fluss - Ort > bis Musterstadt", Fields.CODE).getCode());
 		assertEquals("O-GROSS", parse("1234567890 / O-GROSS - DEPP SCHNATTER HALLE, Musterstadt-Musterort, Musterstraße 8", Fields.CODE).getCode());
+	}
+
+	@Test
+	public void testNullValue() throws Exception {
+		assertNull(parse("bla", Fields.CODE).getCode());
 	}
 
 	private Operation parse(String heystack, Fields field) {

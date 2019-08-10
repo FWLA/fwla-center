@@ -213,9 +213,9 @@ public enum Fields implements Field {
 
 	static Optional<String> getSingleValue(Matcher matcher) {
 		if (matcher.find()) {
-			return Optional.of(trim(matcher.group(1)));
+			return Optional.ofNullable(trim(matcher.group(1)));
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	static Set<String> getMultiValue(Matcher matcher) {
