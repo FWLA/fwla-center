@@ -188,6 +188,7 @@ public class RailwayLayerProvider extends AbstractLayerProvider {
 
 	private void standartize(Feature feature) {
 		double km = feature.getProperty("location");
+		feature.setId(feature.getProperty("id"));
 		setNameProperty(feature, String.format(Locale.GERMANY, "KM %.2f", km));
 		setColorProperty(feature, RailwayLayerProvider.iconColor);
 		setHasDetailsProperty(feature, true);
