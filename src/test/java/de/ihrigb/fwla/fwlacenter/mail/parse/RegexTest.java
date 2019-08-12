@@ -9,13 +9,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RegexPattern;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RegexPatternRepository;
-import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -23,8 +21,6 @@ public class RegexTest {
 
 	@Autowired
 	private RegexPatternRepository repository;
-	@MockBean
-	private EventLogService eventLogService;
 
 	@Test
 	public void testTimePattern() throws Exception {
@@ -38,7 +34,6 @@ public class RegexTest {
 	public void testCodePattern() throws Exception {
 		assertEquals("F-2", parse("1234567890 / F-2 - , Musterstadt-Musterort, Musterstraße", Fields.CODE).getCode());
 		assertEquals("H-PWASS", parse("1234567890 / H-PWASS - , Musterstadt-Musterort, Fluss - Ort > bis Musterstadt", Fields.CODE).getCode());
-		assertEquals("O-GROSS", parse("1234567890 / O-GROSS - DEPP SCHNATTER HALLE, Musterstadt-Musterort, Musterstraße 8", Fields.CODE).getCode());
 	}
 
 	@Test
@@ -52,7 +47,7 @@ public class RegexTest {
 		Matcher matcher = pattern.matcher(heystack);
 		Operation operation = new Operation();
 
-		field.getPopulator().accept(operation, matcher, eventLogService);
+		field.getPopulator().accept(operation, matcher);
 
 		return operation;
 	}

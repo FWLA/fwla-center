@@ -9,16 +9,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 
 import de.ihrigb.fwla.fwlacenter.api.Address;
 import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.api.Location;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
-import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
-import de.ihrigb.fwla.fwlacenter.utils.TriConsumer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -26,25 +24,19 @@ public enum Fields implements Field {
 
 	ID {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
-				operation.setId(getSingleValue(matcher).orElseGet(() -> {
-					logBrokenRegex(this, eventLogService);
-					return null;
-				}));
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
+				operation.setId(getSingleValue(matcher));
 			};
 		}
 	},
 	TIME {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
 
 				Instant time;
-				String value = getSingleValue(matcher).orElseGet(() -> {
-					logBrokenRegex(this, eventLogService);
-					return null;
-				});
+				String value = getSingleValue(matcher);
 				if (value != null) {
 					try {
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
@@ -67,66 +59,51 @@ public enum Fields implements Field {
 	},
 	PLACE {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
-				operation.setPlace(getSingleValue(matcher).orElseGet(() -> {
-					logBrokenRegex(this, eventLogService);
-					return null;
-				}));
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
+				operation.setPlace(getSingleValue(matcher));
 			};
 		}
 	},
 	OBJECT {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
-				operation.setObject(getSingleValue(matcher).orElseGet(() -> {
-					logBrokenRegex(this, eventLogService);
-					return null;
-				}));
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
+				operation.setObject(getSingleValue(matcher));
 			};
 		}
 	},
 	TOWN {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
 				Fields.initLocation(operation);
-				operation.getLocation().getAddress().setTown(getSingleValue(matcher).orElseGet(() -> {
-					logBrokenRegex(this, eventLogService);
-					return null;
-				}));
+				operation.getLocation().getAddress().setTown(getSingleValue(matcher));
 			};
 		}
 	},
 	DISTRICT {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
 				Fields.initLocation(operation);
-				operation.getLocation().getAddress().setDistrict(getSingleValue(matcher).orElseGet(() -> {
-					logBrokenRegex(this, eventLogService);
-					return null;
-				}));
+				operation.getLocation().getAddress().setDistrict(getSingleValue(matcher));
 			};
 		}
 	},
 	STREET {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
 				Fields.initLocation(operation);
-				operation.getLocation().getAddress().setStreet(getSingleValue(matcher).orElseGet(() -> {
-					logBrokenRegex(this, eventLogService);
-					return null;
-				}));
+				operation.getLocation().getAddress().setStreet(getSingleValue(matcher));
 			};
 		}
 	},
 	LATITUDE {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
 				if (operation.getLocation() == null) {
 					operation.setLocation(new Location());
 				}
@@ -134,11 +111,7 @@ public enum Fields implements Field {
 					operation.getLocation().setCoordinate(new Coordinate());
 				}
 				try {
-					operation.getLocation().getCoordinate()
-							.setLatitude(toDouble(getSingleValue(matcher).orElseGet(() -> {
-								logBrokenRegex(this, eventLogService);
-								return null;
-							})));
+					operation.getLocation().getCoordinate().setLatitude(toDouble(getSingleValue(matcher)));
 				} catch (NumberFormatException e) {
 					log.warn("Error parsing coordinate.", e);
 				}
@@ -147,8 +120,8 @@ public enum Fields implements Field {
 	},
 	LONGITUDE {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
 				if (operation.getLocation() == null) {
 					operation.setLocation(new Location());
 				}
@@ -156,11 +129,7 @@ public enum Fields implements Field {
 					operation.getLocation().setCoordinate(new Coordinate());
 				}
 				try {
-					operation.getLocation().getCoordinate()
-							.setLongitude(toDouble(getSingleValue(matcher).orElseGet(() -> {
-								logBrokenRegex(this, eventLogService);
-								return null;
-							})));
+					operation.getLocation().getCoordinate().setLongitude(toDouble(getSingleValue(matcher)));
 				} catch (NumberFormatException e) {
 					log.warn("Error parsing coordinate.", e);
 				}
@@ -169,41 +138,32 @@ public enum Fields implements Field {
 	},
 	NOTICE {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
-				operation.setNotice(getSingleValue(matcher).orElseGet(() -> {
-					logBrokenRegex(this, eventLogService);
-					return null;
-				}));
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
+				operation.setNotice(getSingleValue(matcher));
 			};
 		}
 	},
 	MESSAGE {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
-				operation.setMessage(getSingleValue(matcher).orElseGet(() -> {
-					logBrokenRegex(this, eventLogService);
-					return null;
-				}));
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
+				operation.setMessage(getSingleValue(matcher));
 			};
 		}
 	},
 	CODE {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
-				operation.setCode(getSingleValue(matcher).orElseGet(() -> {
-					logBrokenRegex(this, eventLogService);
-					return null;
-				}));
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
+				operation.setCode(getSingleValue(matcher));
 			};
 		}
 	},
 	RESOURCE_KEYS {
 		@Override
-		public TriConsumer<Operation, Matcher, EventLogService> getPopulator() {
-			return (operation, matcher, eventLogService) -> {
+		public BiConsumer<Operation, Matcher> getPopulator() {
+			return (operation, matcher) -> {
 				List<String> values = new ArrayList<>(getMultiValue(matcher));
 				Collections.sort(values, String.CASE_INSENSITIVE_ORDER);
 				operation.setResourceKeys(values);
@@ -211,11 +171,11 @@ public enum Fields implements Field {
 		}
 	};
 
-	static Optional<String> getSingleValue(Matcher matcher) {
+	static String getSingleValue(Matcher matcher) {
 		if (matcher.find()) {
-			return Optional.ofNullable(trim(matcher.group(1)));
+			return trim(matcher.group(1));
 		}
-		return Optional.empty();
+		return null;
 	}
 
 	static Set<String> getMultiValue(Matcher matcher) {
@@ -253,10 +213,6 @@ public enum Fields implements Field {
 		if (operation.getLocation().getAddress() == null) {
 			operation.getLocation().setAddress(new Address());
 		}
-	}
-
-	private static void logBrokenRegex(Field field, EventLogService eventLogService) {
-		eventLogService.error("Cannot find match for field %s", field.getName());
 	}
 
 	@Override

@@ -10,7 +10,6 @@ import de.ihrigb.fwla.fwlacenter.mail.Email;
 import de.ihrigb.fwla.fwlacenter.mail.api.MailExtractionService;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RegexPattern;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RegexPatternRepository;
-import de.ihrigb.fwla.fwlacenter.services.api.EventLogService;
 import de.ihrigb.fwla.fwlacenter.utils.Sanitizers;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 public class EmailExtractionServiceImpl implements MailExtractionService {
 
 	private final RegexPatternRepository patternRepository;
-	private final EventLogService eventLogService;
 
 	@Override
 	public Operation extract(Email email) {
@@ -34,7 +32,7 @@ public class EmailExtractionServiceImpl implements MailExtractionService {
 
 		for (Field field : Fields.values()) {
 			patternRepository.findById(field.getName()).ifPresent(pattern -> {
-				field.getPopulator().accept(operation, getMatcher(pattern, email), eventLogService);
+				field.getPopulator().accept(operation, getMatcher(pattern, email));
 			});
 		}
 
