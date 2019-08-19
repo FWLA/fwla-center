@@ -13,6 +13,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroupCategory;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import de.ihrigb.fwla.fwlacenter.utils.GeoJsonUtils;
 
@@ -54,7 +55,8 @@ public class StationLayerProvider extends AbstractRepositoryLayerProviderAdapter
 			return Collections.emptyList();
 		}
 		return Collections.singletonList(new LayerGroup(StationLayerProvider.layerId,
-				Collections.singletonList(new Layer(StationLayerProvider.layerId, StationLayerProvider.layerName))));
+				Collections.singletonList(new Layer(StationLayerProvider.layerId, StationLayerProvider.layerName)),
+				LayerGroupCategory.INFO));
 	}
 
 	@Override
@@ -74,7 +76,6 @@ public class StationLayerProvider extends AbstractRepositoryLayerProviderAdapter
 
 	@Override
 	Feature toFeature(Station t) {
-		return createFeature(t, GeoJsonUtils.toPoint(t.getLocation().getCoordinate()),
-				StationLayerProvider.iconColor);
+		return createFeature(t, GeoJsonUtils.toPoint(t.getLocation().getCoordinate()), StationLayerProvider.iconColor);
 	}
 }

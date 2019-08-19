@@ -6,6 +6,8 @@ import org.springframework.util.Assert;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.MapLayer;
+import de.ihrigb.fwla.fwlacenter.persistence.model.MapLayerCategory;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroupCategory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +19,7 @@ public class MapLayerDTO {
 
 	private String id;
 	private String name;
+	private MapLayerCategory category;
 	private FeatureCollection geoJson;
 
 	public MapLayerDTO(MapLayer mapLayer) {
@@ -24,6 +27,7 @@ public class MapLayerDTO {
 
 		this.id = mapLayer.getId();
 		this.name = mapLayer.getName();
+		this.category = mapLayer.getCategory();
 		this.geoJson = mapLayer.getGeoJson();
 	}
 
@@ -32,6 +36,7 @@ public class MapLayerDTO {
 		MapLayer mapLayer = new MapLayer();
 		mapLayer.setId(id);
 		mapLayer.setName(name);
+		mapLayer.setCategory(category);
 		mapLayer.setGeoJson(geoJson);
 		return mapLayer;
 	}

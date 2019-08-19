@@ -13,6 +13,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroupCategory;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import de.ihrigb.fwla.fwlacenter.utils.GeoJsonUtils;
 
@@ -53,8 +54,10 @@ public class RealEstateLayerProvider extends AbstractRepositoryLayerProviderAdap
 		if (getRepository().count() == 0) {
 			return Collections.emptyList();
 		}
-		return Collections.singletonList(new LayerGroup(RealEstateLayerProvider.layerId, Collections
-				.singletonList(new Layer(RealEstateLayerProvider.layerId, RealEstateLayerProvider.layerName))));
+		return Collections.singletonList(new LayerGroup(RealEstateLayerProvider.layerId,
+				Collections
+						.singletonList(new Layer(RealEstateLayerProvider.layerId, RealEstateLayerProvider.layerName)),
+				LayerGroupCategory.INFO));
 	}
 
 	@Override

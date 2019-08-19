@@ -16,6 +16,7 @@ public class LayerGroup implements Comparable<LayerGroup> {
 
 	private String name;
 	private List<Layer> layers;
+	private LayerGroupCategory category;
 
 	@Override
 	public int compareTo(LayerGroup o) {

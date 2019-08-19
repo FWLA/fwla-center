@@ -22,6 +22,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.RiverSectorRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroupCategory;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import de.ihrigb.fwla.fwlacenter.services.river.CachingWSVRestServiceClient;
 import de.ihrigb.fwla.fwlacenter.services.river.model.Fehlkilometer;
@@ -70,7 +71,7 @@ public class RiverLayerProvider extends AbstractLayerProvider {
 			return new Layer(RiverLayerProvider.layerIdPrefix + river.getBWaStrId(), river.getName());
 		}).collect(Collectors.toList());
 
-		return Collections.singletonList(new LayerGroup("Wasserstraßen", layers));
+		return Collections.singletonList(new LayerGroup("Wasserstraßen", layers, LayerGroupCategory.INFO));
 	}
 
 	@Override

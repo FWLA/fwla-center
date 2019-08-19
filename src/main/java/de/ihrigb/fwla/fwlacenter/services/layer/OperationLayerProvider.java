@@ -19,6 +19,7 @@ import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroupCategory;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import de.ihrigb.fwla.fwlacenter.utils.GeoJsonUtils;
 import lombok.RequiredArgsConstructor;
@@ -73,11 +74,12 @@ class OperationLayerProvider extends AbstractLayerProvider {
 	public List<LayerGroup> getLayerGroups() {
 
 		LayerGroup currentOperationLayerGroup = new LayerGroup(OperationLayerProvider.operationLayerId,
-				Collections.singletonList(new Layer(OperationLayerProvider.operationLayerId, "Einsatz")));
+				Collections.singletonList(new Layer(OperationLayerProvider.operationLayerId, "Einsatz")),
+				LayerGroupCategory.OPERATION);
 		LayerGroup operationsLayerGroup = new LayerGroup(OperationLayerProvider.operationsLayerIdPrefix,
 				operationRepository.findYears().stream().map(year -> {
 					return new Layer(OperationLayerProvider.operationsLayerIdPrefix + year, "Einsätze " + year);
-				}).filter(Objects::nonNull).collect(Collectors.toList()));
+				}).filter(Objects::nonNull).collect(Collectors.toList()), LayerGroupCategory.ARCHIVE);
 
 		return Arrays.asList(currentOperationLayerGroup, operationsLayerGroup);
 	}

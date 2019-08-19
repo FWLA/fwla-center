@@ -26,6 +26,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.RailwayCoordinateBoxRepo
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroupCategory;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,8 +74,8 @@ public class RailwayLayerProvider extends AbstractLayerProvider {
 		if (repository.count() == 0) {
 			return Collections.emptyList();
 		}
-		return Collections.singletonList(
-				new LayerGroup(LAYER_GROUP_NAME, Collections.singletonList(new Layer(LAYER_ID, LAYER_NAME))));
+		return Collections.singletonList(new LayerGroup(LAYER_GROUP_NAME,
+				Collections.singletonList(new Layer(LAYER_ID, LAYER_NAME)), LayerGroupCategory.INFO));
 	}
 
 	@Override

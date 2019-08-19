@@ -2,6 +2,8 @@ package de.ihrigb.fwla.fwlacenter.persistence.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
@@ -29,4 +31,8 @@ public class MapLayer {
 	@Lob
 	@Column(name = "geojson", nullable = true)
 	private FeatureCollection geoJson;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category", nullable = false)
+	private MapLayerCategory category;
 }

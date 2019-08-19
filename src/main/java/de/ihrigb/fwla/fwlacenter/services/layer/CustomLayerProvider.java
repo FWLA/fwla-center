@@ -13,6 +13,7 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.MapLayerRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
+import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroupCategory;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
 import lombok.RequiredArgsConstructor;
 
@@ -30,12 +31,12 @@ public class CustomLayerProvider extends AbstractLayerProvider {
 
 	@Override
 	public List<LayerGroup> getLayerGroups() {
-		LayerGroup lg = new LayerGroup();
-		lg.setName("custom");
-		lg.setLayers(mapLayerRepository.findAll().stream().map(mapLayer -> {
-			return new Layer(mapLayerIdPrefix + mapLayer.getId(), mapLayer.getName(), true);
-		}).collect(Collectors.toList()));
-		return Collections.singletonList(lg);
+		return mapLayerRepository.findAll().stream().map(mapLayer -> {
+			String layerId = mapLayerIdPrefix + mapLayer.getId();
+			Layer layer = new Layer(layerId, mapLayer.getName());
+			return new LayerGroup(mapLayerIdPrefix, Collections.singletonList(layer),
+					LayerGroupCategory.of(mapLayer.getCategory()));
+		}).collect(Collectors.toList());
 	}
 
 	@Override
