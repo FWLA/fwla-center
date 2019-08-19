@@ -16,20 +16,16 @@ import de.ihrigb.fwla.fwlacenter.services.api.geo.FeatureDetails;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 
-/**
- * @deprecated 0.1.4
- */
-@Deprecated
-public class RailwayLayerServiceTest {
+public class RailwayLayerProviderTest {
 
-	private RailwayLayerService testee;
+	private RailwayLayerProvider testee;
 
 	private RailwayCoordinateBoxRepository repository;
 
 	@Before
 	public void setUp() {
 		repository = mock(RailwayCoordinateBoxRepository.class);
-		testee = new RailwayLayerService(repository);
+		testee = new RailwayLayerProvider(repository);
 	}
 
 	@Test
@@ -51,19 +47,19 @@ public class RailwayLayerServiceTest {
 		List<LayerGroup> layerGroups = testee.getLayerGroups();
 		assertEquals(1, layerGroups.size());
 		LayerGroup layerGroup = layerGroups.get(0);
-		assertEquals(RailwayLayerService.LAYER_GROUP_NAME, layerGroup.getName());
+		assertEquals(RailwayLayerProvider.LAYER_GROUP_NAME, layerGroup.getName());
 		List<Layer> layers = layerGroup.getLayers();
 		assertEquals(1, layers.size());
 		Layer layer = layers.get(0);
-		assertEquals(RailwayLayerService.LAYER_ID, layer.getId());
-		assertEquals(RailwayLayerService.LAYER_NAME, layer.getName());
+		assertEquals(RailwayLayerProvider.LAYER_ID, layer.getId());
+		assertEquals(RailwayLayerProvider.LAYER_NAME, layer.getName());
 		verify(repository);
 	}
 
 	@Test
 	public void testGetFeaturesWrongLayerId() throws Exception {
 		replay(repository);
-		assertTrue(testee.getFeatures("wrong").isEmpty());
+		assertTrue(testee.getFeatures("wrong").getFeatures().isEmpty());
 		verify(repository);
 	}
 
@@ -73,7 +69,7 @@ public class RailwayLayerServiceTest {
 		expect(repository.findAll()).andReturn(Collections.emptyList());
 
 		replay(repository);
-		assertTrue(testee.getFeatures(RailwayLayerService.LAYER_ID).isEmpty());
+		assertTrue(testee.getFeatures(RailwayLayerProvider.LAYER_ID).getFeatures().isEmpty());
 		verify(repository);
 	}
 
@@ -83,7 +79,7 @@ public class RailwayLayerServiceTest {
 		expectRailwayCoordinateBox();
 
 		replay(repository);
-		assertEquals(41, testee.getFeatures(RailwayLayerService.LAYER_ID).size());
+		assertEquals(41, testee.getFeatures(RailwayLayerProvider.LAYER_ID).getFeatures().size());
 		verify(repository);
 	}
 
@@ -101,7 +97,7 @@ public class RailwayLayerServiceTest {
 		expectRailwayCoordinateBox();
 
 		replay(repository);
-		assertFalse(testee.getFeatureDetails(RailwayLayerService.LAYER_ID, "wrong").isPresent());
+		assertFalse(testee.getFeatureDetails(RailwayLayerProvider.LAYER_ID, "wrong").isPresent());
 		verify(repository);
 	}
 
@@ -111,10 +107,11 @@ public class RailwayLayerServiceTest {
 		expectRailwayCoordinateBox();
 
 		replay(repository);
-		FeatureDetails featureDetails = testee.getFeatureDetails(RailwayLayerService.LAYER_ID, "MPost-452719").orElseGet(() -> {
-			fail();
-			return null;
-		});
+		FeatureDetails featureDetails = testee.getFeatureDetails(RailwayLayerProvider.LAYER_ID, "MPost-452719")
+				.orElseGet(() -> {
+					fail();
+					return null;
+				});
 
 		assertEquals("KM 21,00", featureDetails.getName());
 		assertEquals("Bahnstrecke Mannheim - Frankfurt Stadion", featureDetails.getText());
