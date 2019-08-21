@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.MapLayer;
 import de.ihrigb.fwla.fwlacenter.persistence.model.MapLayerCategory;
-import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroupCategory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -33,7 +33,7 @@ public class CustomLayerProvider extends AbstractLayerProvider {
 	public List<LayerGroup> getLayerGroups() {
 		return mapLayerRepository.findAll().stream().map(mapLayer -> {
 			String layerId = mapLayerIdPrefix + mapLayer.getId();
-			Layer layer = new Layer(layerId, mapLayer.getName());
+			Layer layer = new Layer(layerId, mapLayer.getName(), true);
 			return new LayerGroup(mapLayerIdPrefix, Collections.singletonList(layer),
 					LayerGroupCategory.of(mapLayer.getCategory()));
 		}).collect(Collectors.toList());
