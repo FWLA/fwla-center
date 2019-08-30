@@ -121,12 +121,6 @@ public class OperationServiceImpl implements OperationService {
 	}
 
 	@Override
-	public boolean hasActiveOperation() {
-		log.trace("hasActiveOperation()");
-		return activeOperation != null;
-	}
-
-	@Override
 	public Optional<Operation> get(String id) {
 		Assert.notNull(id, "Operation ID must not be null.");
 

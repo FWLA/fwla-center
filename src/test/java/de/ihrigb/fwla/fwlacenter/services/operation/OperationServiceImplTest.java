@@ -45,7 +45,6 @@ public class OperationServiceImplTest {
 		assertFalse(testee.get("id").isPresent());
 		assertFalse(testee.getActiveOperation().isPresent());
 		assertTrue(testee.getCurrentOperations().isEmpty());
-		assertFalse(testee.hasActiveOperation());
 		assertFalse(testee.hasCurrentOperations());
 	}
 
@@ -66,7 +65,6 @@ public class OperationServiceImplTest {
 		assertSame(operation, testee.get("id").get());
 		assertSame(operation, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasActiveOperation());
 		assertTrue(testee.hasCurrentOperations());
 
 		testee.closeOperation("id");
@@ -75,7 +73,6 @@ public class OperationServiceImplTest {
 		assertTrue(testee.get("id").isPresent());
 		assertFalse(testee.getActiveOperation().isPresent());
 		assertTrue(testee.getCurrentOperations().isEmpty());
-		assertFalse(testee.hasActiveOperation());
 		assertFalse(testee.hasCurrentOperations());
 	}
 
@@ -96,7 +93,6 @@ public class OperationServiceImplTest {
 		assertSame(operation1, testee.get("id1").get());
 		assertSame(operation1, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasActiveOperation());
 		assertTrue(testee.hasCurrentOperations());
 
 		Operation operation2 = mock(Operation.class);
@@ -114,7 +110,6 @@ public class OperationServiceImplTest {
 		assertSame(operation2, testee.get("id2").get());
 		assertSame(operation2, testee.getActiveOperation().get());
 		assertEquals(2, testee.getCurrentOperations().size());
-		assertTrue(testee.hasActiveOperation());
 		assertTrue(testee.hasCurrentOperations());
 
 		testee.closeOperation("id1");
@@ -123,7 +118,6 @@ public class OperationServiceImplTest {
 		assertTrue(testee.get("id1").isPresent());
 		assertSame(operation2, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasActiveOperation());
 		assertTrue(testee.hasCurrentOperations());
 
 		testee.closeOperation("id2");
@@ -132,7 +126,6 @@ public class OperationServiceImplTest {
 		assertTrue(testee.get("id2").isPresent());
 		assertFalse(testee.getActiveOperation().isPresent());
 		assertTrue(testee.getCurrentOperations().isEmpty());
-		assertFalse(testee.hasActiveOperation());
 		assertFalse(testee.hasCurrentOperations());
 	}
 
@@ -153,7 +146,6 @@ public class OperationServiceImplTest {
 		assertSame(operation1, testee.get("id1").get());
 		assertSame(operation1, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasActiveOperation());
 		assertTrue(testee.hasCurrentOperations());
 
 		Operation operation2 = mock(Operation.class);
@@ -171,7 +163,6 @@ public class OperationServiceImplTest {
 		assertSame(operation2, testee.get("id2").get());
 		assertSame(operation2, testee.getActiveOperation().get());
 		assertEquals(2, testee.getCurrentOperations().size());
-		assertTrue(testee.hasActiveOperation());
 		assertTrue(testee.hasCurrentOperations());
 
 		testee.closeOperation("id2");
@@ -180,7 +171,6 @@ public class OperationServiceImplTest {
 		assertTrue(testee.get("id2").isPresent());
 		assertSame(operation1, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasActiveOperation());
 		assertTrue(testee.hasCurrentOperations());
 
 		testee.closeOperation("id1");
@@ -189,7 +179,6 @@ public class OperationServiceImplTest {
 		assertTrue(testee.get("id1").isPresent());
 		assertFalse(testee.getActiveOperation().isPresent());
 		assertTrue(testee.getCurrentOperations().isEmpty());
-		assertFalse(testee.hasActiveOperation());
 		assertFalse(testee.hasCurrentOperations());
 	}
 
@@ -212,7 +201,6 @@ public class OperationServiceImplTest {
 		assertSame(operation, testee.get("id").get());
 		assertSame(operation, testee.getActiveOperation().get());
 		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasActiveOperation());
 		assertTrue(testee.hasCurrentOperations());
 
 		testee.timeoutOperations();
@@ -221,7 +209,6 @@ public class OperationServiceImplTest {
 		assertTrue(testee.get("id").isPresent());
 		assertFalse(testee.getActiveOperation().isPresent());
 		assertTrue(testee.getCurrentOperations().isEmpty());
-		assertFalse(testee.hasActiveOperation());
 		assertFalse(testee.hasCurrentOperations());
 	}
 }
