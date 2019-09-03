@@ -1,6 +1,8 @@
 package de.ihrigb.fwla.fwlacenter.web;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.geojson.FeatureCollection;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
@@ -34,19 +37,27 @@ public class LayerControllerV2 {
 	private final LayerServiceV2 layerService;
 
 	@GetMapping
-	public ResponseEntity<List<LayerGroupDTO>> getLayers() {
-		return ResponseEntity.ok(layerService.getLayerGroups().stream().map(layerGroup -> new LayerGroupDTO(layerGroup))
-				.collect(Collectors.toList()));
+	public ResponseEntity<List<LayerGroupDTO>> getLayers(@RequestParam("editable") Optional<Boolean> editableParam) {
+		List<LayerGroup> layerGroups = layerService.getLayerGroups();
+		editableParam.ifPresent(editable -> {
+			layerGroups.forEach(layerGroup -> {
+				layerGroup.setLayers(new ArrayList<>(layerGroup.getLayers()));
+				layerGroup.getLayers().removeIf(layer -> editable != layer.isEditable());
+			});
+		});
+		return ResponseEntity.ok(layerGroups.stream().filter(layerGroup -> layerGroup.getLayers().size() > 0)
+				.map(layerGroup -> new LayerGroupDTO(layerGroup)).collect(Collectors.toList()));
 	}
 
 	@GetMapping("/editable")
 	public ResponseEntity<List<LayerGroupDTO>> getEditableLayer() {
 		List<LayerGroup> layerGroups = layerService.getLayerGroups();
 		layerGroups.forEach(layerGroup -> {
+			layerGroup.setLayers(new ArrayList<>(layerGroup.getLayers()));
 			layerGroup.getLayers().removeIf(PredicateUtils.not(Layer::isEditable));
 		});
-		return ResponseEntity
-				.ok(layerGroups.stream().map(layerGroup -> new LayerGroupDTO(layerGroup)).collect(Collectors.toList()));
+		return ResponseEntity.ok(layerGroups.stream().filter(layerGroup -> layerGroup.getLayers().size() > 0)
+				.map(layerGroup -> new LayerGroupDTO(layerGroup)).collect(Collectors.toList()));
 	}
 
 	@GetMapping("/{layerId}")
