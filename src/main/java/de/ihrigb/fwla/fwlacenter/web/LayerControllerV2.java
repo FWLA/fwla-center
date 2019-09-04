@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.ihrigb.fwla.fwlacenter.services.api.geo.Layer;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerGroup;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerServiceV2;
 import de.ihrigb.fwla.fwlacenter.services.api.geo.LayerUpdateNotSupportedException;
-import de.ihrigb.fwla.fwlacenter.utils.PredicateUtils;
 import de.ihrigb.fwla.fwlacenter.web.model.FeatureDetailsDTO;
 import de.ihrigb.fwla.fwlacenter.web.model.LayerGroupDTO;
 import lombok.RequiredArgsConstructor;
@@ -44,17 +42,6 @@ public class LayerControllerV2 {
 				layerGroup.setLayers(new ArrayList<>(layerGroup.getLayers()));
 				layerGroup.getLayers().removeIf(layer -> editable != layer.isEditable());
 			});
-		});
-		return ResponseEntity.ok(layerGroups.stream().filter(layerGroup -> layerGroup.getLayers().size() > 0)
-				.map(layerGroup -> new LayerGroupDTO(layerGroup)).collect(Collectors.toList()));
-	}
-
-	@GetMapping("/editable")
-	public ResponseEntity<List<LayerGroupDTO>> getEditableLayer() {
-		List<LayerGroup> layerGroups = layerService.getLayerGroups();
-		layerGroups.forEach(layerGroup -> {
-			layerGroup.setLayers(new ArrayList<>(layerGroup.getLayers()));
-			layerGroup.getLayers().removeIf(PredicateUtils.not(Layer::isEditable));
 		});
 		return ResponseEntity.ok(layerGroups.stream().filter(layerGroup -> layerGroup.getLayers().size() > 0)
 				.map(layerGroup -> new LayerGroupDTO(layerGroup)).collect(Collectors.toList()));
