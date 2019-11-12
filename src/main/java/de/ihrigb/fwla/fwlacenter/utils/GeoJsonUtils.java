@@ -1,6 +1,5 @@
 package de.ihrigb.fwla.fwlacenter.utils;
 
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
@@ -29,16 +28,8 @@ public final class GeoJsonUtils {
 		return FROM_LNG_LAT_ALT.apply(lngLatAlt);
 	}
 
-	public static Optional<Coordinate> fromLngLatAlt(Optional<LngLatAlt> lngLatAlt) {
-		return lngLatAlt.map(FROM_LNG_LAT_ALT);
-	}
-
 	public static LngLatAlt toLngLatAlt(Coordinate coordinate) {
 		return TO_LNG_LAT_ALT.apply(coordinate);
-	}
-
-	public static Optional<LngLatAlt> toLngLatAlt(Optional<Coordinate> coordinate) {
-		return coordinate.map(TO_LNG_LAT_ALT);
 	}
 
 	public static Point toPoint(Coordinate coordinate) {
