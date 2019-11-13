@@ -40,7 +40,7 @@ public class AmbulanceProcessor implements Processor {
 	private boolean isIncluded(String resource) {
 		Set<AmbulancePattern> includes = ambulancePatternRepository.findByMode(PatternMode.INCLUDE);
 		if (includes.isEmpty()) {
-			return true;
+			return false;
 		}
 
 		for (AmbulancePattern ambulancePattern : includes) {
