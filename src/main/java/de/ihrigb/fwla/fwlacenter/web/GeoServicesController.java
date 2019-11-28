@@ -1,10 +1,13 @@
 package de.ihrigb.fwla.fwlacenter.web;
 
+import org.geojson.FeatureCollection;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.ihrigb.fwla.fwlacenter.services.api.GeoServices;
 import de.ihrigb.fwla.fwlacenter.services.api.GeocodingService;
 import de.ihrigb.fwla.fwlacenter.web.model.CoordinateDTO;
+import de.ihrigb.fwla.fwlacenter.web.model.DirectionsRequestDTO;
 import lombok.RequiredArgsConstructor;
 
 @Transactional
@@ -30,6 +34,21 @@ public class GeoServicesController {
 		}).orElseGet(() -> {
 			return ResponseEntity.notFound().build();
 		})).orElseGet(() -> {
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+		});
+	}
+
+	@PostMapping("/directions")
+	public ResponseEntity<FeatureCollection> directions(@RequestBody DirectionsRequestDTO directionsRequest) {
+		return geoServices.directions().map(directions -> {
+			return directions
+					.getDirections(directionsRequest.getFrom().getApiModel(), directionsRequest.getTo().getApiModel())
+					.map(featureCollection -> {
+						return ResponseEntity.ok(featureCollection);
+					}).orElseGet(() -> {
+						return ResponseEntity.notFound().build();
+					});
+		}).orElseGet(() -> {
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
 		});
 	}
