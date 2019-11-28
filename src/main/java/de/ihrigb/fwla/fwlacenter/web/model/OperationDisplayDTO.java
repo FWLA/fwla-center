@@ -65,7 +65,6 @@ public class OperationDisplayDTO {
 			this.resources = operation.getResources().stream().map(r -> new ResourceDTO(r)).collect(Collectors.toList());
 		}
 		this.ambulanceCalled = operation.isAmbulanceCalled();
-		this.directions = operation.getDirections();
 	}
 
 	@JsonIgnore
@@ -96,7 +95,6 @@ public class OperationDisplayDTO {
 					.collect(Collectors.toList()));
 		}
 		operation.setAmbulanceCalled(ambulanceCalled);
-		operation.setDirections(directions);
 		return operation;
 	}
 }

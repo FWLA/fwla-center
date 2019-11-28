@@ -13,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
@@ -21,8 +20,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.geojson.FeatureCollection;
 
 import de.ihrigb.fwla.fwlacenter.api.Location;
 import lombok.Data;
@@ -87,10 +84,6 @@ public class Operation {
 
 	@Column(name = "ambulance_called", nullable = false)
 	private boolean ambulanceCalled = false;
-
-	@Lob
-	@Column(name = "directions", nullable = true)
-	private FeatureCollection directions;
 
 	/*
 	 * Metadata
