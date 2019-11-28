@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GeoServicesController {
 
-	private GeoServices geoServices;
+	private final GeoServices geoServices;
 
 	@GetMapping("/geocode")
 	public ResponseEntity<CoordinateDTO> geocode(@RequestParam(required = true, name = "query") String query) {

@@ -5,22 +5,17 @@ import java.util.Locale;
 import java.util.Optional;
 
 import org.geojson.FeatureCollection;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.services.api.DirectionsService;
+import de.ihrigb.fwla.fwlacenter.services.geoservices.GeoServiceProperties.OpenRouteServiceProperties;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
-@ConditionalOnProperty(prefix = "app.geo.ors", name = "apiKey", matchIfMissing = false)
-@EnableConfigurationProperties(OpenRouteServiceProperties.class)
 public class OpenRouteServiceDirectionsService implements DirectionsService {
 
 	private final static String baseUri = "https://api.openrouteservice.org/directions";
