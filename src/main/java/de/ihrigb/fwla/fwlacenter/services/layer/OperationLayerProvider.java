@@ -58,11 +58,7 @@ class OperationLayerProvider extends AbstractLayerProvider {
 			return new FeatureCollection();
 		}
 		if (OperationLayerProvider.operationLayerId.equals(layer)) {
-			return operationService.getActiveOperation().map(map()).map(f -> {
-				FeatureCollection fc = new FeatureCollection();
-				fc.add(f);
-				return fc;
-			}).orElseGet(() -> new FeatureCollection());
+			return operationService.getOperations().stream().map(map()).collect(GeoJsonUtils.collector());
 		}
 		int year = Integer.parseInt(layer.substring(OperationLayerProvider.operationsLayerIdPrefix.length()));
 		return operationRepository.findByYear(year).filter(o -> o.getLocation() != null)

@@ -4,24 +4,21 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Station;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +33,8 @@ public class OperationServiceImpl implements OperationService {
 	private final OperationRepository operationRepository;
 	private final OperationProperties properties;
 
-	private Map<String, Operation> trainingOperations = new ConcurrentHashMap<>();
-	private LinkedList<String> currentOperationIds = new LinkedList<>();
-	private String activeOperation;
+	private final Map<String, List<Operation>> currentOperations = new ConcurrentHashMap<>();
+	private final Map<String, Operation> activeOperations = new ConcurrentHashMap<>();
 
 	@Transactional
 	@Scheduled(fixedRate = 60000)
@@ -50,26 +46,20 @@ public class OperationServiceImpl implements OperationService {
 			log.info("Operation {} timed out. Closing it.", o.getId());
 			closeOperation(o.getId());
 		});
-		trainingOperations.values().stream().filter(o -> {
-			return Duration.between(o.getCreated(), Instant.now()).compareTo(properties.getTimeout()) > 0;
-		}).forEach(o -> {
-			log.info("Training Operation {} timed out. Closing it.", o.getId());
+		Set<Operation> operationsToBeClosed = currentOperations.values().stream().flatMap(list -> list.stream())
+				.filter(o -> {
+					return Duration.between(o.getCreated(), Instant.now()).compareTo(properties.getTimeout()) > 0;
+				}).collect(Collectors.toSet());
+
+		operationsToBeClosed.forEach(o -> {
 			closeOperation(o.getId());
 		});
 	}
 
 	@Override
-	public List<Operation> getOperations() {
-		log.trace("getOperations()");
-		ArrayList<Operation> operations = new ArrayList<>();
-		operations.addAll(operationRepository.findAll());
-		operations.addAll(trainingOperations.values());
-		return operations;
-	}
-
-	@Override
-	public Page<Operation> getOperations(Pageable pageable) {
-		return operationRepository.findAll(pageable);
+	public Set<Operation> getOperations() {
+		return Collections.unmodifiableSet(
+				currentOperations.values().stream().flatMap(x -> x.stream()).collect(Collectors.toSet()));
 	}
 
 	@Override
@@ -78,11 +68,8 @@ public class OperationServiceImpl implements OperationService {
 
 		log.info("Adding operation {}.", operation.getId());
 
-		String id = operation.getId();
 		if (!operation.isTraining()) {
 			operationRepository.save(operation);
-		} else {
-			trainingOperations.put(id, operation);
 		}
 
 		if (!operation.isTraining() && containsTraining()) {
@@ -90,57 +77,32 @@ public class OperationServiceImpl implements OperationService {
 			clearTraining();
 		}
 
-		if (!currentOperationIds.contains(id)) {
-			currentOperationIds.addFirst(id);
-		}
+		Set<Station> stations = OperationUtils.getStations(operation);
+		stations.forEach(station -> {
+			String stationId = station.getId();
+			if (currentOperations.get(stationId) == null) {
+				currentOperations.put(stationId, new ArrayList<>());
+			}
+
+			currentOperations.get(stationId).add(0, operation);
+		});
 		resetActiveOperation();
 	}
 
 	@Override
-	public void setActiveOperation(String id) {
-		Assert.notNull(id, "Operation ID must not be null.");
-
-		log.info("Set active operation to {}.", id);
-
-		if (!currentOperationIds.contains(id)) {
-			log.debug("Tried to set an active operation of unknown id.");
-			return;
-		}
-
-		activeOperation = id;
-	}
-
-	@Override
-	public Optional<Operation> getActiveOperation() {
+	public Optional<Operation> getActiveOperation(Station station) {
 		log.trace("getActiveOperation()");
-
-		if (activeOperation == null) {
-			return Optional.empty();
-		}
-		return get(activeOperation);
+		return Optional.ofNullable(activeOperations.get(station.getId()));
 	}
 
 	@Override
-	public Optional<Operation> get(String id) {
-		Assert.notNull(id, "Operation ID must not be null.");
-
-		log.trace("get({})", id);
-
-		return Optional.ofNullable(operationRepository.findById(id).orElse(trainingOperations.get(id)));
-	}
-
-	@Override
-	public List<Operation> getCurrentOperations() {
+	public List<Operation> getCurrentOperations(Station station) {
 		log.trace("getCurrentOperations()");
-		return Collections.unmodifiableList(currentOperationIds.stream().map(id -> {
-			return get(id);
-		}).map(o -> o.orElse(null)).filter(Objects::nonNull).collect(Collectors.toList()));
-	}
-
-	@Override
-	public boolean hasCurrentOperations() {
-		log.trace("hasCurrentOperations()");
-		return !currentOperationIds.isEmpty();
+		List<Operation> operations = currentOperations.get(station.getId());
+		if (operations == null) {
+			return Collections.emptyList();
+		}
+		return Collections.unmodifiableList(operations);
 	}
 
 	@Transactional
@@ -155,44 +117,53 @@ public class OperationServiceImpl implements OperationService {
 			operation.setClosed(true);
 			if (!operation.isTraining()) {
 				operationRepository.save(operation);
-			} else {
-				trainingOperations.remove(id);
 			}
 		});
 
-		currentOperationIds.remove(id);
-		if (activeOperation != null && activeOperation.equals(id)) {
-			log.debug("Active operation was closed, resetting.");
-			activeOperation = null;
-			resetActiveOperation();
-		}
+		currentOperations.values().forEach(list -> {
+			list.removeIf(operation -> {
+				return id.equals(operation.getId());
+			});
+		});
+		activeOperations.values().removeIf(operation -> {
+			return id.equals(operation.getId());
+		});
+		resetActiveOperation();
 	}
 
-	@Override
-	public long getCount() {
-		return operationRepository.count() + trainingOperations.size();
+	private Optional<Operation> get(String id) {
+		Assert.notNull(id, "Operation ID must not be null.");
+
+		log.trace("get({})", id);
+
+		return currentOperations.values().stream().flatMap(l -> l.stream()).filter(o -> {
+			return id.equals(o.getId());
+		}).findFirst();
 	}
 
 	private void resetActiveOperation() {
 		log.trace("resetActiveOperation()");
-		if (!currentOperationIds.isEmpty()) {
-			activeOperation = currentOperationIds.get(0);
-			log.info("New active operation: {}.", activeOperation);
-		}
+		currentOperations.entrySet().forEach(entry -> {
+			Optional<Operation> o = entry.getValue().stream().findFirst();
+
+			if (!o.isPresent()) {
+				activeOperations.remove(entry.getKey());
+			} else {
+				activeOperations.put(entry.getKey(), o.get());
+			}
+		});
 	}
 
 	private boolean containsTraining() {
 		log.trace("containsTraining()");
-		return !trainingOperations.isEmpty();
+		return currentOperations.values().stream().flatMap(list -> list.stream()).anyMatch(Operation::isTraining);
 	}
 
 	private void clearTraining() {
 		log.trace("clearTraining()");
-		Set<String> trainingIds = trainingOperations.keySet();
-		currentOperationIds.removeAll(trainingIds);
-		if (trainingIds.contains(activeOperation)) {
-			activeOperation = null;
-		}
-		trainingOperations.clear();
+		currentOperations.values().forEach(list -> {
+			list.removeIf(Operation::isTraining);
+		});
+		activeOperations.values().removeIf(Operation::isTraining);
 	}
 }

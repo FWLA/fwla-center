@@ -22,8 +22,8 @@ import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationKeyRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.ResourceRepository;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.OperationService;
-import de.ihrigb.fwla.fwlacenter.web.model.IdDTO;
 import de.ihrigb.fwla.fwlacenter.web.model.OperationDTO;
 
 @Transactional
@@ -37,10 +37,12 @@ public class OperationController extends BaseController<Operation, String, Opera
 	private final OperationKeyRepository operationKeyRepository;
 	private final RealEstateRepository realEstateRepository;
 	private final ResourceRepository resourceRepository;
+	private final StationRepository stationRepository;
 
 	public OperationController(OperationRepository operationRepository, OperationService operationService,
 			OperationChain operationChain, OperationKeyRepository operationKeyRepository,
-			RealEstateRepository realEstateRepository, ResourceRepository resourceRepository) {
+			RealEstateRepository realEstateRepository, ResourceRepository resourceRepository,
+			StationRepository stationRepository) {
 		super(operationRepository);
 		this.operationRepository = operationRepository;
 		this.operationService = operationService;
@@ -48,6 +50,7 @@ public class OperationController extends BaseController<Operation, String, Opera
 		this.operationKeyRepository = operationKeyRepository;
 		this.realEstateRepository = realEstateRepository;
 		this.resourceRepository = resourceRepository;
+		this.stationRepository = stationRepository;
 	}
 
 	@GetMapping
@@ -68,16 +71,27 @@ public class OperationController extends BaseController<Operation, String, Opera
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("/active")
-	public ResponseEntity<?> getActiveOperation() {
-		return operationService.getActiveOperation().map(getToDTOFunction()).map(dto -> ResponseEntity.ok(dto))
-				.orElse(ResponseEntity.notFound().build());
+	@GetMapping("/stations/{stationId}/active")
+	public ResponseEntity<?> getActiveOperation(@PathVariable("stationId") String stationId) {
+		return stationRepository.findById(stationId).map(station -> {
+			return operationService.getActiveOperation(station).map(getToDTOFunction()).map(oDTO -> {
+				return ResponseEntity.ok(oDTO);
+			}).orElseGet(() -> {
+				return ResponseEntity.notFound().build();
+			});
+		}).orElseGet(() -> {
+			return ResponseEntity.notFound().build();
+		});
 	}
 
-	@GetMapping("/current")
-	public ResponseEntity<?> getCurrentOperations() {
-		return ResponseEntity.ok(
-				operationService.getCurrentOperations().stream().map(getToDTOFunction()).collect(Collectors.toList()));
+	@GetMapping("/stations/{stationId}/current")
+	public ResponseEntity<?> getCurrentOperations(@PathVariable("stationId") String stationId) {
+		return stationRepository.findById(stationId).map(station -> {
+			return ResponseEntity.ok(operationService.getCurrentOperations(station).stream().map(getToDTOFunction())
+					.collect(Collectors.toList()));
+		}).orElseGet(() -> {
+			return ResponseEntity.notFound().build();
+		});
 	}
 
 	@PostMapping
@@ -87,12 +101,6 @@ public class OperationController extends BaseController<Operation, String, Opera
 		operation.setTraining(true);
 		operationChain.put(operation);
 		return ResponseEntity.accepted().build();
-	}
-
-	@PostMapping("/active")
-	public ResponseEntity<?> activate(@RequestBody IdDTO idDTO) {
-		operationService.setActiveOperation(idDTO.getId());
-		return ResponseEntity.noContent().build();
 	}
 
 	@PatchMapping("/{id}/close")

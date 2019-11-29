@@ -2,44 +2,24 @@ package de.ihrigb.fwla.fwlacenter.services.api;
 
 import java.util.List;
 import java.util.Optional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.Set;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Station;
 
 public interface OperationService {
 
-	List<Operation> getOperations();
-
-	/**
-	 * List all operations paged.
-	 *
-	 * @param pageable the page request
-	 * @return page of operations
-	 */
-	Page<Operation> getOperations(Pageable pageable);
-
 	void addOperation(Operation operation);
 
-	void setActiveOperation(String id);
+	Optional<Operation> getActiveOperation(Station station);
 
-	Optional<Operation> getActiveOperation();
+	List<Operation> getCurrentOperations(Station station);
 
-	Optional<Operation> get(String id);
+	Set<Operation> getOperations();
 
-	List<Operation> getCurrentOperations();
-
-	default boolean hasCurrentOperations() {
-		return !getCurrentOperations().isEmpty();
+	default boolean hasCurrentOperations(Station station) {
+		return !getCurrentOperations(station).isEmpty();
 	}
 
 	void closeOperation(String id);
-
-	/**
-	 * Get the total amount of operations.
-	 *
-	 * @return count of operations
-	 */
-	long getCount();
 }

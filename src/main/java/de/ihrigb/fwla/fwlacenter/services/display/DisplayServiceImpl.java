@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Component;
 
-import de.ihrigb.fwla.fwlacenter.configuration.HomeProvider;
 import de.ihrigb.fwla.fwlacenter.persistence.model.DisplayEvent;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Station;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.DisplayEventRepository;
 import de.ihrigb.fwla.fwlacenter.services.api.DisplayService;
 import de.ihrigb.fwla.fwlacenter.services.api.DisplayState;
@@ -25,11 +25,10 @@ public class DisplayServiceImpl implements DisplayService {
 	private final Optional<BuildProperties> buildProperties;
 	private final OperationService operationService;
 	private final Optional<WeatherService> weatherService;
-	private final Optional<HomeProvider> homeProvider;
 	private final DisplayEventRepository displayEventRepository;
 
 	@Override
-	public DisplayState getDisplayState() {
+	public DisplayState getDisplayState(Station station) {
 		log.trace("getDisplayState()");
 
 		DisplayState.DisplayStateBuilder builder = DisplayState.builder();
@@ -39,7 +38,7 @@ public class DisplayServiceImpl implements DisplayService {
 		});
 
 		Optional<DisplayEvent> displayEventOpt = displayEventRepository.getActive();
-		Optional<Operation> operationOpt = operationService.getActiveOperation();
+		Optional<Operation> operationOpt = operationService.getActiveOperation(station);
 
 		if (operationOpt.isPresent()) {
 			Operation operation = operationOpt.get();
@@ -67,16 +66,12 @@ public class DisplayServiceImpl implements DisplayService {
 			builder.state(State.IDLE);
 		}
 
-		homeProvider.ifPresent(hp -> {
-			builder.home(Optional.ofNullable(hp.getHome()));
-		});
+		builder.home(Optional.of(station.getLocation().getCoordinate()));
 
 		DisplayState displayState = builder.build();
 		if (!displayState.getWeather().isPresent()) {
-			homeProvider.ifPresent(hp -> {
-				weatherService.ifPresent(ws -> {
-					displayState.setWeather(Optional.ofNullable(ws.getWeather(hp.getHome())));
-				});
+			weatherService.ifPresent(ws -> {
+				displayState.setWeather(Optional.ofNullable(ws.getWeather(station.getLocation().getCoordinate())));
 			});
 		}
 

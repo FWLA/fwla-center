@@ -9,9 +9,6 @@ import static org.mockito.Mockito.when;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,6 +18,8 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Resource;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Station;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationRepository;
 
 public class OperationServiceImplTest {
@@ -41,174 +40,274 @@ public class OperationServiceImplTest {
 
 	@Test
 	public void testInitial() throws Exception {
+		Station s = station("id", "name");
+
 		assertTrue(testee.getOperations().isEmpty());
-		assertFalse(testee.get("id").isPresent());
-		assertFalse(testee.getActiveOperation().isPresent());
-		assertTrue(testee.getCurrentOperations().isEmpty());
-		assertFalse(testee.hasCurrentOperations());
+		assertFalse(testee.getActiveOperation(s).isPresent());
+		assertTrue(testee.getCurrentOperations(s).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s));
 	}
 
 	@Test
 	public void testSimpleAddAndClose() throws Exception {
-		Operation operation = mock(Operation.class);
+		Station s = station("id", "name");
+		Resource r = resource("id", "name", s);
+		Operation o = operation("id", false, r);
 
-		when(operation.isTraining()).thenReturn(false);
-		when(operation.getId()).thenReturn("id");
+		when(operationRepository.save(o)).thenReturn(o);
 
-		when(operationRepository.save(operation)).thenReturn(operation);
-		when(operationRepository.findById("id")).thenReturn(Optional.of(operation));
-		when(operationRepository.findAll()).thenReturn(Collections.singletonList(operation));
-
-		testee.addOperation(operation);
+		testee.addOperation(o);
 
 		assertEquals(1, testee.getOperations().size());
-		assertSame(operation, testee.get("id").get());
-		assertSame(operation, testee.getActiveOperation().get());
-		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasCurrentOperations());
+		assertSame(o, testee.getActiveOperation(s).get());
+		assertEquals(1, testee.getCurrentOperations(s).size());
+		assertTrue(testee.hasCurrentOperations(s));
 
 		testee.closeOperation("id");
 
-		assertEquals(1, testee.getOperations().size());
-		assertTrue(testee.get("id").isPresent());
-		assertFalse(testee.getActiveOperation().isPresent());
-		assertTrue(testee.getCurrentOperations().isEmpty());
-		assertFalse(testee.hasCurrentOperations());
+		assertEquals(0, testee.getOperations().size());
+		assertFalse(testee.getActiveOperation(s).isPresent());
+		assertTrue(testee.getCurrentOperations(s).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s));
 	}
 
 	@Test
 	public void testTwoFiFo() throws Exception {
-		Operation operation1 = mock(Operation.class);
+		Station s = station("id", "name");
+		Resource r = resource("id", "name", s);
+		Operation o1 = operation("id1", false, r);
 
-		when(operation1.isTraining()).thenReturn(false);
-		when(operation1.getId()).thenReturn("id1");
+		when(operationRepository.save(o1)).thenReturn(o1);
 
-		when(operationRepository.save(operation1)).thenReturn(operation1);
-		when(operationRepository.findById("id1")).thenReturn(Optional.of(operation1));
-		when(operationRepository.findAll()).thenReturn(Collections.singletonList(operation1));
-
-		testee.addOperation(operation1);
+		testee.addOperation(o1);
 
 		assertEquals(1, testee.getOperations().size());
-		assertSame(operation1, testee.get("id1").get());
-		assertSame(operation1, testee.getActiveOperation().get());
-		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasCurrentOperations());
+		assertSame(o1, testee.getActiveOperation(s).get());
+		assertEquals(1, testee.getCurrentOperations(s).size());
+		assertTrue(testee.hasCurrentOperations(s));
 
-		Operation operation2 = mock(Operation.class);
+		Operation o2 = operation("id2", false, r);
 
-		when(operation2.isTraining()).thenReturn(false);
-		when(operation2.getId()).thenReturn("id2");
+		when(operationRepository.save(o2)).thenReturn(o2);
 
-		when(operationRepository.save(operation2)).thenReturn(operation2);
-		when(operationRepository.findById("id2")).thenReturn(Optional.of(operation2));
-		when(operationRepository.findAll()).thenReturn(Arrays.asList(operation1, operation2));
-
-		testee.addOperation(operation2);
+		testee.addOperation(o2);
 
 		assertEquals(2, testee.getOperations().size());
-		assertSame(operation2, testee.get("id2").get());
-		assertSame(operation2, testee.getActiveOperation().get());
-		assertEquals(2, testee.getCurrentOperations().size());
-		assertTrue(testee.hasCurrentOperations());
+		assertSame(o2, testee.getActiveOperation(s).get());
+		assertEquals(2, testee.getCurrentOperations(s).size());
+		assertTrue(testee.hasCurrentOperations(s));
 
 		testee.closeOperation("id1");
 
-		assertEquals(2, testee.getOperations().size());
-		assertTrue(testee.get("id1").isPresent());
-		assertSame(operation2, testee.getActiveOperation().get());
-		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasCurrentOperations());
+		assertEquals(1, testee.getOperations().size());
+		assertSame(o2, testee.getActiveOperation(s).get());
+		assertEquals(1, testee.getCurrentOperations(s).size());
+		assertTrue(testee.hasCurrentOperations(s));
 
 		testee.closeOperation("id2");
 
-		assertEquals(2, testee.getOperations().size());
-		assertTrue(testee.get("id2").isPresent());
-		assertFalse(testee.getActiveOperation().isPresent());
-		assertTrue(testee.getCurrentOperations().isEmpty());
-		assertFalse(testee.hasCurrentOperations());
+		assertEquals(0, testee.getOperations().size());
+		assertFalse(testee.getActiveOperation(s).isPresent());
+		assertTrue(testee.getCurrentOperations(s).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s));
 	}
 
 	@Test
 	public void testTwoFiLo() throws Exception {
-		Operation operation1 = mock(Operation.class);
+		Station s = station("id", "name");
+		Resource r = resource("id", "name", s);
+		Operation o1 = operation("id1", false, r);
 
-		when(operation1.isTraining()).thenReturn(false);
-		when(operation1.getId()).thenReturn("id1");
+		when(operationRepository.save(o1)).thenReturn(o1);
 
-		when(operationRepository.save(operation1)).thenReturn(operation1);
-		when(operationRepository.findById("id1")).thenReturn(Optional.of(operation1));
-		when(operationRepository.findAll()).thenReturn(Collections.singletonList(operation1));
-
-		testee.addOperation(operation1);
+		testee.addOperation(o1);
 
 		assertEquals(1, testee.getOperations().size());
-		assertSame(operation1, testee.get("id1").get());
-		assertSame(operation1, testee.getActiveOperation().get());
-		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasCurrentOperations());
+		assertSame(o1, testee.getActiveOperation(s).get());
+		assertEquals(1, testee.getCurrentOperations(s).size());
+		assertTrue(testee.hasCurrentOperations(s));
 
-		Operation operation2 = mock(Operation.class);
+		Operation o2 = operation("id2", false, r);
 
-		when(operation2.isTraining()).thenReturn(false);
-		when(operation2.getId()).thenReturn("id2");
+		when(operationRepository.save(o2)).thenReturn(o2);
 
-		when(operationRepository.save(operation2)).thenReturn(operation2);
-		when(operationRepository.findById("id2")).thenReturn(Optional.of(operation2));
-		when(operationRepository.findAll()).thenReturn(Arrays.asList(operation1, operation2));
 
-		testee.addOperation(operation2);
+		testee.addOperation(o2);
 
 		assertEquals(2, testee.getOperations().size());
-		assertSame(operation2, testee.get("id2").get());
-		assertSame(operation2, testee.getActiveOperation().get());
-		assertEquals(2, testee.getCurrentOperations().size());
-		assertTrue(testee.hasCurrentOperations());
+		assertSame(o2, testee.getActiveOperation(s).get());
+		assertEquals(2, testee.getCurrentOperations(s).size());
+		assertTrue(testee.hasCurrentOperations(s));
 
 		testee.closeOperation("id2");
 
-		assertEquals(2, testee.getOperations().size());
-		assertTrue(testee.get("id2").isPresent());
-		assertSame(operation1, testee.getActiveOperation().get());
-		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasCurrentOperations());
+		assertEquals(1, testee.getOperations().size());
+		assertSame(o1, testee.getActiveOperation(s).get());
+		assertEquals(1, testee.getCurrentOperations(s).size());
+		assertTrue(testee.hasCurrentOperations(s));
 
 		testee.closeOperation("id1");
 
+		assertEquals(0, testee.getOperations().size());
+		assertFalse(testee.getActiveOperation(s).isPresent());
+		assertTrue(testee.getCurrentOperations(s).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s));
+	}
+
+	@Test
+	public void testOperationsOfDistinctStations() throws Exception {
+		Station s1 = station("id1", "name");
+		Resource r1 = resource("id1", "name", s1);
+		Operation o1 = operation("id1", false, r1);
+
+		Station s2 = station("id2", "name");
+		Resource r2 = resource("id2", "name", s2);
+		Operation o2 = operation("id2", false, r2);
+
+		when(operationRepository.save(o1)).thenReturn(o1);
+		when(operationRepository.save(o2)).thenReturn(o2);
+
+		testee.addOperation(o1);
+
+		assertEquals(1, testee.getOperations().size());
+		assertSame(o1, testee.getActiveOperation(s1).get());
+		assertEquals(1, testee.getCurrentOperations(s1).size());
+		assertTrue(testee.hasCurrentOperations(s1));
+		assertFalse(testee.getActiveOperation(s2).isPresent());
+		assertTrue(testee.getCurrentOperations(s2).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s2));
+
+
+		testee.addOperation(o2);
+
 		assertEquals(2, testee.getOperations().size());
-		assertTrue(testee.get("id1").isPresent());
-		assertFalse(testee.getActiveOperation().isPresent());
-		assertTrue(testee.getCurrentOperations().isEmpty());
-		assertFalse(testee.hasCurrentOperations());
+		assertSame(o1, testee.getActiveOperation(s1).get());
+		assertEquals(1, testee.getCurrentOperations(s1).size());
+		assertTrue(testee.hasCurrentOperations(s1));
+		assertSame(o2, testee.getActiveOperation(s2).get());
+		assertEquals(1, testee.getCurrentOperations(s2).size());
+		assertTrue(testee.hasCurrentOperations(s2));
+
+		testee.closeOperation("id2");
+
+		assertEquals(1, testee.getOperations().size());
+		assertSame(o1, testee.getActiveOperation(s1).get());
+		assertEquals(1, testee.getCurrentOperations(s1).size());
+		assertTrue(testee.hasCurrentOperations(s1));
+		assertFalse(testee.getActiveOperation(s2).isPresent());
+		assertTrue(testee.getCurrentOperations(s2).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s2));
+
+		testee.closeOperation("id1");
+
+		assertEquals(0, testee.getOperations().size());
+		assertFalse(testee.getActiveOperation(s1).isPresent());
+		assertTrue(testee.getCurrentOperations(s1).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s1));
+		assertFalse(testee.getActiveOperation(s2).isPresent());
+		assertTrue(testee.getCurrentOperations(s2).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s2));
+	}
+
+	@Test
+	public void testOperationsOfMixedStations() throws Exception {
+		Station s1 = station("id1", "name");
+		Resource r1 = resource("id1", "name", s1);
+		Operation o1 = operation("id1", false, r1);
+
+		Station s2 = station("id2", "name");
+		Resource r2 = resource("id2", "name", s2);
+		Operation o2 = operation("id2", false, r1, r2);
+
+		when(operationRepository.save(o1)).thenReturn(o1);
+		when(operationRepository.save(o2)).thenReturn(o2);
+
+		testee.addOperation(o1);
+
+		assertEquals(1, testee.getOperations().size());
+		assertSame(o1, testee.getActiveOperation(s1).get());
+		assertEquals(1, testee.getCurrentOperations(s1).size());
+		assertTrue(testee.hasCurrentOperations(s1));
+		assertFalse(testee.getActiveOperation(s2).isPresent());
+		assertTrue(testee.getCurrentOperations(s2).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s2));
+
+
+		testee.addOperation(o2);
+
+		assertEquals(2, testee.getOperations().size());
+		assertSame(o2, testee.getActiveOperation(s1).get());
+		assertEquals(2, testee.getCurrentOperations(s1).size());
+		assertTrue(testee.hasCurrentOperations(s1));
+		assertSame(o2, testee.getActiveOperation(s2).get());
+		assertEquals(1, testee.getCurrentOperations(s2).size());
+		assertTrue(testee.hasCurrentOperations(s2));
+
+		testee.closeOperation("id2");
+
+		assertEquals(1, testee.getOperations().size());
+		assertSame(o1, testee.getActiveOperation(s1).get());
+		assertEquals(1, testee.getCurrentOperations(s1).size());
+		assertTrue(testee.hasCurrentOperations(s1));
+		assertFalse(testee.getActiveOperation(s2).isPresent());
+		assertTrue(testee.getCurrentOperations(s2).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s2));
+
+		testee.closeOperation("id1");
+
+		assertEquals(0, testee.getOperations().size());
+		assertFalse(testee.getActiveOperation(s1).isPresent());
+		assertTrue(testee.getCurrentOperations(s1).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s1));
+		assertFalse(testee.getActiveOperation(s2).isPresent());
+		assertTrue(testee.getCurrentOperations(s2).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s2));
 	}
 
 	@Test
 	public void testTimeout() throws Exception {
-		Operation operation = mock(Operation.class);
+		Station s = station("id", "name");
+		Resource r = resource("id", "name", s);
+		Operation o = operation("id", false, r);
+		o.setCreated(Instant.ofEpochMilli(System.currentTimeMillis() - (16 * 60 * 1000)));
 
-		when(operation.isTraining()).thenReturn(false);
-		when(operation.getId()).thenReturn("id");
-		when(operation.getCreated()).thenReturn(Instant.ofEpochMilli(System.currentTimeMillis() - (16 * 60 * 1000)));
+		when(operationRepository.save(o)).thenReturn(o);
 
-		when(operationRepository.save(operation)).thenReturn(operation);
-		when(operationRepository.findById("id")).thenReturn(Optional.of(operation));
-		when(operationRepository.streamByClosedFalse()).thenReturn(Stream.of(operation));
-		when(operationRepository.findAll()).thenReturn(Collections.singletonList(operation));
-
-		testee.addOperation(operation);
+		testee.addOperation(o);
 
 		assertEquals(1, testee.getOperations().size());
-		assertSame(operation, testee.get("id").get());
-		assertSame(operation, testee.getActiveOperation().get());
-		assertEquals(1, testee.getCurrentOperations().size());
-		assertTrue(testee.hasCurrentOperations());
+		assertSame(o, testee.getActiveOperation(s).get());
+		assertEquals(1, testee.getCurrentOperations(s).size());
+		assertTrue(testee.hasCurrentOperations(s));
 
 		testee.timeoutOperations();
 
-		assertEquals(1, testee.getOperations().size());
-		assertTrue(testee.get("id").isPresent());
-		assertFalse(testee.getActiveOperation().isPresent());
-		assertTrue(testee.getCurrentOperations().isEmpty());
-		assertFalse(testee.hasCurrentOperations());
+		assertEquals(0, testee.getOperations().size());
+		assertFalse(testee.getActiveOperation(s).isPresent());
+		assertTrue(testee.getCurrentOperations(s).isEmpty());
+		assertFalse(testee.hasCurrentOperations(s));
+	}
+
+	private Operation operation(String id, boolean isTraining, Resource... resources) {
+		Operation o = new Operation();
+		o.setId(id);
+		o.setTraining(isTraining);
+		o.setResources(Arrays.asList(resources));
+		return o;
+	}
+
+	private Resource resource(String id, String name, Station station) {
+		Resource r = new Resource();
+		r.setId(id);
+		r.setName(name);
+		r.setStation(station);
+		return r;
+	}
+
+	private Station station(String id, String name) {
+		Station s = new Station();
+		s.setId(id);
+		s.setName(name);
+		return s;
 	}
 }
