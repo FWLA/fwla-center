@@ -4,14 +4,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.ihrigb.fwla.fwlacenter.services.api.RoadblockService;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.RoadblockRepository;
 import de.ihrigb.fwla.fwlacenter.web.model.BasicRoadblockDTO;
-import de.ihrigb.fwla.fwlacenter.web.model.CoordinateBoxDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -19,14 +17,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RoadblockServiceController {
 
-	private final RoadblockService roadblockService;
+	private final RoadblockRepository roadblockRepository;
 
-	@PostMapping
-	public ResponseEntity<Set<BasicRoadblockDTO>> getRoadblocksInBox(@RequestBody CoordinateBoxDTO coordinateBoxDTO) {
-		return ResponseEntity.ok(roadblockService
-				.getWithinBounds(coordinateBoxDTO.getSw().getApiModel(), coordinateBoxDTO.getNe().getApiModel())
-				.stream().map(roadblock -> {
-					return new BasicRoadblockDTO(roadblock);
-				}).collect(Collectors.toSet()));
+	@GetMapping
+	public ResponseEntity<Set<BasicRoadblockDTO>> getRoadblocksInBox() {
+		return ResponseEntity.ok(roadblockRepository.findAll().stream().map(roadblock -> {
+			return new BasicRoadblockDTO(roadblock);
+		}).collect(Collectors.toSet()));
 	}
 }
