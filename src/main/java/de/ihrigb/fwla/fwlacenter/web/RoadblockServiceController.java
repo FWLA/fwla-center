@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.services.api.RoadblockService;
+import de.ihrigb.fwla.fwlacenter.web.model.BasicRoadblockDTO;
 import de.ihrigb.fwla.fwlacenter.web.model.CoordinateBoxDTO;
-import de.ihrigb.fwla.fwlacenter.web.model.RoadblockDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -22,11 +22,11 @@ public class RoadblockServiceController {
 	private final RoadblockService roadblockService;
 
 	@PostMapping
-	public ResponseEntity<Set<RoadblockDTO>> getRoadblocksInBox(@RequestBody CoordinateBoxDTO coordinateBoxDTO) {
+	public ResponseEntity<Set<BasicRoadblockDTO>> getRoadblocksInBox(@RequestBody CoordinateBoxDTO coordinateBoxDTO) {
 		return ResponseEntity.ok(roadblockService
 				.getWithinBounds(coordinateBoxDTO.getSw().getApiModel(), coordinateBoxDTO.getNe().getApiModel())
 				.stream().map(roadblock -> {
-					return new RoadblockDTO(roadblock);
+					return new BasicRoadblockDTO(roadblock);
 				}).collect(Collectors.toSet()));
 	}
 }
