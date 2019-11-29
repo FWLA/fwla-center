@@ -1,7 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.web;
 
 import org.geojson.FeatureCollection;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.services.api.GeoServices;
-import de.ihrigb.fwla.fwlacenter.services.api.GeocodingService;
 import de.ihrigb.fwla.fwlacenter.web.model.CoordinateDTO;
 import de.ihrigb.fwla.fwlacenter.web.model.DirectionsRequestDTO;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RestController
 @RequestMapping("/v1/services/geo")
-@ConditionalOnBean(GeocodingService.class)
 @RequiredArgsConstructor
 public class GeoServicesController {
 
