@@ -11,5 +11,5 @@ import lombok.Setter;
 @Setter
 @ConfigurationProperties(prefix = "app.operation")
 public class OperationProperties {
-	private Duration timeout = Duration.ofMinutes(15);
+	private Duration timeout = Duration.ofMinutes(20);
 }

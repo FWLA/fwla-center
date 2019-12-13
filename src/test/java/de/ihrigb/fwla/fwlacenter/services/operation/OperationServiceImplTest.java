@@ -269,7 +269,7 @@ public class OperationServiceImplTest {
 		Station s = station("id", "name");
 		Resource r = resource("id", "name", s);
 		Operation o = operation("id", false, r);
-		o.setCreated(Instant.ofEpochMilli(System.currentTimeMillis() - (16 * 60 * 1000)));
+		o.setCreated(Instant.ofEpochMilli(System.currentTimeMillis() - (21 * 60 * 1000)));
 
 		when(operationRepository.save(o)).thenReturn(o);
 
