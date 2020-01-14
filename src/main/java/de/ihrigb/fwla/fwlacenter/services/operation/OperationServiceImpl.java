@@ -136,9 +136,13 @@ public class OperationServiceImpl implements OperationService {
 
 		log.trace("get({})", id);
 
-		return currentOperations.values().stream().flatMap(l -> l.stream()).filter(o -> {
+		Optional<Operation> operation = currentOperations.values().stream().flatMap(l -> l.stream()).filter(o -> {
 			return id.equals(o.getId());
 		}).findFirst();
+		if (operation.isPresent()) {
+			return operation;
+		}
+		return operationRepository.findById(id);
 	}
 
 	private void resetActiveOperation() {
