@@ -2,16 +2,16 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.geojson.FeatureCollection;
 import org.springframework.util.Assert;
 
-import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateTagRepository;
-import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Resource;
+import de.ihrigb.fwla.fwlacenter.persistence.model.Station;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,11 +34,15 @@ public class OperationDisplayDTO {
 	private OperationKeyDTO operationKey;
 	private RealEstateDTO realEstate;
 	private String realEstateAdditional;
-	private List<ResourceDTO> resources;
+	private Set<String> stations;
 	private boolean ambulanceCalled;
 	private FeatureCollection directions;
 
 	public OperationDisplayDTO(Operation operation) {
+		this(operation, null);
+	}
+
+	public OperationDisplayDTO(Operation operation, Station station) {
 		Assert.notNull(operation, "Operation must not be null.");
 
 		this.id = operation.getId();
@@ -62,39 +66,11 @@ public class OperationDisplayDTO {
 		}
 		this.realEstateAdditional = operation.getRealEstateAdditional();
 		if (operation.getResources() != null) {
-			this.resources = operation.getResources().stream().map(r -> new ResourceDTO(r)).collect(Collectors.toList());
+			this.stations = operation.getResources().stream().map(Resource::getStation).filter(Objects::nonNull)
+					.filter(s -> {
+						return station == null || !station.getId().equals(s.getId());
+					}).map(Station::getName).filter(Objects::nonNull).collect(Collectors.toSet());
 		}
 		this.ambulanceCalled = operation.isAmbulanceCalled();
-	}
-
-	@JsonIgnore
-	public Operation getApiModel(StationRepository stationRepository, RealEstateTagRepository realEstateTagRepository) {
-		Operation operation = new Operation();
-		operation.setId(id);
-		operation.setTime(time);
-		operation.setPlace(place);
-		operation.setObject(object);
-		if (location != null) {
-			operation.setLocation(location.getApiModel());
-		}
-		operation.setCode(code);
-		operation.setMessage(message);
-		operation.setNotice(notice);
-		operation.setTraining(isTraining);
-		operation.setClosed(closed);
-		operation.setResourceKeys(resourceKeys);
-		if (operationKey != null) {
-			operation.setOperationKey(operationKey.getPersistenceModel());
-		}
-		if (realEstate != null) {
-			operation.setRealEstate(realEstate.getPersistenceModel(realEstateTagRepository));
-		}
-		operation.setRealEstateAdditional(realEstateAdditional);
-		if (resources != null) {
-			operation.setResources(resources.stream().map(dto -> dto.getPersistenceModel(stationRepository))
-					.collect(Collectors.toList()));
-		}
-		operation.setAmbulanceCalled(ambulanceCalled);
-		return operation;
 	}
 }

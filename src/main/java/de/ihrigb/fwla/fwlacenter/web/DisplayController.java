@@ -24,7 +24,7 @@ public class DisplayController {
 	@GetMapping("/{stationId}")
 	public ResponseEntity<?> getDisplay(@PathVariable("stationId") String stationId) {
 		return stationRepository.findById(stationId).map(station -> {
-			return ResponseEntity.ok(new DisplayStateDTO(displayService.getDisplayState(station)));
+			return ResponseEntity.ok(new DisplayStateDTO(displayService.getDisplayState(station), station));
 		}).orElseGet(() -> {
 			return ResponseEntity.notFound().build();
 		});
