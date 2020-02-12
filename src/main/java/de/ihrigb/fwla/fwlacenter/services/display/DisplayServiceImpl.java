@@ -37,7 +37,7 @@ public class DisplayServiceImpl implements DisplayService {
 			builder.serverVersion(p.getVersion());
 		});
 
-		Optional<DisplayEvent> displayEventOpt = displayEventRepository.getActive();
+		Optional<DisplayEvent> displayEventOpt = displayEventRepository.getActive(station);
 		Optional<Operation> operationOpt = operationService.getActiveOperation(station);
 
 		if (operationOpt.isPresent()) {

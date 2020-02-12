@@ -6,7 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -36,4 +38,8 @@ public class DisplayEvent {
 
 	@Column(name = "show_operation", nullable = false)
 	private boolean showOperation = true;
+
+	@ManyToOne
+	@JoinColumn(name = "station_id", nullable = true)
+	private Station station;
 }

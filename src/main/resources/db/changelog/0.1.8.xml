@@ -5,4 +5,24 @@
 		<dropColumn tableName="operations" columnName="directions">
 	</changeSet>
 
+	<changeSet id="01-add-station-to-displayevent" author="ihrigb">
+
+		<delete tableName="display_events" />
+
+		<addColumn tableName="display_events">
+			<column name="station_id" type="VARCHAR(64)">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+
+		<addForeignKeyConstraint
+			baseTableName="display_events"
+			baseColumnNames="station_id"
+			constraintName="display_events-stations"
+			referencedTableName="stations"
+			referencedColumnNames="id"
+			onUpdate="CASCADE"
+			onDelete="CASCADE" />
+	</changeSet>
+
 </databaseChangeLog>

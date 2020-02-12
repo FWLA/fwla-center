@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.ihrigb.fwla.fwlacenter.persistence.model.DisplayEvent;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.DisplayEventRepository;
+import de.ihrigb.fwla.fwlacenter.persistence.repository.StationRepository;
 import de.ihrigb.fwla.fwlacenter.web.exception.BadRequestException;
 import de.ihrigb.fwla.fwlacenter.web.model.DisplayEventDTO;
 
@@ -27,8 +28,12 @@ import de.ihrigb.fwla.fwlacenter.web.model.DisplayEventDTO;
 public class DisplayEventController
 		extends BaseController<DisplayEvent, String, DisplayEventDTO, DisplayEventRepository> {
 
-	public DisplayEventController(DisplayEventRepository repository) {
+	private final StationRepository stationRepository;
+
+	public DisplayEventController(DisplayEventRepository repository, StationRepository stationRepository) {
 		super(repository);
+
+		this.stationRepository = stationRepository;
 	}
 
 	@GetMapping
@@ -69,7 +74,7 @@ public class DisplayEventController
 	@Override
 	protected Function<? super DisplayEventDTO, ? extends DisplayEvent> getFromDTOFunction() {
 		return dto -> {
-			return dto.getPersistenceModel();
+			return dto.getPersistenceModel(stationRepository);
 		};
 	}
 
@@ -108,11 +113,12 @@ public class DisplayEventController
 	}
 
 	private void checkTimeRangeUniqueness(DisplayEvent displayEvent, boolean isUpdate) {
-		if (!isUpdate && !getRepository().getEventsIntersectingTimeRange(displayEvent.getStartTime(), displayEvent.getEndTime())
-				.isEmpty()) {
+		if (!isUpdate && !getRepository().getEventsIntersectingTimeRange(displayEvent.getStation(),
+				displayEvent.getStartTime(), displayEvent.getEndTime()).isEmpty()) {
 			throw new BadRequestException("Time range does intersect with another display event.",
 					Optional.of(displayEvent));
-		} else if (!getRepository().getEventsIntersectingTimeRangeExcludeId(displayEvent.getStartTime(), displayEvent.getEndTime(), displayEvent.getId()).isEmpty()) {
+		} else if (!getRepository().getEventsIntersectingTimeRangeExcludeId(displayEvent.getStation(),
+				displayEvent.getStartTime(), displayEvent.getEndTime(), displayEvent.getId()).isEmpty()) {
 			throw new BadRequestException("Time range does intersect with another display event.",
 					Optional.of(displayEvent));
 		}

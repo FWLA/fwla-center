@@ -54,7 +54,7 @@ public class DisplayServiceImplTest {
 		station.setLocation(stationLocation);
 
 		when(buildProperties.getVersion()).thenReturn("0.1.2");
-		when(displayEventRepository.getActive()).thenReturn(Optional.empty());
+		when(displayEventRepository.getActive(station)).thenReturn(Optional.empty());
 		when(operationService.getActiveOperation(station)).thenReturn(Optional.empty());
 		Weather weather = mock(Weather.class);
 		when(weatherService.getWeather(stationCoordinate)).thenReturn(weather);
@@ -79,7 +79,7 @@ public class DisplayServiceImplTest {
 		station.setLocation(stationLocation);
 
 		when(buildProperties.getVersion()).thenReturn("0.1.2");
-		when(displayEventRepository.getActive()).thenReturn(Optional.empty());
+		when(displayEventRepository.getActive(station)).thenReturn(Optional.empty());
 		Operation operation = mock(Operation.class);
 		Location location = new Location();
 		location.setCoordinate(new Coordinate(1.2d, 1.3d));
@@ -110,7 +110,7 @@ public class DisplayServiceImplTest {
 		when(buildProperties.getVersion()).thenReturn("0.1.2");
 		DisplayEvent displayEvent = mock(DisplayEvent.class);
 		when(displayEvent.isShowOperation()).thenReturn(true);
-		when(displayEventRepository.getActive()).thenReturn(Optional.of(displayEvent));
+		when(displayEventRepository.getActive(station)).thenReturn(Optional.of(displayEvent));
 		Operation operation = mock(Operation.class);
 		Location location = new Location();
 		location.setCoordinate(new Coordinate(1.2d, 1.3d));
@@ -142,7 +142,7 @@ public class DisplayServiceImplTest {
 		DisplayEvent displayEvent = mock(DisplayEvent.class);
 		when(displayEvent.isShowOperation()).thenReturn(false);
 		when(displayEvent.getText()).thenReturn("<h1>My Header</h1>");
-		when(displayEventRepository.getActive()).thenReturn(Optional.of(displayEvent));
+		when(displayEventRepository.getActive(station)).thenReturn(Optional.of(displayEvent));
 		Operation operation = mock(Operation.class);
 		Location location = new Location();
 		location.setCoordinate(new Coordinate(1.2d, 1.3d));
@@ -173,7 +173,7 @@ public class DisplayServiceImplTest {
 		when(buildProperties.getVersion()).thenReturn("0.1.2");
 		DisplayEvent displayEvent = mock(DisplayEvent.class);
 		when(displayEvent.getText()).thenReturn("<h1>My Header</h1>");
-		when(displayEventRepository.getActive()).thenReturn(Optional.of(displayEvent));
+		when(displayEventRepository.getActive(station)).thenReturn(Optional.of(displayEvent));
 		when(operationService.getActiveOperation(station)).thenReturn(Optional.empty());
 		Weather weather = mock(Weather.class);
 		when(weatherService.getWeather(stationCoordinate)).thenReturn(weather);
