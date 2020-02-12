@@ -2,7 +2,7 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet id="00-create-roadblocks-table" author="ihrigb">
-		<dropColumn tableName="operations" columnName="directions">
+		<dropColumn tableName="operations" columnName="directions" />
 	</changeSet>
 
 	<changeSet id="01-add-station-to-displayevent" author="ihrigb">
