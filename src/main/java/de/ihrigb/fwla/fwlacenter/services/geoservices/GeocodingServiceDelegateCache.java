@@ -8,7 +8,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.services.api.GeocodingService;
 
-public class GeocodingServiceDelegateCache extends AbstractGeocodingService implements GeocodingService {
+public class GeocodingServiceDelegateCache extends AbstractGeocodingService {
 
 	private final GeocodingService delegate;
 	private final Cache<String, Optional<Coordinate>> cache;

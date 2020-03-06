@@ -7,7 +7,7 @@ import org.geojson.GeoJsonObject;
 import org.geojson.GeoJsonObjectVisitor;
 import org.geojson.Point;
 
-public class PointVisitorPredicate extends GeoJsonObjectVisitor.Adapter<Boolean> implements Predicate<Feature>, GeoJsonObjectVisitor<Boolean> {
+public class PointVisitorPredicate extends GeoJsonObjectVisitor.Adapter<Boolean> implements Predicate<Feature> {
 
 	@Override
 	public Boolean visit(Point geoJsonObject) {

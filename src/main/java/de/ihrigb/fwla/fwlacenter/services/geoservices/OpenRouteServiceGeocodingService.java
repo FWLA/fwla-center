@@ -13,14 +13,13 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import de.ihrigb.fwla.fwlacenter.api.Coordinate;
-import de.ihrigb.fwla.fwlacenter.services.api.GeocodingService;
 import de.ihrigb.fwla.fwlacenter.services.geoservices.GeoServiceProperties.OpenRouteServiceProperties;
 import de.ihrigb.fwla.fwlacenter.services.geoservices.visitors.PointVisitorPredicate;
 import de.ihrigb.fwla.fwlacenter.services.geoservices.visitors.ToCoordinateFunction;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class OpenRouteServiceGeocodingService extends AbstractGeocodingService implements GeocodingService {
+public class OpenRouteServiceGeocodingService extends AbstractGeocodingService {
 
 	private final static String baseUri = "https://api.openrouteservice.org/geocode/search";
 
