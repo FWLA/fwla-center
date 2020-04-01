@@ -1,6 +1,9 @@
 package de.ihrigb.fwla.fwlacenter.mail.receive;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
+
+import javax.net.ssl.SSLSocketFactory;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,14 +29,24 @@ public class MailConfiguration {
 
 	@Bean
 	public ImapMailReceiver imapMailReceiver(ReceivingProperties properties) {
+
+		Properties javaMailProperties = new Properties();
+		javaMailProperties.setProperty("mail.imaps.socketFactory.class", SSLSocketFactory.class.getName());
+		javaMailProperties.setProperty("mail.imap.starttls.enable", "true");
+		javaMailProperties.setProperty("mail.imaps.socketFactory.fallback", "false");
+		javaMailProperties.setProperty("mail.store.protocol", properties.getProtocol());
+		javaMailProperties.setProperty("mail.debug", "" + properties.isDebug());
+
 		String userInfo = String.format("%s:%s", properties.getUsername(), properties.getPassword());
 
-		String url = String.format("imap://%s@%s:143/inbox", UriUtils.encodeUserInfo(userInfo, StandardCharsets.UTF_8),
-				UriUtils.encodeHost(properties.getHost(), StandardCharsets.UTF_8));
+		String url = String.format("%s://%s@%s:%d/INBOX", properties.getProtocol(),
+				UriUtils.encodeUserInfo(userInfo, StandardCharsets.UTF_8),
+				UriUtils.encodeHost(properties.getHost(), StandardCharsets.UTF_8), properties.getPort());
 
 		log.info("Connecting to {}.", url);
 		ImapMailReceiver imapMailReceiver = new ImapMailReceiver(url);
 		imapMailReceiver.setShouldMarkMessagesAsRead(Boolean.TRUE);
+		imapMailReceiver.setJavaMailProperties(javaMailProperties);
 		return imapMailReceiver;
 	}
 
