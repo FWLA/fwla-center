@@ -1,35 +1,49 @@
 package de.ihrigb.fwla.fwlacenter.mail.receive;
 
 import de.ihrigb.fwla.fwlacenter.utils.StringUtils;
+import de.ihrigb.fwla.mail.EmailSenderFilter;
+import de.ihrigb.fwla.mail.FilterResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-class MailFilter {
+class MailFilter implements EmailSenderFilter {
 
 	private final ReceivingProperties properties;
 
-	FilterResult filter(String sender) {
+	@Override
+	public FilterResult filter(String sender) {
+		switch (filterInternal(sender)) {
+			case HOT:
+			case TRAINING:
+				return FilterResult.ACCEPTED;
+			case REJECTED:
+			default:
+				return FilterResult.REJECTED;
+		}
+	}
+
+	InternalFilterResult filterInternal(String sender) {
 		if (properties.getWhitelistHot() != null && !properties.getWhitelistHot().isEmpty()) {
 			if (StringUtils.containsIgnoreCase(properties.getWhitelistHot(), sender)) {
 				log.debug("Mail from '{}' filtered as 'HOT'.", sender);
-				return FilterResult.HOT;
+				return InternalFilterResult.HOT;
 			}
 		}
 
 		if (properties.getWhitelistTraining() != null && !properties.getWhitelistTraining().isEmpty()) {
 			if (StringUtils.containsIgnoreCase(properties.getWhitelistTraining(), sender)) {
 				log.debug("Mail from '{}' filtered as 'TRAINING'.", sender);
-				return FilterResult.TRAINING;
+				return InternalFilterResult.TRAINING;
 			}
 		}
 
 		log.debug("Mail from '{}' filtered as 'REJECTED'.", sender);
-		return FilterResult.REJECTED;
+		return InternalFilterResult.REJECTED;
 	}
 
-	static enum FilterResult {
+	static enum InternalFilterResult {
 		HOT, TRAINING, REJECTED;
 	}
 }

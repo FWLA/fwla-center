@@ -6,11 +6,11 @@ import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import de.ihrigb.fwla.fwlacenter.mail.Email;
 import de.ihrigb.fwla.fwlacenter.mail.api.MailExtractionService;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RegexPattern;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RegexPatternRepository;
 import de.ihrigb.fwla.fwlacenter.utils.Sanitizers;
+import de.ihrigb.fwla.mail.Email;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class EmailExtractionServiceImpl implements MailExtractionService {
 	private final RegexPatternRepository patternRepository;
 
 	@Override
-	public Operation extract(Email email) {
+	public Operation extract(Email<String> email) {
 		Assert.notNull(email, "Email must not be null.");
 
 		log.debug("Extracting operation from email.");
@@ -43,7 +43,7 @@ public class EmailExtractionServiceImpl implements MailExtractionService {
 		return operation;
 	}
 
-	private Matcher getMatcher(RegexPattern regexPattern, Email email) {
+	private Matcher getMatcher(RegexPattern regexPattern, Email<String> email) {
 		String text;
 		switch (regexPattern.getSource()) {
 		case SUBJECT:

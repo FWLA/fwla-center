@@ -7,7 +7,7 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.ihrigb.fwla.fwlacenter.mail.receive.MailFilter.FilterResult;
+import de.ihrigb.fwla.fwlacenter.mail.receive.MailFilter.InternalFilterResult;
 
 public class MailFilterTest {
 
@@ -22,15 +22,15 @@ public class MailFilterTest {
 
 	@Test
 	public void testEmptyHotEmptyTraining() {
-		assertSame(FilterResult.REJECTED, testee.filter("mail@domain.de"));
+		assertSame(InternalFilterResult.REJECTED, testee.filterInternal("mail@domain.de"));
 	}
 
 	@Test
 	public void testHot() {
 		properties.setWhitelistHot(Collections.singleton("SenderA@domain.de"));
 
-		assertSame(FilterResult.REJECTED, testee.filter("SenderB@domain.de"));
-		assertSame(FilterResult.HOT, testee.filter("SenderA@domain.de"));
+		assertSame(InternalFilterResult.REJECTED, testee.filterInternal("SenderB@domain.de"));
+		assertSame(InternalFilterResult.HOT, testee.filterInternal("SenderA@domain.de"));
 	}
 
 	@Test
@@ -38,8 +38,8 @@ public class MailFilterTest {
 		properties.setWhitelistHot(Collections.singleton("SenderA@domain.de"));
 		properties.setWhitelistTraining(Collections.singleton("SenderC@domain.de"));
 
-		assertSame(FilterResult.REJECTED, testee.filter("SenderB@domain.de"));
-		assertSame(FilterResult.HOT, testee.filter("SenderA@domain.de"));
-		assertSame(FilterResult.TRAINING, testee.filter("SenderC@domain.de"));
+		assertSame(InternalFilterResult.REJECTED, testee.filterInternal("SenderB@domain.de"));
+		assertSame(InternalFilterResult.HOT, testee.filterInternal("SenderA@domain.de"));
+		assertSame(InternalFilterResult.TRAINING, testee.filterInternal("SenderC@domain.de"));
 	}
 }

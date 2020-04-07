@@ -1,6 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.mail.receive;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.Properties;
 
 import javax.net.ssl.SSLSocketFactory;
@@ -18,6 +19,10 @@ import org.springframework.web.util.UriUtils;
 
 import de.ihrigb.fwla.fwlacenter.handling.api.OperationChain;
 import de.ihrigb.fwla.fwlacenter.mail.api.MailExtractionService;
+import de.ihrigb.fwla.mail.EmailHandler;
+import de.ihrigb.fwla.mail.EmailSenderFilter;
+import de.ihrigb.fwla.mail.ReceivingMessageHandler;
+import de.ihrigb.fwla.mail.TextEmailBodyConverter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -69,6 +74,10 @@ public class MailConfiguration {
 	@Bean
 	public MessageHandler messageHandler(ReceivingProperties properties, MailExtractionService mailExtractionService,
 			OperationChain operationChain) {
-		return new ReceivingMessageHandler(properties, mailExtractionService, operationChain);
+		EmailSenderFilter emailSenderFilter = new MailFilter(properties);
+		EmailHandler<String> emailHandler = new OperationEmailHandler(properties, mailExtractionService,
+				operationChain);
+		return new ReceivingMessageHandler<>(Optional.of(emailSenderFilter), new TextEmailBodyConverter(),
+				emailHandler);
 	}
 }
