@@ -24,6 +24,7 @@
 		<java.version>11</java.version>
 
 		<!-- Versions -->
+		<commons.version>0.0.7</commons.version>
 		<easymock.version>4.0.2</easymock.version>
 		<geojson-jackson.version>1.8.1</geojson-jackson.version>
 		<commons-codec.version>1.13</commons-codec.version>
@@ -34,6 +35,11 @@
 			<groupId>de.ihrigb.fwla</groupId>
 			<artifactId>mail-handler</artifactId>
 			<version>0.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ihrigb.commons</groupId>
+			<artifactId>commons</artifactId>
+			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

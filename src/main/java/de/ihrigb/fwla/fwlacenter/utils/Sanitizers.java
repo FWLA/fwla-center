@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.springframework.util.ReflectionUtils;
 
+import de.ihrigb.commons.ArrayUtils;
 import de.ihrigb.fwla.fwlacenter.api.Address;
 import de.ihrigb.fwla.fwlacenter.api.Location;
 

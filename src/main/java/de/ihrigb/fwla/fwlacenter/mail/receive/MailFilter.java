@@ -1,6 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.mail.receive;
 
-import de.ihrigb.fwla.fwlacenter.utils.StringUtils;
+import de.ihrigb.commons.StringUtils;
 import de.ihrigb.fwla.mail.EmailSenderFilter;
 import de.ihrigb.fwla.mail.FilterResult;
 import lombok.RequiredArgsConstructor;
