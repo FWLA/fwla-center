@@ -4,8 +4,8 @@ import java.util.Set;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
 import de.ihrigb.fwla.fwlacenter.handling.core.ProcessorOrder;
 import de.ihrigb.fwla.fwlacenter.persistence.model.AmbulancePattern;

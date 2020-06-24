@@ -1,7 +1,6 @@
 package de.ihrigb.fwla.fwlacenter.web.model;
 
-import org.springframework.util.Assert;
-
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.services.api.Weather;
 import lombok.Getter;
 import lombok.Setter;

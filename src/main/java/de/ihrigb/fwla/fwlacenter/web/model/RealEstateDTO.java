@@ -3,10 +3,9 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.util.Assert;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateTagRepository;
 import de.ihrigb.fwla.fwlacenter.web.ReferenceNotFoundException;

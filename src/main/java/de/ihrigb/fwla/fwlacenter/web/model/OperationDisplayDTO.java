@@ -7,8 +7,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.geojson.FeatureCollection;
-import org.springframework.util.Assert;
 
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Resource;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Station;

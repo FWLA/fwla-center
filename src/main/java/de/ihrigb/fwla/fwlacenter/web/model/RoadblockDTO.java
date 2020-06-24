@@ -2,10 +2,9 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 
 import java.time.Instant;
 
-import org.springframework.util.Assert;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Roadblock;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

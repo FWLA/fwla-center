@@ -2,8 +2,7 @@ package de.ihrigb.fwla.fwlacenter.web.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import org.springframework.util.Assert;
-
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.persistence.model.River;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RiverSector;
 import lombok.Getter;

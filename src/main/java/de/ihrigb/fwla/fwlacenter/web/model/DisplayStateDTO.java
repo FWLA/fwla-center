@@ -1,10 +1,9 @@
 package de.ihrigb.fwla.fwlacenter.web.model;
 
-import org.springframework.util.Assert;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Station;
 import de.ihrigb.fwla.fwlacenter.services.api.DisplayState;
 import lombok.Getter;

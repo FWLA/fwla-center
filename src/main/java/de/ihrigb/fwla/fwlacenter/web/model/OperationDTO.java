@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.util.Assert;
-
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Operation;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.OperationKeyRepository;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RealEstateRepository;

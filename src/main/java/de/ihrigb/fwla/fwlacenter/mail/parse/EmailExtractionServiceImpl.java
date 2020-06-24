@@ -4,8 +4,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.mail.api.MailExtractionService;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RegexPattern;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RegexPatternRepository;

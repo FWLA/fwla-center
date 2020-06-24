@@ -2,8 +2,7 @@ package de.ihrigb.fwla.fwlacenter.services.geoservices;
 
 import java.util.Optional;
 
-import org.springframework.util.Assert;
-
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.api.Address;
 import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.api.Location;

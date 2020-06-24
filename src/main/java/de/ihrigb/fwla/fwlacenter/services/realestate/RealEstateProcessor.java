@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import de.ihrigb.commons.Assert;
 import de.ihrigb.fwla.fwlacenter.handling.api.Processor;
 import de.ihrigb.fwla.fwlacenter.handling.core.ProcessorOrder;
 import de.ihrigb.fwla.fwlacenter.persistence.model.RealEstate;

@@ -7,8 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import org.geojson.Point;
-import org.springframework.util.Assert;
 
+import de.ihrigb.commons.Assert;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
