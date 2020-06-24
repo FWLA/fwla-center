@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>de.ihrigb.fwla</groupId>
 		<artifactId>parent</artifactId>
-		<version>0.0.2</version>
+		<version>0.0.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -21,7 +21,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 
 		<!-- Versions -->
 		<easymock.version>4.0.2</easymock.version>
@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>de.ihrigb.fwla</groupId>
 			<artifactId>mail-handler</artifactId>
-			<version>0.0.2</version>
+			<version>0.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

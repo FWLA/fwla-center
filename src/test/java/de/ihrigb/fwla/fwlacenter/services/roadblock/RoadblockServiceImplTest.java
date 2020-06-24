@@ -1,6 +1,7 @@
 package de.ihrigb.fwla.fwlacenter.services.roadblock;
 
 import java.util.Collections;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,7 +11,6 @@ import org.mockito.Mockito;
 import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import de.ihrigb.fwla.fwlacenter.persistence.model.Roadblock;
 import de.ihrigb.fwla.fwlacenter.persistence.repository.RoadblockRepository;
-import lombok.var;
 
 public class RoadblockServiceImplTest {
 
@@ -32,7 +32,7 @@ public class RoadblockServiceImplTest {
 
 		Mockito.when(roadblockRepository.findWithinBounds(1.0, 2.0, 3.0, 4.0)).thenReturn(Collections.singleton(ret));
 
-		var roadblocks = testee.getWithinBounds(sw, ne);
+		Set<Roadblock> roadblocks = testee.getWithinBounds(sw, ne);
 		Assert.assertEquals(1, roadblocks.size());
 		Assert.assertTrue(roadblocks.contains(ret));
 	}

@@ -5,7 +5,6 @@ import java.util.Optional;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 
-import de.ihrigb.fwla.fwlacenter.api.Coordinate;
 import lombok.Getter;
 import lombok.Setter;
 

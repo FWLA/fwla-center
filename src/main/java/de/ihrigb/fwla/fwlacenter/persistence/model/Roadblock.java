@@ -28,10 +28,10 @@ public class Roadblock implements Locatable {
 	@Column(name = "id", nullable = false, unique = true)
 	private String id;
 
-	@Column(name = "start_time", nullable = false)
+	@Column(name = "start_time", nullable = true)
 	private Instant startTime;
 
-	@Column(name = "end_time", nullable = false)
+	@Column(name = "end_time", nullable = true)
 	private Instant endTime;
 
 	@Column(name = "information", nullable = true)
