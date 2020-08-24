@@ -59,7 +59,8 @@ public class OperationDTO {
 		}
 		this.realEstateAdditional = operation.getRealEstateAdditional();
 		if (operation.getResources() != null) {
-			this.resources = operation.getResources().stream().map(r -> r.getId()).collect(Collectors.toList());
+			this.resources = operation.getResources().stream().filter(Objects::nonNull).map(r -> r.getId())
+					.collect(Collectors.toList());
 		}
 		this.ambulanceCalled = operation.isAmbulanceCalled();
 	}
