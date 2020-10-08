@@ -21,7 +21,7 @@ public class GeoServicesConfiguration {
 	public DirectionsService directionsService(GeoServiceProperties properties,
 			RestTemplateBuilder restTemplateBuilder) {
 		return new DirectionsServiceDelegateCache(
-				new OpenRouteServiceDirectionsService(restTemplateBuilder, properties.getOrs()),
+				new OpenRouteServiceDirectionsServiceV2(restTemplateBuilder, properties.getOrs()),
 				properties.getDirectionsCache());
 	}
 

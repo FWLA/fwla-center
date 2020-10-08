@@ -15,20 +15,15 @@ import de.ihrigb.fwla.fwlacenter.services.api.DirectionsService;
 import de.ihrigb.fwla.fwlacenter.services.geoservices.GeoServiceProperties.OpenRouteServiceProperties;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @deprecated https://openrouteservice.org/dev/#/api-docs/introduction
- *             (30.10.2020)
- */
 @Slf4j
-@Deprecated
-public class OpenRouteServiceDirectionsService implements DirectionsService {
+public class OpenRouteServiceDirectionsServiceV2 implements DirectionsService {
 
-	private final static String baseUri = "https://api.openrouteservice.org/directions";
+	private final static String baseUri = "https://api.openrouteservice.org/v2/directions/driving-car";
 
 	private final RestTemplate restTemplate;
 	private final OpenRouteServiceProperties properties;
 
-	public OpenRouteServiceDirectionsService(RestTemplateBuilder restTemplateBuilder,
+	public OpenRouteServiceDirectionsServiceV2(RestTemplateBuilder restTemplateBuilder,
 			OpenRouteServiceProperties properties) {
 		this.restTemplate = restTemplateBuilder.setConnectTimeout(properties.getConnectTimeout())
 				.setReadTimeout(properties.getReadTimeout()).build();
@@ -38,9 +33,8 @@ public class OpenRouteServiceDirectionsService implements DirectionsService {
 	@Override
 	public Optional<FeatureCollection> getDirections(Coordinate from, Coordinate to) {
 		URI uri = UriComponentsBuilder.fromUriString(baseUri).queryParam("api_key", properties.getApiKey())
-				.queryParam("coordinates", stringifyCoordinates(from, to)).queryParam("profile", "driving-car")
-				.queryParam("format", "geojson").queryParam("geometry_format", "geojson")
-				.queryParam("instructions", false).build().toUri();
+				.queryParam("start", stringifyCoordinate(from)).queryParam("end", stringifyCoordinate(to)).build()
+				.toUri();
 
 		log.debug("Directions URI: {}", uri);
 
@@ -52,8 +46,22 @@ public class OpenRouteServiceDirectionsService implements DirectionsService {
 		}
 	}
 
-	private String stringifyCoordinates(Coordinate from, Coordinate to) {
-		return String.format(Locale.US, "%f,%f|%f,%f", from.getLongitude(), from.getLatitude(), to.getLongitude(),
-				to.getLatitude());
+	private String stringifyCoordinate(Coordinate c) {
+		return String.format(Locale.US, "%f,%f", c.getLongitude(), c.getLatitude());
+	}
+
+	public static void main(String[] args) {
+		OpenRouteServiceProperties properties = new OpenRouteServiceProperties();
+		properties.setApiKey("5b3ce3597851110001cf62489442932f2c474fb4acd6ba26ce3e5fa0");
+
+		RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
+
+		OpenRouteServiceDirectionsServiceV2 directionsService = new OpenRouteServiceDirectionsServiceV2(
+				restTemplateBuilder, properties);
+
+		Optional<FeatureCollection> geojson = directionsService.getDirections(new Coordinate(49.591684, 8.480834),
+				new Coordinate(49.598678, 8.460858));
+
+		System.out.println(geojson.map(FeatureCollection::toString).orElseThrow(RuntimeException::new));
 	}
 }
