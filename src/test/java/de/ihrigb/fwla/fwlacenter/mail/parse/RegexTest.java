@@ -34,6 +34,7 @@ public class RegexTest {
 	public void testCodePattern() throws Exception {
 		assertEquals("F-2", parse("1234567890 / F-2 - , Musterstadt-Musterort, Musterstraße", Fields.CODE).getCode());
 		assertEquals("H-PWASS", parse("1234567890 / H-PWASS - , Musterstadt-Musterort, Fluss - Ort > bis Musterstadt", Fields.CODE).getCode());
+		assertEquals("H WASS Y", parse("1234567890 / H WASS Y - , Musterstadt-Musterort, Fluss - Ort > bis Musterstadt", Fields.CODE).getCode());
 	}
 
 	@Test
